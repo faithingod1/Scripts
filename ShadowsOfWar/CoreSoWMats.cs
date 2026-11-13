@@ -15,9 +15,17 @@ public class CoreSoWMats
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
-    private static CoreSoW SoW { get => _SoW ??= new CoreSoW(); set => _SoW = value; }
+    private static CoreSoW SoW
+    {
+        get => _SoW ??= new CoreSoW();
+        set => _SoW = value;
+    }
     private static CoreSoW _SoW;
 
     public void ScriptMain(IScriptInterface Bot) => Core.RunCore();
@@ -60,7 +68,7 @@ public class CoreSoWMats
         Core.CancelRegisteredQuests();
     }
 
-    public void ElementalCore(int Quantity = 1000)
+    public void ElementalCore(int Quantity = 500)
     {
         if (Core.CheckInventory("Elemental Core", Quantity))
             return;
@@ -69,16 +77,18 @@ public class CoreSoWMats
 
         if (!Core.isCompletedBefore(9126))
         {
-            Core.Logger("Once Upon Another Time 9126, missing quest progress (Group Boss - skua no can do)");
+            Core.Logger(
+                "Once Upon Another Time 9126, missing quest progress (Group Boss - skua no can do)"
+            );
             return;
         }
 
         Core.FarmingLogger("Elemental Core", Quantity);
         Core.AddDrop("Elemental Core");
 
-        Adv.GearStore();
+        Adv.GearStore(EnhAfter: true);
 
-        Core.BossClass();
+        Core.UseBossClass();
         Core.RegisterQuests(9126);
         while (!Bot.ShouldExit && !Core.CheckInventory("Elemental Core", Quantity))
         {
@@ -88,7 +98,7 @@ public class CoreSoWMats
         }
         Bot.Wait.ForPickup("Elemental Core");
         Core.CancelRegisteredQuests();
-        Adv.GearStore(true);
+        Adv.GearStore(true, EnhAfter: true);
     }
 
     public void GarishRemnant(int Quantity = 1000)

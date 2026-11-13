@@ -1,7 +1,7 @@
 /*
 name: Void Highlord (Class)
 description: This will farm all requirements for the Void Highlord class to obtain.
-tags: farm, class, nation, vhl, void, highlord, roentgenium, void-crystal-a, void-crystal-b
+tags: farm, class, nation, vhl, void, highlord, roentgenium, void crystal a, void crystal b
 */
 //cs_include Scripts/CoreBots.cs
 //cs_include Scripts/CoreFarms.cs
@@ -17,15 +17,25 @@ public class VoidHighlord
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreVHL VHL { get => _VHL ??= new CoreVHL(); set => _VHL = value; }    private static CoreVHL _VHL;
-public static CoreVHL sVHL
-{
-    get => _sVHL ??= new CoreVHL();
-    set => _sVHL = value;
-}
-public static CoreVHL _sVHL;
+    private static CoreVHL VHL
+    {
+        get => _VHL ??= new CoreVHL();
+        set => _VHL = value;
+    }
+    private static CoreVHL _VHL;
+    public static CoreVHL sVHL
+    {
+        get => _sVHL ??= new CoreVHL();
+        set => _sVHL = value;
+    }
+    public static CoreVHL _sVHL;
 
-    private static CoreNation Nation { get => _Nation ??= new CoreNation(); set => _Nation = value; }    private static CoreNation _Nation;
+    private static CoreNation Nation
+    {
+        get => _Nation ??= new CoreNation();
+        set => _Nation = value;
+    }
+    private static CoreNation _Nation;
 
     public string OptionsStorage = sVHL.OptionsStorage;
     public bool DontPreconfigure = true;

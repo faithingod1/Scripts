@@ -18,9 +18,18 @@ public class AlphaPirate
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
-    private static BlazeBeardMerge BBM { get => _BBM ??= new BlazeBeardMerge(); set => _BBM = value; }
-    private static BlazeBeardMerge _BBM;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
+    private static BlazebeardMerge BBM
+    {
+        get => _BBM ??= new BlazebeardMerge();
+        set => _BBM = value;
+    }
+    private static BlazebeardMerge _BBM;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -35,6 +44,12 @@ public class AlphaPirate
     {
         if (Core.CheckInventory("Alpha Pirate") || !Core.isSeasonalMapActive("blazebeard"))
             return;
+
+        if (!Core.CheckInventory(new[] { "Alpha Pirate Class Token ", "Classic Alpha Pirate" }, any: true))
+        {
+            Core.Logger("This script *REQUIRES* the `Classic ALpha Pirate` Class ( with 1 point into it ) to be able to do the `Alpha Pirate` merge, cannot continue.");
+            return;
+        }
 
         BBM.BuyAllMerge("Alpha Pirate");
 

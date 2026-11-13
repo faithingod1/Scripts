@@ -20,14 +20,41 @@ public class ImageOfNulgath
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreNation Nation { get => _Nation ??= new CoreNation(); set => _Nation = value; }    private static CoreNation _Nation;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
-    private static JuggernautItemsofNulgath Jug { get => _Jug ??= new JuggernautItemsofNulgath(); set => _Jug = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreNation Nation
+    {
+        get => _Nation ??= new CoreNation();
+        set => _Nation = value;
+    }
+    private static CoreNation _Nation;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
+    private static JuggernautItemsofNulgath Jug
+    {
+        get => _Jug ??= new JuggernautItemsofNulgath();
+        set => _Jug = value;
+    }
     private static JuggernautItemsofNulgath _Jug;
-    private static TempleDelve TD { get => _TD ??= new TempleDelve(); set => _TD = value; }
+    private static TempleDelve TD
+    {
+        get => _TD ??= new TempleDelve();
+        set => _TD = value;
+    }
     private static TempleDelve _TD;
-    private static VoidChasm VC { get => _VC ??= new VoidChasm(); set => _VC = value; }
+    private static VoidChasm VC
+    {
+        get => _VC ??= new VoidChasm();
+        set => _VC = value;
+    }
     private static VoidChasm _VC;
 
     public void ScriptMain(IScriptInterface bot)
@@ -44,7 +71,9 @@ public class ImageOfNulgath
         if (Core.CheckInventory(Core.QuestRewards(10019)))
             return;
 
-        string[] acceptReqs = Core.EnsureLoad(10019).AcceptRequirements.Select(req => req.Name).ToArray();
+        string[] acceptReqs = Core.EnsureLoad(10019)
+            .AcceptRequirements.Select(req => req.Name)
+            .ToArray();
         string[] reqs = Core.EnsureLoad(10019).Requirements.Select(req => req.Name).ToArray();
 
         Core.AddDrop((acceptReqs).Concat(reqs).ToArray());
@@ -58,23 +87,28 @@ public class ImageOfNulgath
 
             // Spoils of War
             Core.EquipClass(ClassType.Solo);
-            Core.HuntMonsterQuest(8582, "darkwarnation", "War", true);
+            Core.HuntMonsterQuest(8582, ("darkwarnation", "War", ClassType.Solo));
 
             // Doomed Extract
             TD.Storyline();
-            Core.HuntMonsterQuest(9090, new[] {
-                ("templedelve", "Infested Nation", ClassType.Farm),
-                ("templedelve", "Doomed Fiend", ClassType.Solo),
-                ("templedelve", "Delirious Elemental", ClassType.Farm),
-                 });
+            Core.EnsureAccept(9090);
+            Core.EquipClass(ClassType.Farm);
+            Core.HuntMonster("templedelve", "Infested Nation", "Infestation Study", 6);
+            Core.EquipClass(ClassType.Solo);
+            Core.HuntMonster("templedelve", "Doomed Fiend", "Fiend Worm");
+            Core.EquipClass(ClassType.Farm);
+            Core.HuntMonster("templedelve", "Delirious Elemental", "Elemental Study", 6);
+            Core.EnsureComplete(9090);
 
             // Void Remnant
             VC.Storyline();
-            Core.HuntMonsterQuest(9553, new[] {
-                ("voidchasm", "Carcano", ClassType.Solo),
-                ("voidchasm", "Carnage", ClassType.Solo),
-                ("voidchasm", "The Hushed", ClassType.Farm),
-            });
+            Core.EnsureAccept(9553);
+            Core.EquipClass(ClassType.Solo);
+            Core.HuntMonster("voidchasm", "Carcano", "Carcano's Teratoma");
+            Core.HuntMonster("voidchasm", "Carnage", "Bloodied Chainlink");
+            Core.EquipClass(ClassType.Farm);
+            Core.HuntMonster("voidchasm", "The Hushed", "Defunct Seal of Approval", 6);
+            Core.EnsureComplete(9553);
         }
 
         List<ItemBase> RewardOptions = Core.EnsureLoad(10019).Rewards;
@@ -100,8 +134,5 @@ public class ImageOfNulgath
             Core.EnsureComplete(10019, Reward.ID);
             Core.ToBank(Reward.Name);
         }
-
     }
 }
-
-

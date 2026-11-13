@@ -24,14 +24,15 @@ public class DiabolicalWarden
 
     public void GetDrops()
     {
-        string[] rewards = {
+        string[] rewards =
+        {
             "Diabolical Warden",
             "Diabolical Warden's Hair",
             "Diabolical Warden's Twintails",
             "Diabolical Warden's Visage",
             "Diabolical Warden's Visage + Locks",
             "Diabolical Zealot's Locks",
-            "Diabolical Zealot's Ponytail"
+            "Diabolical Zealot's Ponytail",
         };
 
         if (Core.CheckInventory(rewards))

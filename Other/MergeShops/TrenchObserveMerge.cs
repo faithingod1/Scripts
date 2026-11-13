@@ -18,37 +18,82 @@ public class TrenchObserveMerge
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
-private static CoreAdvanced sAdv { get => _sAdv ??= new CoreAdvanced(); set => _sAdv = value; }
-private static CoreAdvanced _sAdv;
+    private static CoreAdvanced sAdv
+    {
+        get => _sAdv ??= new CoreAdvanced();
+        set => _sAdv = value;
+    }
+    private static CoreAdvanced _sAdv;
 
-    private static CoreAOR AOR { get => _AOR ??= new CoreAOR(); set => _AOR = value; }
+    private static CoreAOR AOR
+    {
+        get => _AOR ??= new CoreAOR();
+        set => _AOR = value;
+    }
     private static CoreAOR _AOR;
-    private static AbyssalZoneMerge AZM { get => _AZM ??= new AbyssalZoneMerge(); set => _AZM = value; }
+    private static AbyssalZoneMerge AZM
+    {
+        get => _AZM ??= new AbyssalZoneMerge();
+        set => _AZM = value;
+    }
     private static AbyssalZoneMerge _AZM;
 
     public bool DontPreconfigure = true;
     public List<IOption> Generic = sAdv.MergeOptions;
     public string[] MultiOptions = { "Generic", "Select" };
     public string OptionsStorage = sAdv.OptionsStorage;
+
     // [Can Change] This should only be changed by the author.
     //              If true, it will not stop the script if the default case triggers and the user chose to only get mats
     private bool dontStopMissingIng = false;
 
     public void ScriptMain(IScriptInterface Bot)
     {
-        Core.BankingBlackList.AddRange(new[] { "Undine Base Scrip", "Dark Elf Pearl", "Ashray Elf Warden", "Ashray Elf Top Knot", "Ashray Elf Locks", "Ashray Top Knot and Horns", "Ashray Locks and Horns", "Coastal Corona", "Golden Ashray Trident", "Dancer's Sea Streams" });
+        ProtectRequiredItems();
         Core.SetOptions();
 
         BuyAllMerge();
         Core.SetOptions(false);
     }
 
+    private void ProtectRequiredItems()
+    {
+        string[] items =
+        {
+            "Undine Base Scrip",
+            "Dark Elf Pearl",
+            "Ashray Elf Warden",
+            "Ashray Elf Top Knot",
+            "Ashray Elf Locks",
+            "Ashray Top Knot and Horns",
+            "Ashray Locks and Horns",
+            "Coastal Corona",
+            "Golden Ashray Trident",
+            "Dancer's Sea Streams",
+        };
+
+        foreach (string item in items)
+        {
+            if (!Core.BankingBlackList.Contains(item))
+                Core.BankingBlackList.Add(item);
+        }
+    }
+
     public void BuyAllMerge(string? buyOnlyThis = null, mergeOptionsEnum? buyMode = null)
     {
+        ProtectRequiredItems();
         AOR.DeepWater();
         //Only edit the map and shopID here
         Adv.StartBuyAllMerge("trenchobserve", 2316, findIngredients, buyOnlyThis, buyMode: buyMode);
@@ -58,7 +103,9 @@ private static CoreAdvanced _sAdv;
         {
             ItemBase req = Adv.externalItem;
             int quant = Adv.externalQuant;
-            int currentQuant = req.Temp ? Bot.TempInv.GetQuantity(req.Name) : Bot.Inventory.GetQuantity(req.Name);
+            int currentQuant = req.Temp
+                ? Bot.TempInv.GetQuantity(req.Name)
+                : Bot.Inventory.GetQuantity(req.Name);
             if (req == null)
             {
                 Core.Logger("req is NULL");
@@ -69,9 +116,14 @@ private static CoreAdvanced _sAdv;
             {
                 default:
                     bool shouldStop = !Adv.matsOnly || !dontStopMissingIng;
-                    Core.Logger($"The bot hasn't been taught how to get {req.Name}." + (shouldStop ? " Please report the issue." : " Skipping"), messageBox: shouldStop, stopBot: shouldStop);
+                    Core.Logger(
+                        $"The bot hasn't been taught how to get {req.Name}."
+                            + (shouldStop ? " Please report the issue." : " Skipping"),
+                        messageBox: shouldStop,
+                        stopBot: shouldStop
+                    );
                     break;
-                #endregion
+        #endregion
 
                 case "Undine Base Scrip":
                     Core.FarmingLogger(req.Name, quant);
@@ -81,12 +133,11 @@ private static CoreAdvanced _sAdv;
 
                 case "Dark Elf Pearl":
                     Core.FarmingLogger(req.Name, quant);
+                    Core.EquipClass(ClassType.Solo);
                     Core.RegisterQuests(9339);
                     while (!Bot.ShouldExit && !Core.CheckInventory(req.Name, quant))
                     {
-                        Core.EquipClass(ClassType.Solo);
                         Core.HuntMonster("trenchobserve", "Lady Noelle", "Noelle's Brooch", log: false);
-                        Core.EquipClass(ClassType.Farm);
                         Core.HuntMonster("trenchobserve", "Sea Spirit", "Green Sea Jelly", 2, log: false);
                         Core.HuntMonster("trenchobserve", "Necro Adipocere", log: false);
                         Bot.Wait.ForPickup(req.Name);
@@ -110,13 +161,53 @@ private static CoreAdvanced _sAdv;
 
     public List<IOption> Select = new()
     {
-        new Option<bool>("79050", "DeepWater Drow", "Mode: [select] only\nShould the bot buy \"DeepWater Drow\" ?", false),
-        new Option<bool>("79051", "DeepWater Top Knot", "Mode: [select] only\nShould the bot buy \"DeepWater Top Knot\" ?", false),
-        new Option<bool>("79052", "DeepWater Locks", "Mode: [select] only\nShould the bot buy \"DeepWater Locks\" ?", false),
-        new Option<bool>("79053", "DeepWater Top Knot and Horns", "Mode: [select] only\nShould the bot buy \"DeepWater Top Knot and Horns\" ?", false),
-        new Option<bool>("79054", "DeepWater Locks and Horns", "Mode: [select] only\nShould the bot buy \"DeepWater Locks and Horns\" ?", false),
-        new Option<bool>("79055", "DeepWater Corona", "Mode: [select] only\nShould the bot buy \"DeepWater Corona\" ?", false),
-        new Option<bool>("79056", "Bioluminescent Trident", "Mode: [select] only\nShould the bot buy \"Bioluminescent Trident\" ?", false),
-        new Option<bool>("79057", "DeepWater Sea Streams", "Mode: [select] only\nShould the bot buy \"DeepWater Sea Streams\" ?", false),
+        new Option<bool>(
+            "79050",
+            "DeepWater Drow",
+            "Mode: [select] only\nShould the bot buy \"DeepWater Drow\" ?",
+            false
+        ),
+        new Option<bool>(
+            "79051",
+            "DeepWater Top Knot",
+            "Mode: [select] only\nShould the bot buy \"DeepWater Top Knot\" ?",
+            false
+        ),
+        new Option<bool>(
+            "79052",
+            "DeepWater Locks",
+            "Mode: [select] only\nShould the bot buy \"DeepWater Locks\" ?",
+            false
+        ),
+        new Option<bool>(
+            "79053",
+            "DeepWater Top Knot and Horns",
+            "Mode: [select] only\nShould the bot buy \"DeepWater Top Knot and Horns\" ?",
+            false
+        ),
+        new Option<bool>(
+            "79054",
+            "DeepWater Locks and Horns",
+            "Mode: [select] only\nShould the bot buy \"DeepWater Locks and Horns\" ?",
+            false
+        ),
+        new Option<bool>(
+            "79055",
+            "DeepWater Corona",
+            "Mode: [select] only\nShould the bot buy \"DeepWater Corona\" ?",
+            false
+        ),
+        new Option<bool>(
+            "79056",
+            "Bioluminescent Trident",
+            "Mode: [select] only\nShould the bot buy \"Bioluminescent Trident\" ?",
+            false
+        ),
+        new Option<bool>(
+            "79057",
+            "DeepWater Sea Streams",
+            "Mode: [select] only\nShould the bot buy \"DeepWater Sea Streams\" ?",
+            false
+        ),
     };
 }

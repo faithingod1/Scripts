@@ -11,7 +11,12 @@ public class Iara
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -33,13 +38,18 @@ public class Iara
         Story.KillQuest(8258, "iara", "Earth Elemental");
 
         //Bandits and Treasure Hunters 8259
-        Story.KillQuest(8259, "iara", new[] { "Bandit", "Treasure Hunter" });
+        if (!Story.QuestProgression(8259))
+        {
+            Core.EnsureAccept(8259);
+            Core.HuntMonster("iara", "Bandit", "Bandit Captured", 3);
+            Core.HuntMonster("iara", "Treasure Hunter", "Treasure Hunter Scared Off", 3);
+            Core.EnsureComplete(8259);
+        }
 
         //Plants be Spooky 8260
         Story.KillQuest(8260, "iara", "Seed Spitter");
 
         //The Test of Will 8261
         Story.KillQuest(8261, "iara", "Iara");
-
     }
 }

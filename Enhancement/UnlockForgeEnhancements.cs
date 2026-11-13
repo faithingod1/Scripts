@@ -111,7 +111,6 @@ tags: lacerate, smite, herosvaliance, arcanasconcerto, elysium, acheron, absolut
 //cs_include Scripts/Nation/MergeShops/NationMerge.cs
 //cs_include Scripts/Nation/NationLoyaltyRewarded.cs
 
-
 using Skua.Core.Interfaces;
 using Skua.Core.Models.Items;
 using Skua.Core.Models.Skills;
@@ -123,87 +122,243 @@ public class UnlockForgeEnhancements
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
 
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
 
-    private static CoreNation Nation { get => _Nation ??= new CoreNation(); set => _Nation = value; }
+    private static CoreNation Nation
+    {
+        get => _Nation ??= new CoreNation();
+        set => _Nation = value;
+    }
     private static CoreNation _Nation;
-    private static CoreLegion Legion { get => _Legion ??= new CoreLegion(); set => _Legion = value; }
+    private static CoreLegion Legion
+    {
+        get => _Legion ??= new CoreLegion();
+        set => _Legion = value;
+    }
     private static CoreLegion _Legion;
-    private static CoreDarkon Darkon { get => _Darkon ??= new CoreDarkon(); set => _Darkon = value; }
+    private static CoreDarkon Darkon
+    {
+        get => _Darkon ??= new CoreDarkon();
+        set => _Darkon = value;
+    }
     private static CoreDarkon _Darkon;
-    private static CoreSoWMats SOWM { get => _SOWM ??= new CoreSoWMats(); set => _SOWM = value; }
+    private static CoreSoWMats SOWM
+    {
+        get => _SOWM ??= new CoreSoWMats();
+        set => _SOWM = value;
+    }
     private static CoreSoWMats _SOWM;
-    private static CoreAwe Awe { get => _Awe ??= new CoreAwe(); set => _Awe = value; }
+    private static CoreAwe Awe
+    {
+        get => _Awe ??= new CoreAwe();
+        set => _Awe = value;
+    }
     private static CoreAwe _Awe;
 
-    private static Core13LoC LOC { get => _LOC ??= new Core13LoC(); set => _LOC = value; }
+    private static Core13LoC LOC
+    {
+        get => _LOC ??= new Core13LoC();
+        set => _LOC = value;
+    }
     private static Core13LoC _LOC;
-    private static CoreNSOD CorNSOD { get => _CorNSOD ??= new CoreNSOD(); set => _CorNSOD = value; }
+    private static CoreNSOD CorNSOD
+    {
+        get => _CorNSOD ??= new CoreNSOD();
+        set => _CorNSOD = value;
+    }
     private static CoreNSOD _CorNSOD;
-    private static CoreAstravia Astravia { get => _Astravia ??= new CoreAstravia(); set => _Astravia = value; }
+    private static CoreAstravia Astravia
+    {
+        get => _Astravia ??= new CoreAstravia();
+        set => _Astravia = value;
+    }
     private static CoreAstravia _Astravia;
-    private static CoreDailies Daily { get => _Daily ??= new CoreDailies(); set => _Daily = value; }
+    private static CoreDailies Daily
+    {
+        get => _Daily ??= new CoreDailies();
+        set => _Daily = value;
+    }
     private static CoreDailies _Daily;
-    private static Core7DD DD { get => _DD ??= new Core7DD(); set => _DD = value; }
+    private static Core7DD DD
+    {
+        get => _DD ??= new Core7DD();
+        set => _DD = value;
+    }
     private static Core7DD _DD;
-    private static CoreYnR YNR { get => _YNR ??= new CoreYnR(); set => _YNR = value; }
+    private static CoreYnR YNR
+    {
+        get => _YNR ??= new CoreYnR();
+        set => _YNR = value;
+    }
     private static CoreYnR _YNR;
 
-    private static CoreSoW SoW { get => _SoW ??= new CoreSoW(); set => _SoW = value; }
+    private static CoreSoW SoW
+    {
+        get => _SoW ??= new CoreSoW();
+        set => _SoW = value;
+    }
     private static CoreSoW _SoW;
-    private static CoreSepulchure CoreSS { get => _CoreSS ??= new CoreSepulchure(); set => _CoreSS = value; }
+    private static CoreSepulchure CoreSS
+    {
+        get => _CoreSS ??= new CoreSepulchure();
+        set => _CoreSS = value;
+    }
     private static CoreSepulchure _CoreSS;
-    private static ArchPaladin AP { get => _AP ??= new ArchPaladin(); set => _AP = value; }
+    private static ArchPaladin AP
+    {
+        get => _AP ??= new ArchPaladin();
+        set => _AP = value;
+    }
     private static ArchPaladin _AP;
-    private static DragonOfTime DOT { get => _DOT ??= new DragonOfTime(); set => _DOT = value; }
+    private static DragonOfTime DOT
+    {
+        get => _DOT ??= new DragonOfTime();
+        set => _DOT = value;
+    }
     private static DragonOfTime _DOT;
-    private static FireChampionsArmor FCA { get => _FCA ??= new FireChampionsArmor(); set => _FCA = value; }
+    private static FireChampionsArmor FCA
+    {
+        get => _FCA ??= new FireChampionsArmor();
+        set => _FCA = value;
+    }
     private static FireChampionsArmor _FCA;
-    private static EternalDrakath ED { get => _ED ??= new EternalDrakath(); set => _ED = value; }
+    private static EternalDrakath ED
+    {
+        get => _ED ??= new EternalDrakath();
+        set => _ED = value;
+    }
     private static EternalDrakath _ED;
-    private static SepulchuresOriginalHelm Seppy { get => _Seppy ??= new SepulchuresOriginalHelm(); set => _Seppy = value; }
+    private static SepulchuresOriginalHelm Seppy
+    {
+        get => _Seppy ??= new SepulchuresOriginalHelm();
+        set => _Seppy = value;
+    }
     private static SepulchuresOriginalHelm _Seppy;
-    private static PrinceDarkonsPoleaxePreReqs PDPPR { get => _PDPPR ??= new PrinceDarkonsPoleaxePreReqs(); set => _PDPPR = value; }
+    private static PrinceDarkonsPoleaxePreReqs PDPPR
+    {
+        get => _PDPPR ??= new PrinceDarkonsPoleaxePreReqs();
+        set => _PDPPR = value;
+    }
     private static PrinceDarkonsPoleaxePreReqs _PDPPR;
-    private static HeadoftheLegionBeast HOTLB { get => _HOTLB ??= new HeadoftheLegionBeast(); set => _HOTLB = value; }
+    private static HeadoftheLegionBeast HOTLB
+    {
+        get => _HOTLB ??= new HeadoftheLegionBeast();
+        set => _HOTLB = value;
+    }
     private static HeadoftheLegionBeast _HOTLB;
-    private static Awescended Awescended { get => _Awescended ??= new Awescended(); set => _Awescended = value; }
+    private static Awescended Awescended
+    {
+        get => _Awescended ??= new Awescended();
+        set => _Awescended = value;
+    }
     private static Awescended _Awescended;
-    private static NulgathDemandsWork NDW { get => _NDW ??= new NulgathDemandsWork(); set => _NDW = value; }
+    private static NulgathDemandsWork NDW
+    {
+        get => _NDW ??= new NulgathDemandsWork();
+        set => _NDW = value;
+    }
     private static NulgathDemandsWork _NDW;
-    private static ThirdSpell TSS { get => _TSS ??= new ThirdSpell(); set => _TSS = value; }
+    private static ThirdSpell TSS
+    {
+        get => _TSS ??= new ThirdSpell();
+        set => _TSS = value;
+    }
     private static ThirdSpell _TSS;
-    private static LordOfOrder LOO { get => _LOO ??= new LordOfOrder(); set => _LOO = value; }
+    private static LordOfOrder LOO
+    {
+        get => _LOO ??= new LordOfOrder();
+        set => _LOO = value;
+    }
     private static LordOfOrder _LOO;
-    private static SevenCircles Circles { get => _Circles ??= new SevenCircles(); set => _Circles = value; }
+    private static SevenCircles Circles
+    {
+        get => _Circles ??= new SevenCircles();
+        set => _Circles = value;
+    }
     private static SevenCircles _Circles;
-    private static YokaiQuests Yokai { get => _Yokai ??= new YokaiQuests(); set => _Yokai = value; }
+    private static YokaiQuests Yokai
+    {
+        get => _Yokai ??= new YokaiQuests();
+        set => _Yokai = value;
+    }
     private static YokaiQuests _Yokai;
-    private static MalgorsArmorSet MAS { get => _MAS ??= new MalgorsArmorSet(); set => _MAS = value; }
+    private static MalgorsArmorSet MAS
+    {
+        get => _MAS ??= new MalgorsArmorSet();
+        set => _MAS = value;
+    }
     private static MalgorsArmorSet _MAS;
-    private static PrimeFiendShard PFS { get => _PFS ??= new PrimeFiendShard(); set => _PFS = value; }
+    private static PrimeFiendShard PFS
+    {
+        get => _PFS ??= new PrimeFiendShard();
+        set => _PFS = value;
+    }
     private static PrimeFiendShard _PFS;
-
 
     public string OptionsStorage = "Forge Ehn Unlocks";
     public bool DontPreconfigure = true;
     public List<IOption> Options = new()
     {
         CoreBots.Instance.SkipOptions,
-        new Option<ForgeQuestWeapon>("ForgeQuestWeapon", "Weapon Enhancement", "Forge Quests to unlock Weapon Enhancement, change to none to unselect", ForgeQuestWeapon.None),
-        new Option<ForgeQuestCape>("ForgeQuestCape", "Cape Enhancement", "Forge Quests to unlock Cape Enhancement, change to none to unselect", ForgeQuestCape.None),
-        new Option<ForgeQuestHelm>("ForgeQuestHelm", "Helm Enhancement", "Forge Quests to unlock Helm Enhancement, change to none to unselect", ForgeQuestHelm.None),
-        new Option<bool>("UseGold", "Use Gold", "Speed the BlacksmithingREP grind up with Gold?", false),
-        new Option<bool>("BulkFarmGold", "Pre-Farm Gold(BlackSmithRep)", "Bulk Turnin after farming 100m Gold. (turns in x10 as long as u have 5m gold)", false),
-        new Option<bool>("SellQuestClass", "Sell quest classes", "sell the classes backa after the Anima, Pneuma, Examen, and Vim quests", false),
-        new Option<bool>("CanSolo", "Can solo", "Solo Sluggbutter"),
-        new Option<bool>("UseInsignOnDaunt", "Use Insignia for dauntless", "Use your Insignia to buy the `Malgor's ShadowFlame Blade`[Malgor] & `Infernal Flame Pyromancer`[Avatar Tyndarius]", false),
-        new Option<bool>("UseInsignOnArcanasConcerto", "Use Insignia for Arcanas Concerto", "Use your Insignia to buy the `Darkon's Debris 2 (Reconstructed) & to complete the quest.", false)
+        new Option<ForgeQuestWeapon>(
+            "ForgeQuestWeapon",
+            "Weapon Enhancement",
+            "Forge Quests to unlock Weapon Enhancement, change to none to unselect",
+            ForgeQuestWeapon.None
+        ),
+        new Option<ForgeQuestCape>(
+            "ForgeQuestCape",
+            "Cape Enhancement",
+            "Forge Quests to unlock Cape Enhancement, change to none to unselect",
+            ForgeQuestCape.None
+        ),
+        new Option<ForgeQuestHelm>(
+            "ForgeQuestHelm",
+            "Helm Enhancement",
+            "Forge Quests to unlock Helm Enhancement, change to none to unselect",
+            ForgeQuestHelm.None
+        ),
+        new Option<bool>(
+            "UseGold",
+            "Use Gold",
+            "Speed the BlacksmithingREP grind up with Gold?",
+            false
+        ),
+        new Option<bool>(
+            "SellQuestClass",
+            "Sell quest classes",
+            "sell the classes backa after the Anima, Pneuma, Examen, and Vim quests",
+            false
+        ),
+        new Option<bool>(
+            "UseInsignOnDaunt",
+            "Use Insignia for dauntless",
+            "Use your Insignia to buy the `Malgor's ShadowFlame Blade`[Malgor] & `Infernal Flame Pyromancer`[Avatar Tyndarius]",
+            false
+        ),
+        new Option<bool>(
+            "UseInsignOnArcanasConcerto",
+            "Use Insignias for Arcana's Concerto",
+            "Use insignias to buy Darkon's Debris 2 (Reconstructed), Prince Darkon's Poleaxe, and complete the quest.",
+            false
+        ),
     };
 
     public void ScriptMain(IScriptInterface Bot)
@@ -218,18 +373,27 @@ public class UnlockForgeEnhancements
     public void ForgeUnlocks()
     {
         ForgeQuestCape selectedCapeEnhancements = Bot.Config!.Get<ForgeQuestCape>("ForgeQuestCape");
-        ForgeQuestWeapon selectedWeaponEnhancements = Bot.Config!.Get<ForgeQuestWeapon>("ForgeQuestWeapon");
+        ForgeQuestWeapon selectedWeaponEnhancements = Bot.Config!.Get<ForgeQuestWeapon>(
+            "ForgeQuestWeapon"
+        );
         ForgeQuestHelm selectedHelmEnhancements = Bot.Config!.Get<ForgeQuestHelm>("ForgeQuestHelm");
 
-        if (selectedCapeEnhancements == ForgeQuestCape.None &&
-            selectedWeaponEnhancements == ForgeQuestWeapon.None &&
-            selectedHelmEnhancements == ForgeQuestHelm.None)
-            Core.Logger("All settings are set to None, no Forge Quest to do. Stopping script.", stopBot: true);
+        if (
+            selectedCapeEnhancements == ForgeQuestCape.None
+            && selectedWeaponEnhancements == ForgeQuestWeapon.None
+            && selectedHelmEnhancements == ForgeQuestHelm.None
+        )
+            Core.Logger(
+                "All settings are set to None, no Forge Quest to do. Stopping script.",
+                stopBot: true
+            );
 
         if (selectedWeaponEnhancements != ForgeQuestWeapon.None)
         {
             if (selectedWeaponEnhancements != ForgeQuestWeapon.All)
-                Core.Logger($"Selected Forge Weapon Enhancement: {Bot.Config.Get<ForgeQuestWeapon>("ForgeQuestWeapon")}");
+                Core.Logger(
+                    $"Selected Forge Weapon Enhancement: {Bot.Config.Get<ForgeQuestWeapon>("ForgeQuestWeapon")}"
+                );
 
             switch (selectedWeaponEnhancements)
             {
@@ -384,7 +548,10 @@ public class UnlockForgeEnhancements
 
         Farm.Experience(30);
         LOC.Escherion();
-        Farm.BlacksmithingREP(4, Bot.Config!.Get<bool>("UseGold"), Bot.Config!.Get<bool>("UseGold"));
+        Farm.BlacksmithingREP(
+            4,
+            Bot.Config!.Get<bool>("UseGold")
+        );
 
         Core.EquipClass(ClassType.Solo);
         Core.EnsureAccept(8738);
@@ -424,11 +591,20 @@ public class UnlockForgeEnhancements
                 Core.KillMonster("greenguardwest", "West12", "Up", "Big Bad Boar", "Big Bad Boar's Wallet");
                 Core.EnsureComplete(91);
             }
-            Story.KillQuest(92, "greenguardwest", new[] { "Breken the Vile", "Ogug Stoneaxe" });
+            if (!Story.QuestProgression(92))
+            {
+                Core.EnsureAccept(92);
+                Core.HuntMonster("greenguardwest", "Breken the Vile", "Breken the Vile's Sword", 1);
+                Core.HuntMonster("greenguardwest", "Ogug Stoneaxe", "Ogug Stoneaxe's Helmet", 1);
+                Core.EnsureComplete(92);
+            }
         }
 
         Farm.Experience(40);
-        Farm.BlacksmithingREP(5, Bot.Config!.Get<bool>("UseGold"), Bot.Config!.Get<bool>("UseGold"));
+        Farm.BlacksmithingREP(
+            5,
+            Bot.Config!.Get<bool>("UseGold")
+        );
 
         Core.EnsureAccept(8739);
 
@@ -474,7 +650,10 @@ public class UnlockForgeEnhancements
         Core.Logger("Unlocking Enhancement: Smite");
 
         Farm.Experience(60);
-        Farm.BlacksmithingREP(6, Bot.Config!.Get<bool>("UseGold"), Bot.Config!.Get<bool>("UseGold"));
+        Farm.BlacksmithingREP(
+            6,
+            Bot.Config!.Get<bool>("UseGold")
+        );
         CoreSS.ShadowfallRise();
 
         Core.EnsureAccept(8740);
@@ -497,7 +676,11 @@ public class UnlockForgeEnhancements
 
         Core.Logger("Unlocking Enhancement: Praxis");
 
-        Farm.BlacksmithingREP(6, Bot.Config!.Get<bool>("UseGold"), Bot.Config!.Get<bool>("UseGold"));
+        Core.EnsureAccept(9171);
+        Farm.BlacksmithingREP(
+            6,
+            Bot.Config!.Get<bool>("UseGold")
+        );
 
         Adv.BuyItem("thespan", 439, "Thief of Hours Armor");
         Adv.BuyItem("yulgar", 69, "Hashashin Armor");
@@ -516,9 +699,9 @@ public class UnlockForgeEnhancements
             Core.HuntMonster("shadowfortress", "1st Head of Orochi", "Perfect Orochi Scales", 10, isTemp: false);
         Core.CancelRegisteredQuests();
 
-        Adv.BuyItem("shadowfortress", 1968, 59465, shopItemID: 8079);
+        Adv.BuyItem("shadowfortress", 1968, 59465, shopItemID: 6869);
 
-        Core.ChainComplete(9171);
+        Core.EnsureComplete(9171);
         Core.Logger("Enhancement Unlocked: Praxis");
     }
 
@@ -530,17 +713,22 @@ public class UnlockForgeEnhancements
         Core.Logger("Unlocking Enhancement: Hero's Valiance");
 
         Farm.Experience(100);
-        Farm.BlacksmithingREP(10, Bot.Config!.Get<bool>("UseGold"), Bot.Config!.Get<bool>("UseGold"));
+        Farm.BlacksmithingREP(
+            10,
+            Bot.Config!.Get<bool>("UseGold")
+        );
 
         FCA.GetFireChampsArmor();
         DOT.GetDoT(doExtra: false);
         ED.getSet(true, "Drakath the Eternal");
         if (!Core.CheckInventory("Drakath the Eternal"))
         {
-            Core.Logger("Cannot \"Finish\" `Heros Valiance quest. We'll continue farming it though...\n" +
-         $"\"Drakath Armor\": x{Bot.Inventory.GetQuantity("Drakath Armor")}\n" +
-         $"\"Dage's Scroll Fragment\" x{Bot.Inventory.GetQuantity("Dage's Scroll Fragment")}\n" +
-         $"\"Drakath the Eternal\" x{Bot.Inventory.GetQuantity("Drakath the Eternal")}");
+            Core.Logger(
+                "Hero Valiance cannot finish without Drakath the Eternal. Continuing with the remaining materials. Check the earlier Drakath prerequisite messages.\n"
+                    + $"\"Drakath Armor\": x{Bot.Inventory.GetQuantity("Drakath Armor")}\n"
+                    + $"\"Dage's Scroll Fragment\" x{Bot.Inventory.GetQuantity("Dage's Scroll Fragment")}\n"
+                    + $"\"Drakath the Eternal\" x{Bot.Inventory.GetQuantity("Drakath the Eternal")}"
+            );
         }
 
         LOO.GetLoO();
@@ -563,7 +751,9 @@ public class UnlockForgeEnhancements
 
         if (!Core.isCompletedBefore(7165))
         {
-            Core.Logger("Quest Progrestion not available For LoO (requires last quest to be complete and these are dailies)");
+            Core.Logger(
+                "Quest Progrestion not available For LoO (requires last quest to be complete and these are dailies)"
+            );
             return;
         }
 
@@ -574,7 +764,10 @@ public class UnlockForgeEnhancements
             Core.EnsureComplete(8741);
             Core.Logger("Enhancement Unlocked: Hero's Valiance");
         }
-        else Core.Logger("Could not complete \"Hero's Valiance\", Try again tomarrow after then \"Dage's Scroll Fragment\" Daily.");
+        else
+            Core.Logger(
+                "Hero Valiance was not completed because Drakath the Eternal is missing. Check the earlier Drakath prerequisite messages before farming more daily fragments."
+            );
     }
 
     public void ArcanasConcerto()
@@ -586,94 +779,152 @@ public class UnlockForgeEnhancements
 
         Astravia.CompleteCoreAstravia();
         Farm.Experience(100);
-        Farm.BlacksmithingREP(10, Bot.Config!.Get<bool>("UseGold"), Bot.Config!.Get<bool>("UseGold"));
+        Farm.BlacksmithingREP(
+            10,
+            Bot.Config!.Get<bool>("UseGold")
+        );
 
         if (!Core.isCompletedBefore(8746))
         {
-            Core.Logger("You must have faced Darkon the Conductor and done the weekly quest in order to unlock \"Arcana's Concerto\"");
+            Core.Logger("You must have faced Darkon the Conductor and done the weekly quest in order to unlock \"Arcana's Concerto\".");
             return;
         }
-        PDPPR.FarmPreReqs();
 
+        // Farm everything required for Prince Darkon's Poleaxe.
+        PDPPR.FarmPreReqs(Bot.Config!.Get<bool>("UseInsignOnArcanasConcerto"));
+
+        // Prince Darkon's Poleaxe is an actual requirement for Arcana's Concerto.
+        // Do not claim Quest 8742 is complete until we have it.
+        if (!Core.CheckInventory("Prince Darkon's Poleaxe"))
+        {
+            Core.Logger("\"Prince Darkon's Poleaxe\" is required to continue the Arcana's Concerto unlock. Farm/merge it at /ultradrago.");
+            return;
+        }
+
+        // Darkon's Debris 2 (Reconstructed) is the other required item.
         if (!Core.CheckInventory("Darkon's Debris 2 (Reconstructed)"))
         {
             if (!Core.CheckInventory("Darkon's Debris 2 (Recovered)"))
             {
                 Darkon.UnfinishedMusicalScore(22);
-                Adv.BuyItem("theworld", 2141, "Darkon's Debris 2 (Recovered)");
+                Farm.Gold(50_000);
+                Core.BuyItem("theworld", 2141, "Gold Voucher 25k", 2);
+                Core.BuyItem("theworld", 2141, "Darkon's Debris 2 (Recovered)");
             }
+
+            if (!Core.CheckInventory("Darkon's Debris 2 (Recovered)"))
+            {
+                Core.Logger("Darkon's Debris 2 (Recovered) could not be purchased. Stopping before farming the remaining materials.");
+                return;
+            }
+
             Darkon.BanditsCorrespondence(22);
             Darkon.SukisPrestiege(22);
             Darkon.AncientRemnant(22);
             Darkon.WheelofFortune(22, 0);
-            if (!Core.CheckInventory("Darkon Insignia", 20))
+
+            if (Bot.Config!.Get<bool>("UseInsignOnArcanasConcerto"))
             {
-                Core.Logger(" x20 \"Darkon Insignia\" is Required to continue quest, our Bots cannot *currently* kill this mob, use Grim (different client) & @InsertNameHere's ultra bot");
+                if (!Core.CheckInventory("Darkon Insignia", 20))
+                {
+                    Core.Logger("x20 \"Darkon Insignia\" is required to continue the quest. Our bots cannot *currently* kill this mob; use Grim (different client) & @InsertNameHere's ultra bot.");
+                    return;
+                }
+
+                Adv.BuyItem(
+                    "ultradarkon",
+                    2147,
+                    "Darkon's Debris 2 (Reconstructed)"
+                );
+            }
+            else
+            {
+                Core.Logger("\"UseInsignOnArcanasConcerto\" is set to false. Please buy \"Darkon's Debris 2 (Reconstructed)\" from the shop manually, then complete QuestID 8742 yourself.");
                 return;
             }
-            else if (Bot.Config!.Get<bool>("UseInsignOnArcanasConcerto"))
-                Core.BuyItem("ultradarkon", 2147, "Darkon's Debris 2 (Reconstructed)");
         }
 
+        // Quest 8742 also requires these insignias.
         if (!Core.CheckInventory("King Drago Insignia", 5))
         {
-            Core.Logger(" x5 \"King Drago Insignia\" is required to continue quest, our Bots cannot *currently* kill this mob, use Grim (different client) & @InsertNameHere's ultra bot");
+            Core.Logger("x5 \"King Drago Insignia\" is required to continue the quest. Our bots cannot *currently* kill this mob; use Grim (different client) & @InsertNameHere's ultra bot.");
             return;
         }
+
         if (!Core.CheckInventory("Darkon Insignia", 5))
         {
-            Core.Logger(" x5 \"Darkon Insignia\" is required to continue quest, our Bots cannot *currently* kill this mob, use Grim (different client) & @InsertNameHere's ultra bot");
+            Core.Logger("x5 \"Darkon Insignia\" is required to continue the quest. Our bots cannot *currently* kill this mob; use Grim (different client) & @InsertNameHere's ultra bot.");
             return;
         }
+
+        // Final sanity check: both actual Arcana's Concerto items must exist.
+        if (!Core.CheckInventory("Prince Darkon's Poleaxe") ||
+            !Core.CheckInventory("Darkon's Debris 2 (Reconstructed)"))
+        {
+            Core.Logger("Arcana's Concerto requirements are not complete. \"Prince Darkon's Poleaxe\" and \"Darkon's Debris 2 (Reconstructed)\" are both required.");
+            return;
+        }
+
         if (Bot.Config!.Get<bool>("UseInsignOnArcanasConcerto"))
+        {
             Core.ChainComplete(8742);
+            Core.Logger("Enhancement Unlocked: Arcana's Concerto");
+        }
         else
-            Core.Logger("\"UseInsignOnArcanasConcerto\" is set to false, please buy the \"Darkon's Debris 2 (Reconstructed)\" from the shop manually, and complete the quest yourself (QuestID: 8742).");
-        Core.Logger("Enhancement Unlocked: Arcana's Concerto");
+        {
+            Core.Logger("\"UseInsignOnArcanasConcerto\" is set to false. Please complete QuestID 8742 manually.");
+        }
     }
 
     public void Acheron()
     {
-        if (Core.isCompletedBefore(8820) || !Core.CheckInventory(new[] { 38566, 38567 }, toInv: false))
+        if (
+            Core.isCompletedBefore(8820)
+            || !Core.CheckInventory(new[] { 38566, 38567 }, toInv: false)
+        )
         {
-            Core.Logger(Core.isCompletedBefore(8820)
-                ? "Skipped: \"Acheron\" (8820) is already completed."
-                : "Skipped: Required items (Dark Box, Dark Key) are missing from inventory.");
+            Core.Logger(
+                Core.isCompletedBefore(8820)
+                    ? "Skipped: \"Acheron\" (8820) is already completed."
+                    : "Skipped: Required items (Dark Box, Dark Key) are missing from inventory."
+            );
 
             Core.Logger($"Dark Key: {(Core.CheckInventory(38567, toInv: false) ? "✔️" : "❌")}");
             Core.Logger($"Dark Box: {(Core.CheckInventory(38566, toInv: false) ? "✔️" : "❌")}");
             return;
         }
 
-
-
         Core.Logger("Unlocking Enhancement: Acheron");
 
-        Farm.BlacksmithingREP(8, Bot.Config!.Get<bool>("UseGold"), Bot.Config!.Get<bool>("UseGold"));
+        Farm.BlacksmithingREP(
+            8,
+            Bot.Config!.Get<bool>("UseGold")
+        );
         Core.EnsureAccept(8820);
 
         VoidLodestone();
 
         SoW.Tyndarius();
 
-        // have the Dark Box and Dark Key mini-saga completed 
-        // Quest complete will require you to turn in the Power of Darkness, 
+        // have the Dark Box and Dark Key mini-saga completed
+        // Quest complete will require you to turn in the Power of Darkness,
         Core.BuyItem(Bot.Map.Name, 1380, "The Power of Darkness");
 
         //20 Dark Potions,
         Core.RegisterQuests(5710);
         while (!Bot.ShouldExit && !Core.CheckInventory("Dark Potion", 20))
         {
-            if (Core.IsMember)
+            if (!Core.IsMember)
                 Core.HuntMonster("darkfortress", "Dark Elemental", "Dark Gem", isTemp: false);
-            else Core.HuntMonster("ruins", "Dark Elemental", "Dark Gem", isTemp: false);
+            else
+                Core.HuntMonster("ruins", "Dark Elemental", "Dark Gem", isTemp: false);
         }
         Core.CancelRegisteredQuests();
 
-        Adv.GearStore();
-        Core.DodgeClass();
+        Adv.GearStore(EnhAfter: true);
+        Core.EquipClass(ClassType.Dodge);
         Core.HuntMonster("tercessuinotlim", "Nulgath", "The Mortal Coil", isTemp: false);
-        Adv.GearStore(true);
+        Adv.GearStore(true, EnhAfter: true);
         Core.EnsureComplete(8820);
         Core.Logger("Enhancement Unlocked: Acheron");
     }
@@ -685,7 +936,10 @@ public class UnlockForgeEnhancements
 
         Core.Logger("Unlocking Enhancement: Elysium");
 
-        Farm.BlacksmithingREP(10, Bot.Config!.Get<bool>("UseGold"), Bot.Config!.Get<bool>("UseGold"));
+        Farm.BlacksmithingREP(
+            10,
+            Bot.Config!.Get<bool>("UseGold")
+        );
 
         Core.EnsureAccept(8821);
         CorNSOD.BonesVoidRealm(15);
@@ -694,7 +948,9 @@ public class UnlockForgeEnhancements
         Awescended.GetAwe();
         if (!Core.CheckInventory("The Divine Will"))
         {
-            Core.Logger("\"Azalith\" is not Soloable, please go kill it otherwise for the Drop \"The Divine Will\", and return here and re-run the script.");
+            Core.Logger(
+                "\"Azalith\" is not Soloable, please go kill it otherwise for the Drop \"The Divine Will\", and return here and re-run the script."
+            );
             return;
         }
         Core.EnsureComplete(8821);
@@ -708,10 +964,21 @@ public class UnlockForgeEnhancements
 
         Core.Logger("Unlocking Enhancement: Dauntless");
 
-        Farm.BlacksmithingREP(10, Bot.Config!.Get<bool>("UseGold"), Bot.Config!.Get<bool>("UseGold"));
+        Farm.BlacksmithingREP(
+            10,
+            Bot.Config!.Get<bool>("UseGold")
+        );
 
-        string[] DauntlessItems = { "ShadowLord's Helm", "Malgor the ShadowLord", "Malgor's ShadowFlame Blade", "Infernal Flame Pyromancer" };
-        Core.Logger($"The only items the bot can get are: \"Malgor the ShadowLord\" and \"ShadowLord's Helm\". Unless `UseInsignOnDaunt` is enabled: {Bot.Config.Get<bool>("UseInsignOnDaunt")}");
+        string[] DauntlessItems =
+        {
+            "ShadowLord's Helm",
+            "Malgor the ShadowLord",
+            "Malgor's ShadowFlame Blade",
+            "Infernal Flame Pyromancer",
+        };
+        Core.Logger(
+            $"The only items the bot can get are: \"Malgor the ShadowLord\" and \"ShadowLord's Helm\". Unless `UseInsignOnDaunt` is enabled: {Bot.Config.Get<bool>("UseInsignOnDaunt")}"
+        );
 
         // Base Quest Req. for dauntless
         int Malgorinsig = 5;
@@ -720,7 +987,6 @@ public class UnlockForgeEnhancements
         Core.EnsureAccept(9172);
         if (!Core.CheckInventory(DauntlessItems))
         {
-
             //Story
             SoW.CompleteCoreSoW();
 
@@ -730,10 +996,10 @@ public class UnlockForgeEnhancements
             #region  [Prep] Malgor's ShadowFlame Blade
             if (!Core.CheckInventory("Malgor's ShadowFlame Blade"))
             {
-                Adv.GearStore();
-                Core.BossClass();
+                Adv.GearStore(EnhAfter: true);
+                Core.UseBossClass();
                 SOWM.ElementalCore(20);
-                Adv.GearStore(true);
+                Adv.GearStore(true, EnhAfter: true);
                 Core.EquipClass(ClassType.Solo);
                 Core.HuntMonster("shadowgrove", "Titan Shadow Dragonlord", "ShadowFlame Dragon Blade", isTemp: false);
             }
@@ -766,12 +1032,18 @@ public class UnlockForgeEnhancements
                 //ensure in inv
                 Core.Unbank("Malgor Insignia", "Avatar Tyndarius Insignia");
 
-                if (!Core.CheckInventory("Malgor's ShadowFlame Blade") && Core.CheckInventory("Malgor Insignia", 20))
+                if (
+                    !Core.CheckInventory("Malgor's ShadowFlame Blade")
+                    && Core.CheckInventory("Malgor Insignia", 20)
+                )
                     Adv.BuyItem("ultraspeaker", 2248, "Malgor's ShadowFlame Blade");
                 else
                     Malgorinsig += 20;
 
-                if (!Core.CheckInventory("Infernal Flame Pyromancer") && Core.CheckInventory("Avatar Tyndarius Insignia", 20))
+                if (
+                    !Core.CheckInventory("Infernal Flame Pyromancer")
+                    && Core.CheckInventory("Avatar Tyndarius Insignia", 20)
+                )
                     Adv.BuyItem("fireavatar", 2038, "Infernal Flame Pyromancer");
                 else
                     AvatarTyndInsig += 20;
@@ -780,18 +1052,20 @@ public class UnlockForgeEnhancements
             // totals:
             // 25 Malgor Insignia
             // 30 Avatar Tyndarius Insignia
-
         }
 
         // Unlock Dauntless if items are owned.
-        if (Core.CheckInventory(DauntlessItems) && Core.CheckInventory("Malgor Insignia", 5) && Core.CheckInventory("Avatar Tyndarius Insignia", 10))
+        if (
+            Core.CheckInventory(DauntlessItems)
+            && Core.CheckInventory("Malgor Insignia", 5)
+            && Core.CheckInventory("Avatar Tyndarius Insignia", 10)
+        )
         {
             Core.ChainComplete(9172);
             Core.Logger("Enhancement Unlocked: Dauntless");
         }
         else
         {
-
             Core.Logger("Items still needed(the bot cannot farm these):");
             foreach (string item in DauntlessItems.Where(item => !Core.CheckInventory(item)))
                 Core.Logger($"Missing \"{item}\" x1");
@@ -816,7 +1090,9 @@ public class UnlockForgeEnhancements
         if (Core.CheckInventory("Gluttonous Maw"))
             Core.ChainComplete(9560);
         else
-            Core.Logger("Cannot complete Ravenous: Requires Gluttonous Maw, which needs 10 Roentgeniums of Nulgath (daily). Try again tomorrow.");
+            Core.Logger(
+                "Cannot complete Ravenous: Requires Gluttonous Maw, which needs 10 Roentgeniums of Nulgath (daily). Try again tomorrow."
+            );
     }
 
     #endregion
@@ -831,7 +1107,7 @@ public class UnlockForgeEnhancements
 
         Farm.Experience(30);
         LOC.Kitsune();
-        Farm.BlacksmithingREP(4, Bot.Config!.Get<bool>("UseGold"), Bot.Config!.Get<bool>("UseGold"));
+        Farm.BlacksmithingREP(4, Bot.Config!.Get<bool>("UseGold"));
 
         Core.EquipClass(ClassType.Solo);
         Core.EnsureAccept(8758);
@@ -854,15 +1130,18 @@ public class UnlockForgeEnhancements
 
         Farm.Experience(90);
         Farm.GoodREP(10);
-        Farm.BlacksmithingREP(9, Bot.Config!.Get<bool>("UseGold"), Bot.Config!.Get<bool>("UseGold"));
+        Farm.BlacksmithingREP(
+            9,
+            Bot.Config!.Get<bool>("UseGold")
+        );
 
         int SlimeSigil = 150;
 
         // Deduct points based on items in inventory
         Dictionary<int, int> itemsToCheck = new()
         {
-            { 39091, 100 },  // Ascended Paladin
-            { 39094, 50 }    // Ascended Paladin Sword
+            { 39091, 100 }, // Ascended Paladin
+            { 39094, 50 }, // Ascended Paladin Sword
         };
 
         // Deduct points for found items
@@ -875,7 +1154,6 @@ public class UnlockForgeEnhancements
         // Purchase items
         Adv.BuyItem("therift", 1399, "Ascended Paladin");
         Adv.BuyItem("therift", 1399, "Ascended Paladin Sword");
-
 
         Core.ChainComplete(8743);
         Core.Logger("Enhancement Unlocked: Absolution");
@@ -891,7 +1169,10 @@ public class UnlockForgeEnhancements
         Core.Logger("Unlocking Enhancement: Vainglory");
         Core.EnsureAccept(8744);
 
-        Farm.BlacksmithingREP(9, Bot.Config!.Get<bool>("UseGold"), Bot.Config!.Get<bool>("UseGold"));
+        Farm.BlacksmithingREP(
+            9,
+            Bot.Config!.Get<bool>("UseGold")
+        );
         Core.EquipClass(ClassType.Solo);
 
         if (Core.IsMember)
@@ -903,11 +1184,9 @@ public class UnlockForgeEnhancements
                 Core.BuyItem("museum", 1130, "Armor of Awe Pass");
                 Core.AddDrop("Pauldron Fragment");
                 Core.RegisterQuests(4162);
-                while (!Bot.ShouldExit && !Core.CheckInventory("Pauldron Fragment", 15))
-                {
-                    Core.HuntMonster("gravestrike", "Ultra Akriloth", "Pauldron Shard", 15, false);
-                    Bot.Wait.ForPickup("Pauldron Fragment");
-                }
+                Core.EquipClass(ClassType.Solo);
+                Core.HuntMonster("gravestrike", "Ultra Akriloth", "Pauldron Fragment", 15, false);
+                Bot.Wait.ForPickup("Pauldron Fragment");
                 Core.CancelRegisteredQuests();
 
                 Core.BuyItem("museum", 1129, "Pauldron Relic");
@@ -932,7 +1211,10 @@ public class UnlockForgeEnhancements
         Vainglory();
         Core.Logger("Unlocking Enhancement: Avarice");
 
-        Farm.BlacksmithingREP(9, Bot.Config!.Get<bool>("UseGold"), Bot.Config!.Get<bool>("UseGold"));
+        Farm.BlacksmithingREP(
+            9,
+            Bot.Config!.Get<bool>("UseGold")
+        );
 
         Core.EnsureAccept(8745);
 
@@ -952,7 +1234,10 @@ public class UnlockForgeEnhancements
         Avarice();
         Core.Logger("Unlocking Enhancement: Penitence");
 
-        Farm.BlacksmithingREP(9, Bot.Config!.Get<bool>("UseGold"), Bot.Config!.Get<bool>("UseGold"));
+        Farm.BlacksmithingREP(
+            9,
+            Bot.Config!.Get<bool>("UseGold")
+        );
 
         Core.EnsureAccept(8822);
         Core.EquipClass(ClassType.Solo);
@@ -964,9 +1249,11 @@ public class UnlockForgeEnhancements
             Core.KillMonster("doomvault", "r5", "Left", "Binky", "Yulgar's Lost Scythe");
             Core.EnsureComplete(3270);
         }
+        Core.EquipClass(ClassType.Dodge);
         Core.HuntMonster("frozenlair", "Legion Lich Lord", "Sapphire Orb", 100, isTemp: false);
         Core.HuntMonster("icewing", "Warlord Icewing", "Boreal Cavalier Bardiche", isTemp: false);
-        Core.HuntMonster("underlair", "ArchFiend DragonLord", "Void Scale", 13, isTemp: false);
+
+        Core.KillArchFiendDragonLord("Void Scale", 13, isTemp: false);
 
         Core.EnsureComplete(8822);
         Core.Logger("Enhancement Unlocked: Penitence");
@@ -980,7 +1267,10 @@ public class UnlockForgeEnhancements
         Penitence();
         Core.Logger("Unlocking Enhancement: Lament");
 
-        Farm.BlacksmithingREP(9, Bot.Config!.Get<bool>("UseGold"), Bot.Config!.Get<bool>("UseGold"));
+        Farm.BlacksmithingREP(
+            9,
+            Bot.Config!.Get<bool>("UseGold")
+        );
 
         Core.EquipClass(ClassType.Solo);
         Core.EnsureAccept(8823);
@@ -990,10 +1280,10 @@ public class UnlockForgeEnhancements
             TSS.StoryLine(true); //sun heart thing
         Core.HuntMonster("ashfallcamp", "Smoldur", "Flame Heart", 10, isTemp: false);
         DD.Sloth();
-        Adv.GearStore();
+        Adv.GearStore(EnhAfter: true);
         DD.HazMatSuit();
         Core.HuntMonster("sloth", "Mutated Plague", "Bloodless Heart", 3, isTemp: false);
-        Adv.GearStore(true);
+        Adv.GearStore(true, EnhAfter: true);
 
         Core.EnsureComplete(8823);
         Core.Logger("Enhancement Unlocked: Lament");
@@ -1009,7 +1299,10 @@ public class UnlockForgeEnhancements
 
         Core.Logger("Unlocking Enhancement: Forge (Helm)");
         Farm.Experience(30);
-        Farm.BlacksmithingREP(4, Bot.Config!.Get<bool>("UseGold"), Bot.Config!.Get<bool>("UseGold"));
+        Farm.BlacksmithingREP(
+            4,
+            Bot.Config!.Get<bool>("UseGold")
+        );
 
         Core.EquipClass(ClassType.Solo);
         Core.EnsureAccept(8828);
@@ -1031,16 +1324,19 @@ public class UnlockForgeEnhancements
         ForgeHelmEnhancement();
         Core.Logger("Unlocking Enhancement: Vim");
 
-        Farm.BlacksmithingREP(7, Bot.Config!.Get<bool>("UseGold"), Bot.Config!.Get<bool>("UseGold"));
-        Adv.GearStore();
+        Farm.BlacksmithingREP(
+            7,
+            Bot.Config!.Get<bool>("UseGold")
+        );
+        Adv.GearStore(EnhAfter: true);
         Core.EnsureAccept(8824);
 
         Core.BuyItem("Classhalla", 172, "Rogue");
         Adv.RankUpClass("Rogue");
-        Adv.GearStore(true);
+        Adv.GearStore(true, EnhAfter: true);
 
         Core.EquipClass(ClassType.Farm);
-        Core.KillMonster("Towerofdoom10", "Enter", "Spawn", "*", "Ethereal Essence", 250, isTemp: false);
+        Core.KillMonster("Towerofdoom10", "r8", "Left", "*", "Ethereal Essence", 250, isTemp: false);
 
         Core.EnsureComplete(8824);
         if (Bot.Config!.Get<bool>("SellQuestClass"))
@@ -1056,14 +1352,14 @@ public class UnlockForgeEnhancements
         Vim();
         Core.Logger("Unlocking Enhancement: Examen");
 
-        Adv.GearStore();
+        Adv.GearStore(EnhAfter: true);
         Core.EnsureAccept(8825);
         Core.BuyItem("Classhalla", 176, "Healer");
         Adv.RankUpClass("Healer");
-        Adv.GearStore(true);
+        Adv.GearStore(true, EnhAfter: true);
 
         Core.EquipClass(ClassType.Farm);
-        Core.KillMonster("Towerofdoom10", "Enter", "Spawn", "*", "Ethereal Essence", 250, isTemp: false);
+        Core.KillMonster("Towerofdoom10", "r8", "Left", "*", "Ethereal Essence", 250, isTemp: false);
 
         Core.EnsureComplete(8825);
         if (Bot.Config!.Get<bool>("SellQuestClass"))
@@ -1079,15 +1375,15 @@ public class UnlockForgeEnhancements
         Examen();
         Core.Logger("Unlocking Enhancement: Anima");
 
-        Adv.GearStore();
+        Adv.GearStore(EnhAfter: true);
         Core.EnsureAccept(8826);
 
         Core.BuyItem("Classhalla", 170, "Warrior");
         Adv.RankUpClass("Warrior");
-        Adv.GearStore(true);
+        Adv.GearStore(true, EnhAfter: true);
 
         Core.EquipClass(ClassType.Farm);
-        Core.KillMonster("Towerofdoom10", "Enter", "Spawn", "*", "Ethereal Essence", 650, isTemp: false);
+        Core.KillMonster("Towerofdoom10", "r8", "Left", "*", "Ethereal Essence", 650, isTemp: false);
 
         Core.EnsureComplete(8826);
         if (Bot.Config!.Get<bool>("SellQuestClass"))
@@ -1103,15 +1399,15 @@ public class UnlockForgeEnhancements
         Anima();
         Core.Logger("Unlocking Enhancement: Pneuma");
 
-        Adv.GearStore();
+        Adv.GearStore(EnhAfter: true);
         Core.EnsureAccept(8827);
 
         Core.BuyItem("Classhalla", 174, "Mage");
         Adv.RankUpClass("Mage");
-        Adv.GearStore(true);
+        Adv.GearStore(true, EnhAfter: true);
 
         Core.EquipClass(ClassType.Farm);
-        Core.KillMonster("Towerofdoom10", "Enter", "Spawn", "*", "Ethereal Essence", 650, isTemp: false);
+        Core.KillMonster("Towerofdoom10", "r8", "Left", "*", "Ethereal Essence", 650, isTemp: false);
 
         Core.EnsureComplete(8827);
         if (Bot.Config!.Get<bool>("SellQuestClass"))
@@ -1136,8 +1432,7 @@ public class UnlockForgeEnhancements
                 Core.EnsureAccept(5723);
                 Core.HuntMonster("dreadfire", "Stray Mana", "Bronze Key", isTemp: false);
                 Core.HuntMonster("dreadfire", "Living Brimstone", "Silver Key", isTemp: false);
-                Core.Logger("Going to your house to load the shop.\n" +
-                "[there may be a delay]");
+                Core.Logger("Going to your house to load the shop.\n" + "[there may be a delay]");
                 Core.SendPackets($"%xt%zm%house%1%{Bot.Player.Username}%");
                 Core.Sleep(5000);
                 Core.BuyItem(Bot.Map.Name, 336, "Golden Key");
@@ -1186,7 +1481,8 @@ public class UnlockForgeEnhancements
             Core.EnsureAccept(5710);
             if (Core.IsMember)
                 Core.HuntMonster("ruins", "Dark Elemental", "Dark Gem", isTemp: false);
-            else Core.HuntMonster("darkfortress", "Dark Elemental", "Dark Gem", isTemp: false);
+            else
+                Core.HuntMonster("darkfortress", "Dark Elemental", "Dark Gem", isTemp: false);
             Core.EnsureComplete(5710);
             Bot.Wait.ForPickup(Reward.ID);
         }
@@ -1208,7 +1504,7 @@ public enum ForgeQuestWeapon
     DauntLess,
     Ravenous,
     None,
-    All
+    All,
 };
 
 public enum ForgeQuestCape
@@ -1220,7 +1516,7 @@ public enum ForgeQuestCape
     Penitence,
     Lament,
     None,
-    All
+    All,
 };
 
 public enum ForgeQuestHelm
@@ -1231,5 +1527,5 @@ public enum ForgeQuestHelm
     Anima,
     Pneuma,
     None,
-    All
+    All,
 };

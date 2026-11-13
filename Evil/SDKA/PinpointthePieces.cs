@@ -17,14 +17,24 @@ public class PinpointthePieces_Any
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreSDKA SDKA { get => _SDKA ??= new CoreSDKA(); set => _SDKA = value; }    private static CoreSDKA _SDKA;
+    private static CoreSDKA SDKA
+    {
+        get => _SDKA ??= new CoreSDKA();
+        set => _SDKA = value;
+    }
+    private static CoreSDKA _SDKA;
 
     public string OptionStorage = "Pinpoint_the_Pieces";
     public bool DontPreconfigure = true;
     public List<IOption> Options = new()
     {
         CoreBots.Instance.SkipOptions,
-        new Option<PinpointIDs>("questID", "Quest ID", "ID of the desired Pinpoint quest to do.", PinpointIDs.Dagger)
+        new Option<PinpointIDs>(
+            "questID",
+            "Quest ID",
+            "ID of the desired Pinpoint quest to do.",
+            PinpointIDs.Dagger
+        ),
     };
 
     public void ScriptMain(IScriptInterface bot)
@@ -41,14 +51,17 @@ public class PinpointthePieces_Any
         Core.EquipClass(ClassType.Farm);
         PinpointIDs questID = Bot.Config?.Get<PinpointIDs>("questID") ?? PinpointIDs.Dagger;
 
-        ItemBase[] QuestRewards = Core.EnsureLoad((int)questID).Rewards.ToArray();
+        ItemBase[] QuestRewards = [.. Core.EnsureLoad((int)questID).Rewards];
 
         foreach (ItemBase reward in QuestRewards)
         {
             while (!Bot.ShouldExit && !Core.CheckInventory(reward.ID, reward.MaxStack))
-                SDKA.PinpointthePieces((int)questID, new[] { reward.Name }, new[] { reward.MaxStack });
+                SDKA.PinpointthePieces(
+                    (int)questID,
+                    new[] { reward.Name },
+                    new[] { reward.MaxStack }
+                );
         }
-
     }
 
     public enum PinpointIDs
@@ -58,6 +71,6 @@ public class PinpointthePieces_Any
         Broadsword = 2183,
         Scythe = 2184,
         Mace = 2185,
-        Bow = 2186
+        Bow = 2186,
     }
 }

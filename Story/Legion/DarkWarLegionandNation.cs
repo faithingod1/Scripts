@@ -14,9 +14,24 @@ public class DarkWarLegionandNation
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static Core13LoC LOC { get => _LOC ??= new Core13LoC(); set => _LOC = value; }    private static Core13LoC _LOC;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static Core13LoC LOC
+    {
+        get => _LOC ??= new Core13LoC();
+        set => _LOC = value;
+    }
+    private static Core13LoC _LOC;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -67,9 +82,12 @@ public class DarkWarLegionandNation
         {
             Core.EquipClass(ClassType.Solo);
             Core.EnsureAccept(8560);
-            while (!Bot.ShouldExit && Bot.Player.Cell != "r3")
+            while (!Bot.ShouldExit && Bot.Map.Name != "dagerecruit" && Bot.Player?.Cell != "r3")
             {
-                Core.Join("dagerecruit", "r3", "Left");
+                if (Bot.Map.Name != "dagerecruit")
+                    Core.Join("dagerecruit");
+                if (Bot.Player?.Cell != "r3")
+                    Core.Jump("r3", "Left");
                 Core.Sleep();
             }
             Core.KillMonster("dagerecruit", "r3", "Left", "Graython", "Graython Defeated");
@@ -174,7 +192,7 @@ public class DarkWarLegionandNation
         // ManSlayer? More Like ManSLAIN
         Story.KillQuest(8587, "darkwarlegion", "Manslayer Fiend");
 
-        // Defeat Dirtlicker            
+        // Defeat Dirtlicker
         Story.KillQuest(8588, "darkwarlegion", "Dirtlicker");
     }
 
@@ -188,7 +206,7 @@ public class DarkWarLegionandNation
         // Legion Badges && Legion Badges,Mega Legion Badges - 8578, 8579
         if (!Story.QuestProgression(8580))
         {
-            Core.EnsureAcceptmultiple( new[] { 8578, 8579 });
+            Core.EnsureAcceptmultiple(new[] { 8578, 8579 });
             Core.KillMonster("darkwarnation", "Enter", "Spawn", "*", "Legion Badge", 5);
             Core.KillMonster("darkwarnation", "Enter", "Spawn", "*", "Mega Legion Badge", 3);
             Core.EnsureComplete(new[] { 8578, 8579 });
@@ -203,8 +221,7 @@ public class DarkWarLegionandNation
         // Defeat War
         Story.KillQuest(8582, "darkwarnation", "War");
 
-        // The Traitor           
+        // The Traitor
         Story.KillQuest(8583, "darkwarnation", "Dage the Evil");
     }
-
 }

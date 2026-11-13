@@ -1,7 +1,7 @@
 /*
 name: Undead Legion Merge
 description: This bot will farm the items belonging to the selected mode for the Undead Legion Merge [238] in /underworld
-tags: undead, legion, merge, underworld, frostbite, overlord, zealith, reavers, blademaster, guiltius, legend, crown, face, judge, assassin, darkside, promotion, titan, cloak, exalted, champion, horns, archer, otherworldly, deathstare, deathdealer, shield, gutripper, skull, goggles, deathmask, apocalypse, dark, flaming, ultimate, lich, king, original, paragon, castle, soul, cleaver, smiling, dage, infinite, caster, loyal, warrior, swordmaster, draconic, plate, horned, spiked, guard, rhongomyniad, platinum, medal, gold, silver, bronze, yami, no, ronin, sheathed, katana, shuriken, shurikens, healer, mage, hatmask, rogue, , dragonblade, nulgath, monsterhunter, monsterhunters, revenant, seven, circles, beast, ancient, wraiths, winged, bone, crusher, crushers, warlord, great, twisted, yulgars, inn, house, parabellum, armaments, hammer, back, armet, void, vigilante, maw, battlegear, awakened, deaths, requiem, ops, armed, breach, morph, briefcase, tactical, gear, ghost, drone, cold, steel, kukri, kukris, rifle, rifles, corpsewax, candle, incendo, regius, nástrandir, warbringer, naval, scarf, eyepatch, bandana, focus, tide, despair, tides
+tags: undead, legion, merge, underworld, frostbite, overlord, zealith, reavers, blademaster, guiltius, legend, crown, face, judge, assassin, darkside, promotion, titan, cloak, exalted, champion, horns, archer, otherworldly, deathstare, deathdealer, shield, gutripper, skull, goggles, deathmask, apocalypse, dark, flaming, ultimate, lich, king, original, paragon, castle, soul, cleaver, smiling, dage, infinite, caster, loyal, warrior, swordmaster, draconic, plate, horned, spiked, guard, rhongomyniad, platinum, medal, gold, silver, bronze, yami, no, ronin, sheathed, katana, shuriken, shurikens, healer, mage, hatmask, rogue, , dragonblade, nulgath, monsterhunter, monsterhunters, revenant, seven, circles, beast, ancient, wraiths, winged, bone, crusher, crushers, warlord, great, twisted, yulgars, inn, house, parabellum, armaments, hammer, back, armet, void, vigilante, maw, battlegear, awakened, deaths, requiem, ops, armed, breach, morph, briefcase, tactical, gear, ghost, drone, cold, steel, kukri, kukris, rifle, rifles, corpsewax, candle, incendo, regius, nástrandir, warbringer, naval, scarf, eyepatch, bandana, focus, tide, despair, tides, arcane, shadow, minion, battle, pet
 */
 //cs_include Scripts/CoreBots.cs
 //cs_include Scripts/CoreFarms.cs
@@ -26,11 +26,23 @@ public class UndeadLegionMerge
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
     public static CoreAdvanced sAdv
     {
@@ -39,25 +51,54 @@ public class UndeadLegionMerge
     }
     public static CoreAdvanced _sAdv;
 
-    private static CoreDailies Daily { get => _Daily ??= new CoreDailies(); set => _Daily = value; }
+    private static CoreDailies Daily
+    {
+        get => _Daily ??= new CoreDailies();
+        set => _Daily = value;
+    }
     private static CoreDailies _Daily;
-    private static CoreLegion Legion { get => _Legion ??= new CoreLegion(); set => _Legion = value; }
+    private static CoreLegion Legion
+    {
+        get => _Legion ??= new CoreLegion();
+        set => _Legion = value;
+    }
     private static CoreLegion _Legion;
-    private static CoreLR LR { get => _LR ??= new CoreLR(); set => _LR = value; }
+    private static CoreLR LR
+    {
+        get => _LR ??= new CoreLR();
+        set => _LR = value;
+    }
     private static CoreLR _LR;
-    private static LegionExercise3 LegionExercise3 { get => _LegionExercise3 ??= new LegionExercise3(); set => _LegionExercise3 = value; }
+    private static LegionExercise3 LegionExercise3
+    {
+        get => _LegionExercise3 ??= new LegionExercise3();
+        set => _LegionExercise3 = value;
+    }
     private static LegionExercise3 _LegionExercise3;
-    private static LegionExercise4 LegionExercise4 { get => _LegionExercise4 ??= new LegionExercise4(); set => _LegionExercise4 = value; }
+    private static LegionExercise4 LegionExercise4
+    {
+        get => _LegionExercise4 ??= new LegionExercise4();
+        set => _LegionExercise4 = value;
+    }
     private static LegionExercise4 _LegionExercise4;
-    private static DragonBladeofNulgath DBoN { get => _DBoN ??= new DragonBladeofNulgath(); set => _DBoN = value; }
+    private static DragonBladeofNulgath DBoN
+    {
+        get => _DBoN ??= new DragonBladeofNulgath();
+        set => _DBoN = value;
+    }
     private static DragonBladeofNulgath _DBoN;
-    private static HollowSoul HS { get => _HS ??= new HollowSoul(); set => _HS = value; }
+    private static HollowSoul HS
+    {
+        get => _HS ??= new HollowSoul();
+        set => _HS = value;
+    }
     private static HollowSoul _HS;
 
     public bool DontPreconfigure = true;
     public List<IOption> Generic = sAdv.MergeOptions;
     public string[] MultiOptions = { "Generic", "Select" };
     public string OptionsStorage = sAdv.OptionsStorage;
+
     // [Can Change] This should only be changed by the author.
     //              If true, it will not stop the script if the default case triggers and the user chose to only get mats
     private bool dontStopMissingIng = false;
@@ -65,6 +106,7 @@ public class UndeadLegionMerge
     public void ScriptMain(IScriptInterface Bot)
     {
         Core.BankingBlackList.AddRange(new[] { "Legion Token", "Frosted Falchion", "Judgement Scythe", "Judgement Hammer", "Cursed Scimitar", "Essence of the Undead Legend", "Shadow Shroud", "DragonBlade of Nulgath", "Fallen MonsterHunter", "Fallen MonsterHunter Helm", "Fallen MonsterHunter Cape", "Fallen MonsterHunter Sword", "Exalted Crown", "Death's Requiem Staff" });
+
         Core.SetOptions();
 
         BuyAllMerge();
@@ -81,7 +123,9 @@ public class UndeadLegionMerge
         {
             ItemBase req = Adv.externalItem;
             int quant = Adv.externalQuant;
-            int currentQuant = req.Temp ? Bot.TempInv.GetQuantity(req.Name) : Bot.Inventory.GetQuantity(req.Name);
+            int currentQuant = req.Temp
+                ? Bot.TempInv.GetQuantity(req.Name)
+                : Bot.Inventory.GetQuantity(req.Name);
             if (req == null)
             {
                 Core.Logger("req is NULL");
@@ -92,9 +136,14 @@ public class UndeadLegionMerge
             {
                 default:
                     bool shouldStop = !Adv.matsOnly || !dontStopMissingIng;
-                    Core.Logger($"The bot hasn't been taught how to get {req.Name}." + (shouldStop ? " Please report the issue." : " Skipping"), messageBox: shouldStop, stopBot: shouldStop);
+                    Core.Logger(
+                        $"The bot hasn't been taught how to get {req.Name}."
+                            + (shouldStop ? " Please report the issue." : " Skipping"),
+                        messageBox: shouldStop,
+                        stopBot: shouldStop
+                    );
                     break;
-                #endregion
+        #endregion
 
                 case "Legion Token":
                     Legion.FarmLegionToken(quant);
@@ -119,22 +168,29 @@ public class UndeadLegionMerge
                 case "Essence of the Undead Legend":
                     if (!Core.isSeasonalMapActive("DarkBirthday"))
                     {
-                        Core.Logger($"{req.Name} Is seasonal item from Dage's Dark Birthday Shop, failing over to next item");
+                        Core.Logger(
+                            $"{req.Name} Is seasonal item from Dage's Dark Birthday Shop, failing over to next item"
+                        );
                         return;
                     }
 
-                    Core.Logger("\"DarkBirthday\" is a seasonal map available during dage's birthday");
+                    Core.Logger(
+                        "\"DarkBirthday\" is a seasonal map available during dage's birthday"
+                    );
                     Adv.BuyItem("DarkBirthday", 376, req.Name);
                     break;
 
                 case "Shadow Shroud":
                     Daily.ShadowShroud();
                     if (!Core.CheckInventory(req.Name, quant))
-                        Core.Logger($"Not enough \"Shadow Shroud\", please do the daily {15 - Bot.Inventory.GetQuantity("Shadow Shroud")} more times (not today)", messageBox: true);
+                        Core.Logger(
+                            $"Not enough \"Shadow Shroud\", please do the daily {15 - Bot.Inventory.GetQuantity("Shadow Shroud")} more times (not today)",
+                            messageBox: true
+                        );
                     break;
 
                 case "DragonBlade of Nulgath":
-                    DBoN.GetDragonBlade();
+                    DBoN.GetDragonBlade(true);
                     break;
 
                 case "Fallen MonsterHunter":
@@ -154,7 +210,6 @@ public class UndeadLegionMerge
                     Core.EquipClass(ClassType.Solo);
                     Core.HuntMonster("cocytusbarracks", "Maleagant", req.Name, quant, false, false);
                     break;
-
             }
         }
     }
@@ -304,5 +359,9 @@ public class UndeadLegionMerge
         new Option<bool>("95823", "Naval Dark Caster Focus Rune", "Mode: [select] only\nShould the bot buy \"Naval Dark Caster Focus Rune\" ?", false),
         new Option<bool>("95843", "Tide of Despair", "Mode: [select] only\nShould the bot buy \"Tide of Despair\" ?", false),
         new Option<bool>("95844", "Tides of Despair", "Mode: [select] only\nShould the bot buy \"Tides of Despair\" ?", false),
+        new Option<bool>("98581", "Arcane Shadow Minion House Guard", "Mode: [select] only\nShould the bot buy \"Arcane Shadow Minion House Guard\" ?", false),
+        new Option<bool>("98582", "Arcane Shadow Minion Battle Pet", "Mode: [select] only\nShould the bot buy \"Arcane Shadow Minion Battle Pet\" ?", false),
+        new Option<bool>("5747", "BladeMaster Visage + Mask", "Mode: [select] only\nShould the bot buy \"BladeMaster Visage + Mask\" ?", false),
+        new Option<bool>("5739", "BladeMaster Morph + Mask", "Mode: [select] only\nShould the bot buy \"BladeMaster Morph + Mask\" ?", false),
    };
 }

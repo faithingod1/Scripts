@@ -1,7 +1,7 @@
 /*
 name: Snowview Race Merge
-description: This will get all or selected items on this merge shop.
-tags: snowview-race-merge, seasonal, frostvale
+description: This bot will farm the items belonging to the selected mode for the Snowview Race Merge [2196] in /snowviewrace
+tags: snowview, race, merge, snowviewrace, frigid, festive, wear, morph, paperboy, cap, papergirl, ice, halation, bell, flail
 */
 //cs_include Scripts/CoreBots.cs
 //cs_include Scripts/CoreFarms.cs
@@ -17,14 +17,31 @@ public class SnowviewRaceMerge
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
-private static CoreAdvanced sAdv { get => _sAdv ??= new CoreAdvanced(); set => _sAdv = value; }
-private static CoreAdvanced _sAdv;
+    private static CoreAdvanced sAdv
+    {
+        get => _sAdv ??= new CoreAdvanced();
+        set => _sAdv = value;
+    }
+    private static CoreAdvanced _sAdv;
 
-    private static CoreFrostvale FV { get => _FV ??= new CoreFrostvale(); set => _FV = value; }    private static CoreFrostvale _FV;
+    private static CoreFrostvale FV
+    {
+        get => _FV ??= new CoreFrostvale();
+        set => _FV = value;
+    }
+    private static CoreFrostvale _FV;
 
     public bool DontPreconfigure = true;
     public List<IOption> Generic = sAdv.MergeOptions;
@@ -42,18 +59,20 @@ private static CoreAdvanced _sAdv;
         Core.SetOptions(false);
     }
 
-    public void BuyAllMerge()
+    public void BuyAllMerge(string? buyOnlyThis = null, mergeOptionsEnum? buyMode = null)
     {
         FV.SnowviewRace();
         //Only edit the map and shopID here
-        Adv.StartBuyAllMerge("snowviewrace", 2196, findIngredients);
+        Adv.StartBuyAllMerge("snowviewrace", 2196, findIngredients, buyOnlyThis, buyMode: buyMode);
 
         #region Dont edit this part
         void findIngredients()
         {
             ItemBase req = Adv.externalItem;
             int quant = Adv.externalQuant;
-            int currentQuant = req.Temp ? Bot.TempInv.GetQuantity(req.Name) : Bot.Inventory.GetQuantity(req.Name);
+            int currentQuant = req.Temp
+                ? Bot.TempInv.GetQuantity(req.Name)
+                : Bot.Inventory.GetQuantity(req.Name);
             if (req == null)
             {
                 Core.Logger("req is NULL");
@@ -64,9 +83,14 @@ private static CoreAdvanced _sAdv;
             {
                 default:
                     bool shouldStop = !Adv.matsOnly || !dontStopMissingIng;
-                    Core.Logger($"The bot hasn't been taught how to get {req.Name}." + (shouldStop ? " Please report the issue." : " Skipping"), messageBox: shouldStop, stopBot: shouldStop);
+                    Core.Logger(
+                        $"The bot hasn't been taught how to get {req.Name}."
+                            + (shouldStop ? " Please report the issue." : " Skipping"),
+                        messageBox: shouldStop,
+                        stopBot: shouldStop
+                    );
                     break;
-                #endregion
+        #endregion
 
                 case "Turkey Leg?":
                     Core.FarmingLogger(req.Name, quant);
@@ -82,22 +106,71 @@ private static CoreAdvanced _sAdv;
                     }
                     Core.CancelRegisteredQuests();
                     break;
-
             }
         }
     }
 
     public List<IOption> Select = new()
     {
-        new Option<bool>("74639", "Frigid Festive Wear", "Mode: [select] only\nShould the bot buy \"Frigid Festive Wear\" ?", false),
-        new Option<bool>("74640", "Frigid Hair", "Mode: [select] only\nShould the bot buy \"Frigid Hair\" ?", false),
-        new Option<bool>("74641", "Frigid Locks", "Mode: [select] only\nShould the bot buy \"Frigid Locks\" ?", false),
-        new Option<bool>("74642", "Frigid Hair Morph", "Mode: [select] only\nShould the bot buy \"Frigid Hair Morph\" ?", false),
-        new Option<bool>("74643", "Frigid Locks Morph", "Mode: [select] only\nShould the bot buy \"Frigid Locks Morph\" ?", false),
-        new Option<bool>("74644", "Frigid Paperboy Cap", "Mode: [select] only\nShould the bot buy \"Frigid Paperboy Cap\" ?", false),
-        new Option<bool>("74645", "Frigid Papergirl Cap", "Mode: [select] only\nShould the bot buy \"Frigid Papergirl Cap\" ?", false),
-        new Option<bool>("74646", "Frigid Ice Halation", "Mode: [select] only\nShould the bot buy \"Frigid Ice Halation\" ?", false),
-        new Option<bool>("74647", "Frigid Ice Staff", "Mode: [select] only\nShould the bot buy \"Frigid Ice Staff\" ?", false),
-        new Option<bool>("74648", "Frigid Bell Flail", "Mode: [select] only\nShould the bot buy \"Frigid Bell Flail\" ?", false),
+        new Option<bool>(
+            "74639",
+            "Frigid Festive Wear",
+            "Mode: [select] only\nShould the bot buy \"Frigid Festive Wear\" ?",
+            false
+        ),
+        new Option<bool>(
+            "74640",
+            "Frigid Hair",
+            "Mode: [select] only\nShould the bot buy \"Frigid Hair\" ?",
+            false
+        ),
+        new Option<bool>(
+            "74641",
+            "Frigid Locks",
+            "Mode: [select] only\nShould the bot buy \"Frigid Locks\" ?",
+            false
+        ),
+        new Option<bool>(
+            "74642",
+            "Frigid Hair Morph",
+            "Mode: [select] only\nShould the bot buy \"Frigid Hair Morph\" ?",
+            false
+        ),
+        new Option<bool>(
+            "74643",
+            "Frigid Locks Morph",
+            "Mode: [select] only\nShould the bot buy \"Frigid Locks Morph\" ?",
+            false
+        ),
+        new Option<bool>(
+            "74644",
+            "Frigid Paperboy Cap",
+            "Mode: [select] only\nShould the bot buy \"Frigid Paperboy Cap\" ?",
+            false
+        ),
+        new Option<bool>(
+            "74645",
+            "Frigid Papergirl Cap",
+            "Mode: [select] only\nShould the bot buy \"Frigid Papergirl Cap\" ?",
+            false
+        ),
+        new Option<bool>(
+            "74646",
+            "Frigid Ice Halation",
+            "Mode: [select] only\nShould the bot buy \"Frigid Ice Halation\" ?",
+            false
+        ),
+        new Option<bool>(
+            "74647",
+            "Frigid Ice Staff",
+            "Mode: [select] only\nShould the bot buy \"Frigid Ice Staff\" ?",
+            false
+        ),
+        new Option<bool>(
+            "74648",
+            "Frigid Bell Flail",
+            "Mode: [select] only\nShould the bot buy \"Frigid Bell Flail\" ?",
+            false
+        ),
     };
 }

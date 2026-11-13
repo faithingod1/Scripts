@@ -13,9 +13,17 @@ public class SkyChargedGrenadier
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
 
     public void ScriptMain(IScriptInterface bot)
@@ -34,7 +42,10 @@ public class SkyChargedGrenadier
 
         if (!Core.HasAchievement(28, "ip14"))
         {
-            Core.Logger("This bot requires you to have 9 Years Membership or more.", messageBox: true);
+            Core.Logger(
+                "This bot requires you to have 9 Years Membership or more.",
+                messageBox: true
+            );
             return;
         }
 
@@ -51,7 +62,7 @@ public class SkyChargedGrenadier
         Story.KillQuest(6930, "skycharged", "Sky Pirate Draconian");
 
         // Draconian Delivery (6931)
-        Story.KillQuest(6931, "skycharged", new[] { "Sky Pirate Draconian", "Sky Pirate Dragon" });
+        Story.KillQuest(6931, "skycharged", new[] { "Sky Pirate Dragon", "Sky Pirate Draconian" });
 
         // Gladius and some Jelly (6932)
         Story.KillQuest(6932, "skycharged", new[] { "Gladius", "Rehydrated Gell Oh No" });

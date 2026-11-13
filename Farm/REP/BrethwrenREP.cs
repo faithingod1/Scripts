@@ -10,13 +10,34 @@ tags: reputation, rep, seasonal, rank, farm
 //cs_include Scripts/Seasonal/HarvestDay/CoreHarvestDay.cs
 
 using Skua.Core.Interfaces;
+
 public class BrethwrenREPFarm
 {
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static CoreHarvestDay HarvestDay { get => _HarvestDay ??= new CoreHarvestDay(); set => _HarvestDay = value; }    private static CoreHarvestDay _HarvestDay;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static CoreHarvestDay HarvestDay
+    {
+        get => _HarvestDay ??= new CoreHarvestDay();
+        set => _HarvestDay = value;
+    }
+    private static CoreHarvestDay _HarvestDay;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -29,8 +50,6 @@ public class BrethwrenREPFarm
 
     public void DoRep()
     {
-        //Adv.BestGear(GenericGearBoost.dmgAll);
-        //Adv.BestGear(GenericGearBoost.rep);
         HarvestDay.BirdsWithHarms();
 
         Farm.BrethwrenREP();

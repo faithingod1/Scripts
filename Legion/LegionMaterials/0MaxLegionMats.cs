@@ -22,10 +22,30 @@ using Skua.Core.Interfaces;
 public class MaxLegionMats
 {
     public CoreBots Core => CoreBots.Instance;
-    private static CoreLegion CL { get => _CL ??= new CoreLegion(); set => _CL = value; }    private static CoreLegion _CL;
-    private static LetItBurn LetItBurn { get => _LetItBurn ??= new LetItBurn(); set => _LetItBurn = value; }    private static LetItBurn _LetItBurn;
-    private static AnotherOneBitesTheDust AnotherOneBitesTheDust { get => _AnotherOneBitesTheDust ??= new AnotherOneBitesTheDust(); set => _AnotherOneBitesTheDust = value; }    private static AnotherOneBitesTheDust _AnotherOneBitesTheDust;
-    private static CoreYnR CoreYnR { get => _CoreYnR ??= new CoreYnR(); set => _CoreYnR = value; }    private static CoreYnR _CoreYnR;
+    private static CoreLegion CL
+    {
+        get => _CL ??= new CoreLegion();
+        set => _CL = value;
+    }
+    private static CoreLegion _CL;
+    private static LetItBurn LetItBurn
+    {
+        get => _LetItBurn ??= new LetItBurn();
+        set => _LetItBurn = value;
+    }
+    private static LetItBurn _LetItBurn;
+    private static AnotherOneBitesTheDust AnotherOneBitesTheDust
+    {
+        get => _AnotherOneBitesTheDust ??= new AnotherOneBitesTheDust();
+        set => _AnotherOneBitesTheDust = value;
+    }
+    private static AnotherOneBitesTheDust _AnotherOneBitesTheDust;
+    private static CoreYnR CoreYnR
+    {
+        get => _CoreYnR ??= new CoreYnR();
+        set => _CoreYnR = value;
+    }
+    private static CoreYnR _CoreYnR;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -47,13 +67,12 @@ public class MaxLegionMats
         CL.EmblemofDage();
         CL.DarkToken();
         CL.BoneSigil();
-        CL.DarkToken();
         CL.DiamondTokenofDage();
         CL.ObsidianRock();
         LetItBurn.SoulEssence();
         AnotherOneBitesTheDust.SoulSand();
         CoreYnR.YokaiSwordScroll();
-        
+
         // Keep pvp as the last, as it takes **FUCKING FOREVER**
         CL.DagePvP();
     }

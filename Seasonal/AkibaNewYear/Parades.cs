@@ -11,7 +11,11 @@ public class Parades
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface Bot)
@@ -30,7 +34,22 @@ public class Parades
 
         Core.EquipClass(ClassType.Farm);
 
-        Story.LegacyQuestManager(QuestLogic, 4830, 4831, 4832, 4833, 4834, 4835, 4836, 4837, 4838, 4839, 4840, 4841, 4842);
+        Story.LegacyQuestManager(
+            QuestLogic,
+            4830,
+            4831,
+            4832,
+            4833,
+            4834,
+            4835,
+            4836,
+            4837,
+            4838,
+            4839,
+            4840,
+            4841,
+            4842
+        );
 
         void QuestLogic()
         {
@@ -105,7 +124,7 @@ public class Parades
                     Core.EquipClass(ClassType.Solo);
                     Core.HuntMonster("parades", "Oni", "Oni Defeated", log: false);
                     break;
-                    #endregion  Lengjing
+                #endregion  Lengjing
             }
         }
     }

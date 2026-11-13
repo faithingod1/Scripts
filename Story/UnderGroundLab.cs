@@ -15,7 +15,12 @@ public class UnderGroundLab
     public IScriptInterface Bot => IScriptInterface.Instance;
 
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -59,7 +64,15 @@ public class UnderGroundLab
         Story.KillQuest(3154, "undergroundlabb", "Window");
 
         // Gamer Fuel
-        Story.KillQuest(3155, "undergroundlabb", new[] { "Invisible Ninjas", "Invisible Ninjas", "Invisible Ninjas", "Invisible Ninjas" });
+        if (!Story.QuestProgression(3155))
+        {
+            Core.EnsureAccept(3155);
+            Core.HuntMonster("undergroundlabb", "Invisible Ninjas", "Sushi", 1);
+            Core.HuntMonster("undergroundlabb", "Invisible Ninjas", "Pocky", 1);
+            Core.HuntMonster("undergroundlabb", "Invisible Ninjas", "Coffee", 1);
+            Core.HuntMonster("undergroundlabb", "Invisible Ninjas", "TableGum", 1);
+            Core.EnsureComplete(3155);
+        }
 
         // Key to Doom
         Core.EquipClass(ClassType.Solo);

@@ -16,23 +16,41 @@ public class AllRankAllClasses
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreArmyLite Army { get => _Army ??= new CoreArmyLite(); set => _Army = value; }
+    private static CoreArmyLite Army
+    {
+        get => _Army ??= new CoreArmyLite();
+        set => _Army = value;
+    }
     private static CoreArmyLite _Army;
-    private static RankUpAll RUA { get => _RUA ??= new RankUpAll(); set => _RUA = value; }
+    private static RankUpAll RUA
+    {
+        get => _RUA ??= new RankUpAll();
+        set => _RUA = value;
+    }
     private static RankUpAll _RUA;
-    
+
     public void ScriptMain(IScriptInterface Bot)
     {
         Core.SetOptions();
 
-        DoTheThing();
+        // DoTheThing();
+        Bot.Log("OneClient scripts area bit fucked, and i just cant fix the \"not logging into full server\" issue.. so they will be disabled -- please use the normal varients of the scripts.");
+
 
         Core.SetOptions(false);
     }
 
     public void DoTheThing()
     {
+        Bot.Options.ReloginServer =
+            (Bot.Options.ReloginServer ?? "Twilly") ?? new[] { "Twilly", "Twig" }[new Random().Next(2)];
+
         while (!Bot.ShouldExit && Army.doForAll())
+        {
+            // TEMPORARY Game4000 inventory change. Remove after the client inventory fix.
+            if (Core.InventoryBagFreeSlots <= 0)
+                continue;
             RUA.RankUpAllClasses();
+        }
     }
 }

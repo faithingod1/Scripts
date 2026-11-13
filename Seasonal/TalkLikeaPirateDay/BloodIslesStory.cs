@@ -13,8 +13,18 @@ public class BloodIsles
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -67,26 +77,41 @@ public class BloodIsles
 
         #region BloodIsles
         Core.EquipClass(ClassType.Farm);
-        // 9876 | Faceless Moon 
+        // 9876 | Faceless Moon
         Story.KillQuest(9876, "bloodisles", UseableMonsters[0]);
 
         // 9877 | Apex Prey
         Story.KillQuest(9877, "bloodisles", UseableMonsters[1]);
 
         // 9878 | False Triton
-        Story.MapItemQuest(9878, "bloodisles", 13655);
-        Story.KillQuest(9878, "bloodisles", UseableMonsters[2]);
+        if (!Story.QuestProgression(9878))
+        {
+            Core.EnsureAccept(9878);
+            Core.GetMapItem(13655, 1, "bloodisles");
+            Core.HuntMonster("bloodisles", "Vampiric Lamprey", "Lamprey Fang", 12);
+            Core.EnsureComplete(9878);
+        }
 
         // 9879 | Blood Moonglade
         Story.KillQuest(9879, "bloodisles", UseableMonsters[3]);
 
         // 9880 | Aye Eye
-        Story.MapItemQuest(9880, "bloodisles", 13656);
-        Story.KillQuest(9880, "bloodisles", UseableMonsters[4]);
+        if (!Story.QuestProgression(9880))
+        {
+            Core.EnsureAccept(9880);
+            Core.GetMapItem(13656, 1, "bloodisles");
+            Core.HuntMonster("bloodisles", "Blood Veil Pirate", "Bloodshot Eye", 6);
+            Core.EnsureComplete(9880);
+        }
 
         // 9881 | Fang Profile
-        Story.MapItemQuest(9881, "bloodisles", 13657);
-        Story.KillQuest(9881, "bloodisles", UseableMonsters[5]);
+        if (!Story.QuestProgression(9881))
+        {
+            Core.EnsureAccept(9881);
+            Core.GetMapItem(13657, 1, "bloodisles");
+            Core.HuntMonster("bloodisles", "Drowned Horde", "Horde's Gold Ring", 6);
+            Core.EnsureComplete(9881);
+        }
 
         // 9882 | Necro-Putrefaction
         Story.KillQuest(9882, "bloodisles", new[] { UseableMonsters[2], UseableMonsters[5] });
@@ -103,10 +128,4 @@ public class BloodIsles
 
         #endregion
     }
-
-
-
-
-
-
 }

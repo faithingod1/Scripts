@@ -21,9 +21,24 @@ public class AscendedDrakathGear
     public IScriptInterface Bot => IScriptInterface.Instance;
 
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static DrakathArmorBot DA { get => _DA ??= new DrakathArmorBot(); set => _DA = value; }    private static DrakathArmorBot _DA;
-    private static TowerOfDoom TOD { get => _TOD ??= new TowerOfDoom(); set => _TOD = value; }    private static TowerOfDoom _TOD;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static DrakathArmorBot DA
+    {
+        get => _DA ??= new DrakathArmorBot();
+        set => _DA = value;
+    }
+    private static DrakathArmorBot _DA;
+    private static TowerOfDoom TOD
+    {
+        get => _TOD ??= new TowerOfDoom();
+        set => _TOD = value;
+    }
+    private static TowerOfDoom _TOD;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -36,10 +51,23 @@ public class AscendedDrakathGear
 
     public void GetAll()
     {
-        if (Core.CheckInventory(new[] { "Ascended Blade of Awe", "Ascended Light of Destiny", "Ascended Face of Chaos" }))
+        if (
+            Core.CheckInventory(
+                new[]
+                {
+                    "Ascended Blade of Awe",
+                    "Ascended Light of Destiny",
+                    "Ascended Face of Chaos",
+                }
+            )
+        )
             return;
 
-        Core.AddDrop("Ascended Blade of Awe", "Ascended Light of Destiny", "Ascended Face of Chaos");
+        Core.AddDrop(
+            "Ascended Blade of Awe",
+            "Ascended Light of Destiny",
+            "Ascended Face of Chaos"
+        );
 
         AscendedGear("Ascended Blade of Awe");
         AscendedGear("Ascended Light of Destiny");
@@ -52,13 +80,18 @@ public class AscendedDrakathGear
             return;
 
         DA.DrakathOriginalArmor();
+        if (!Core.CheckInventory("Original Drakath Armor"))
+        {
+            Core.Logger(
+                "Missing \"Original Drakath Armor\", which is required to accept and turnin this quest. returning to previous script/stopping script.\n"
+                    + $"Probably Missing \"Dage's Scroll fragments\" [{Core.dynamicQuant("Dage's Scroll Fragment", false) / 13}], try again tomarrow when the dailys available."
+            );
+            return;
+        }
+
         Core.AddDrop(Target);
         Core.RegisterQuests(3767);
-        while (!Bot.ShouldExit && !Core.CheckInventory(Target))
-        {
-            Core.HuntMonster("towerofdoom4", "Dread Stranglerfish", "Holy Wasabi");
-            Bot.Wait.ForPickup(Target);
-        }
+        Core.HuntMonster("towerofdoom4", "Dread Stranglerfish", Target, isTemp: false, log: false);
         Core.CancelRegisteredQuests();
     }
 }

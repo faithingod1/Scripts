@@ -11,16 +11,42 @@ public class ThirdSpell
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
-        Core.BankingBlackList.AddRange(new[] {
-                                "Brainz n' Eggs",
-                                "Mana Token I", "Mana Token II", "Mana Token III", "Mana Token IV", "Mana Token V", "Mana Token VI", "Mana Token VI",
-                                "Mana Token VII", "Mana Token VIII", "Mana Token IX", "Mana Token X", "Mana Token XI",
-                                "Sun Token I", "Sun Token II", "Sun Token III", "Sun Token IV", "Sun Token V", "Sun Token VI", "Sun Token VII", "Sun Token VIII",
-                                "Heart of the Sun"});
+        Core.BankingBlackList.AddRange(
+            new[]
+            {
+                "Brainz n' Eggs",
+                "Mana Token I",
+                "Mana Token II",
+                "Mana Token III",
+                "Mana Token IV",
+                "Mana Token V",
+                "Mana Token VI",
+                "Mana Token VI",
+                "Mana Token VII",
+                "Mana Token VIII",
+                "Mana Token IX",
+                "Mana Token X",
+                "Mana Token XI",
+                "Sun Token I",
+                "Sun Token II",
+                "Sun Token III",
+                "Sun Token IV",
+                "Sun Token V",
+                "Sun Token VI",
+                "Sun Token VII",
+                "Sun Token VIII",
+                "Heart of the Sun",
+            }
+        );
         Core.SetOptions();
         StoryLine();
 
@@ -33,7 +59,6 @@ public class ThirdSpell
 
         if (HoTS)
             HeartoftheSun();
-
         else
         {
             if (Core.CheckInventory("Sun Token VIII", toInv: false))
@@ -42,7 +67,29 @@ public class ThirdSpell
                 return;
             }
 
-            Story.LegacyQuestManager(QuestLogic, 4474, 4475, 4476, 4477, 4478, 4479, 4480, 4481, 4482, 4483, 4484, 4485, 4486, 4487, 4488, 4489, 4490, 4491, 4492, 4493);
+            Story.LegacyQuestManager(
+                QuestLogic,
+                4474,
+                4475,
+                4476,
+                4477,
+                4478,
+                4479,
+                4480,
+                4481,
+                4482,
+                4483,
+                4484,
+                4485,
+                4486,
+                4487,
+                4488,
+                4489,
+                4490,
+                4491,
+                4492,
+                4493
+            );
 
             void QuestLogic()
             {
@@ -125,13 +172,12 @@ public class ThirdSpell
                         Core.GetMapItem(3676, map: "thirdspell");
                         break;
 
-                    case 4493: // 4493|See the Hero Run        
+                    case 4493: // 4493|See the Hero Run
                         Core.GetMapItem(3677, map: "thirdspell");
                         break;
                 }
             }
         }
-
     }
 
     void HeartoftheSun()
@@ -139,11 +185,27 @@ public class ThirdSpell
         if (Core.CheckInventory("Heart of the Sun"))
             return;
         Core.AddDrop(
-                "Brainz n' Eggs",
-                "Mana Token I", "Mana Token II", "Mana Token III", "Mana Token IV", "Mana Token V", "Mana Token VI", "Mana Token VI",
-                "Mana Token VII", "Mana Token VIII", "Mana Token IX", "Mana Token X", "Mana Token XI",
-                "Sun Token I", "Sun Token II", "Sun Token III", "Sun Token IV", "Sun Token V", "Sun Token VI",
-                "Heart of the Sun");
+            "Brainz n' Eggs",
+            "Mana Token I",
+            "Mana Token II",
+            "Mana Token III",
+            "Mana Token IV",
+            "Mana Token V",
+            "Mana Token VI",
+            "Mana Token VI",
+            "Mana Token VII",
+            "Mana Token VIII",
+            "Mana Token IX",
+            "Mana Token X",
+            "Mana Token XI",
+            "Sun Token I",
+            "Sun Token II",
+            "Sun Token III",
+            "Sun Token IV",
+            "Sun Token V",
+            "Sun Token VI",
+            "Heart of the Sun"
+        );
 
         Core.EquipClass(ClassType.Farm);
 
@@ -186,43 +248,89 @@ public class ThirdSpell
                                                         if (!Core.CheckInventory("Mana Token V"))
                                                         {
                                                             // Check for "Mana Token IV"
-                                                            if (!Core.CheckInventory("Mana Token IV"))
+                                                            if (
+                                                                !Core.CheckInventory(
+                                                                    "Mana Token IV"
+                                                                )
+                                                            )
                                                             {
                                                                 // Check for "Mana Token III"
-                                                                if (!Core.CheckInventory("Mana Token III"))
+                                                                if (
+                                                                    !Core.CheckInventory(
+                                                                        "Mana Token III"
+                                                                    )
+                                                                )
                                                                 {
                                                                     // Check for "Mana Token II"
-                                                                    if (!Core.CheckInventory("Mana Token II"))
+                                                                    if (
+                                                                        !Core.CheckInventory(
+                                                                            "Mana Token II"
+                                                                        )
+                                                                    )
                                                                     {
                                                                         // Check for "Mana Token I"
-                                                                        if (!Core.CheckInventory("Mana Token I"))
+                                                                        if (
+                                                                            !Core.CheckInventory(
+                                                                                "Mana Token I"
+                                                                            )
+                                                                        )
                                                                         {
                                                                             // Check for "Brainz n' Eggs"
-                                                                            if (!Core.CheckInventory("Brainz n' Eggs"))
+                                                                            if (
+                                                                                !Core.CheckInventory(
+                                                                                    "Brainz n' Eggs"
+                                                                                )
+                                                                            )
                                                                             {
-                                                                                Core.Logger("Token: Brainz n' Eggs");
-                                                                                Core.EnsureAccept(4474);
+                                                                                Core.Logger(
+                                                                                    "Token: Brainz n' Eggs"
+                                                                                );
+                                                                                Core.EnsureAccept(
+                                                                                    4474
+                                                                                );
                                                                                 Core.HuntMonster("doomwood", "Doomwood Treeant", "Braaaainz", 10);
-                                                                                Core.EnsureComplete(4474);
-                                                                                Bot.Wait.ForPickup("Brainz n' Eggs");
+                                                                                Core.EnsureComplete(
+                                                                                    4474
+                                                                                );
+                                                                                Bot.Wait.ForPickup(
+                                                                                    "Brainz n' Eggs"
+                                                                                );
                                                                             }
-                                                                            Core.Logger("Token: Mana Token II");
+                                                                            Core.Logger(
+                                                                                "Token: Mana Token II"
+                                                                            );
                                                                             Core.EnsureAccept(4475);
                                                                             Core.HuntMonster("thirdspell", "Mana Phoenix", "Mana Plane Monster Defeated", 12);
-                                                                            Core.EnsureComplete(4475);
-                                                                            Bot.Wait.ForPickup("Mana Token I");
+                                                                            Core.EnsureComplete(
+                                                                                4475
+                                                                            );
+                                                                            Bot.Wait.ForPickup(
+                                                                                "Mana Token I"
+                                                                            );
                                                                         }
-                                                                        Core.Logger("Token: Mana Token III");
+                                                                        Core.Logger(
+                                                                            "Token: Mana Token III"
+                                                                        );
                                                                         Core.EnsureAccept(4476);
                                                                         Core.HuntMonster("thirdspell", "Mana Phoenix", "Proxy Eggs", 8);
                                                                         Core.EnsureComplete(4476);
-                                                                        Bot.Wait.ForPickup("Mana Token II");
+                                                                        Bot.Wait.ForPickup(
+                                                                            "Mana Token II"
+                                                                        );
                                                                     }
-                                                                    Core.Logger("Token: Mana Token IV");
+                                                                    Core.Logger(
+                                                                        "Token: Mana Token IV"
+                                                                    );
                                                                     Core.EnsureAccept(4477);
-                                                                    Core.GetMapItem(3668, 10, "thirdspell");
+                                                                    Core.GetMapItem(
+                                                                        3668,
+                                                                        10,
+                                                                        "thirdspell"
+                                                                    );
                                                                     Core.EnsureComplete(4477);
-                                                                    Bot.Wait.ForPickup("Mana Token III");
+                                                                    Bot.Wait.ForPickup(
+                                                                        "Mana Token III"
+                                                                    );
                                                                 }
                                                                 Core.Logger("Token: Mana Token V");
                                                                 Core.EnsureAccept(4478);

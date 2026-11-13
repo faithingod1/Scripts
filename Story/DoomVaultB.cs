@@ -1,7 +1,7 @@
 /*
 name: Doom Vault (B) Story
 description: This will finish the Doom Vault (B) Story.
-tags: story, quest, doom-vault-b
+tags: story, quest, doom-vault-b, undead, raxgore, undead raxgore
 */
 //cs_include Scripts/CoreBots.cs
 //cs_include Scripts/CoreStory.cs
@@ -15,10 +15,30 @@ public class DoomVaultB
     public IScriptInterface Bot => IScriptInterface.Instance;
 
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static DoomVaultA DoomVaultA { get => _DoomVaultA ??= new DoomVaultA(); set => _DoomVaultA = value; }    private static DoomVaultA _DoomVaultA;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static DoomVaultA DoomVaultA
+    {
+        get => _DoomVaultA ??= new DoomVaultA();
+        set => _DoomVaultA = value;
+    }
+    private static DoomVaultA _DoomVaultA;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -118,6 +138,7 @@ public class DoomVaultB
         // Grim Underdungeon XXIX 3004
         if (!Story.QuestProgression(3004))
         {
+            Core.EquipClass(ClassType.Solo);
             Core.EnsureAccept(3004);
             Core.KillMonster("doomvaultb", "r26", "Left", "Undead Raxgore", "Raxgore Slain", publicRoom: false);
             Core.EnsureComplete(3004);

@@ -1,7 +1,7 @@
 /*
 name: Fire Champion's Armor
 description: This script will farm Fire Champion's Armor.
-tags: fire-champion-s-armor, fire-champions-armor, polished-dragon-slayer, flame-forged-metal, void-scale, damage-dragon, hero-s-valiance
+tags: fire champions armor, fire champions armor, polished dragon slayer, flame forged metal, void scale, damage dragon, heros valiance, fca
 */
 //cs_include Scripts/CoreBots.cs
 //cs_include Scripts/CoreFarms.cs
@@ -12,16 +12,42 @@ tags: fire-champion-s-armor, fire-champions-armor, polished-dragon-slayer, flame
 //cs_include Scripts/Story/ShadowsOfWar/CoreSoW.cs
 //cs_include Scripts/Story/Lair.cs
 using Skua.Core.Interfaces;
+using Skua.Core.Models.Items;
 
 public class FireChampionsArmor
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
-    private static DragonslayerGeneral DSG { get => _DSG ??= new DragonslayerGeneral(); set => _DSG = value; }    private static DragonslayerGeneral _DSG;
-    private static WarfuryEmblem WFE { get => _WFE ??= new WarfuryEmblem(); set => _WFE = value; }    private static WarfuryEmblem _WFE;
-    private static Lair Lair { get => _Lair ??= new Lair(); set => _Lair = value; }    private static Lair _Lair;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
+    private static DragonslayerGeneral DSG
+    {
+        get => _DSG ??= new DragonslayerGeneral();
+        set => _DSG = value;
+    }
+    private static DragonslayerGeneral _DSG;
+    private static WarfuryEmblem WFE
+    {
+        get => _WFE ??= new WarfuryEmblem();
+        set => _WFE = value;
+    }
+    private static WarfuryEmblem _WFE;
+    private static Lair Lair
+    {
+        get => _Lair ??= new Lair();
+        set => _Lair = value;
+    }
+    private static Lair _Lair;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -44,7 +70,6 @@ public class FireChampionsArmor
         VoidScale(13);
         Adv.BuyItem("wartraining", 2035, "Fire Champion's Armor", shopItemID: 8759);
     }
-
 
     public void PolishedDragonSlayer()
     {
@@ -69,13 +94,11 @@ public class FireChampionsArmor
         Adv.BuyItem("wartraining", 2035, "Polished DragonSlayer");
     }
 
-
     public void FlameForgedMetal(int Metalquant = 10)
     {
         if (Core.CheckInventory("Flame-Forged Metal", Metalquant))
             return;
 
-        //Adv.BestGear(RacialGearBoost.Undead);
         Core.EquipClass(ClassType.Solo);
         Core.AddDrop("Flame-Forged Metal");
 
@@ -92,11 +115,6 @@ public class FireChampionsArmor
         if (Core.CheckInventory("Void Scale", VoidScaleQuant))
             return;
 
-        //Adv.BestGear(RacialGearBoost.Chaos);
-        Core.EquipClass(ClassType.Solo);
-
-        Core.HuntMonster("underlair", "Archfiend Dragonlord", "Void Scale", VoidScaleQuant, isTemp: false);
+        Core.KillArchFiendDragonLord("Void Scale", VoidScaleQuant, isTemp: false);
     }
-
-
 }

@@ -8,15 +8,19 @@ tags: birthday-feast-quest-rewards, seasonal, harvest-day
 //cs_include Scripts/Story/SepulchureSaga/CoreSepulchure.cs
 using Skua.Core.Interfaces;
 using Skua.Core.Models.Items;
-using Skua.Core.Options;
 using Skua.Core.Models.Quests;
-
+using Skua.Core.Options;
 
 public class BirthdayFeastQuestRewards
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreSepulchure CoreSS { get => _CoreSS ??= new CoreSepulchure(); set => _CoreSS = value; }    private static CoreSepulchure _CoreSS;
+    private static CoreSepulchure CoreSS
+    {
+        get => _CoreSS ??= new CoreSepulchure();
+        set => _CoreSS = value;
+    }
+    private static CoreSepulchure _CoreSS;
 
     public string OptionsStorage = "BirthdayFeast";
 
@@ -24,13 +28,31 @@ public class BirthdayFeastQuestRewards
     public List<IOption> Options = new()
     {
         CoreBots.Instance.SkipOptions,
-        new Option<bool>("ArlettesQuests", "ArlettesQuests Rewards", "Farms All \"Arlette's Birthday Quest (8385)\" Rewards.", false),
-        new Option<bool>("InanitasQuests", "InanitasQuests Rewards", "Farms All \"Inanitas' Birthday Quest (8384)\" Rewards.", false),
-        new Option<bool>("MemetsQuests", "MemetsQuests Rewards", "Farms All \"Memet's Birthday Quest (8382)\" Rewards.", false),
-        new Option<bool>("KotarosQuests", "KotarosQuests Rewards", "Farms All \"Kotaro's Birthday Quest (8383)\" Rewards.", false),
-
+        new Option<bool>(
+            "ArlettesQuests",
+            "ArlettesQuests Rewards",
+            "Farms All \"Arlette's Birthday Quest (8385)\" Rewards.",
+            false
+        ),
+        new Option<bool>(
+            "InanitasQuests",
+            "InanitasQuests Rewards",
+            "Farms All \"Inanitas' Birthday Quest (8384)\" Rewards.",
+            false
+        ),
+        new Option<bool>(
+            "MemetsQuests",
+            "MemetsQuests Rewards",
+            "Farms All \"Memet's Birthday Quest (8382)\" Rewards.",
+            false
+        ),
+        new Option<bool>(
+            "KotarosQuests",
+            "KotarosQuests Rewards",
+            "Farms All \"Kotaro's Birthday Quest (8383)\" Rewards.",
+            false
+        ),
     };
-
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -117,10 +139,8 @@ public class BirthdayFeastQuestRewards
                         Core.ToBank(QuestRewards);
                     }
                 }
-
             }
         }
-
 
         // foreach (ItemBase Reward in RewardOptions) { Core.ToBank(Reward.Name); }
     }
@@ -156,7 +176,6 @@ public class BirthdayFeastQuestRewards
                         Core.ToBank(QuestRewards);
                     }
                 }
-
             }
         }
         // foreach (ItemBase Reward in RewardOptions) { Core.ToBank(Reward.Name); }
@@ -195,8 +214,6 @@ public class BirthdayFeastQuestRewards
                     }
                 }
             }
-
-
         }
         // foreach (ItemBase Reward in RewardOptions) { Core.ToBank(Reward.Name); }
     }

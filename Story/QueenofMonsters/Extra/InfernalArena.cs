@@ -14,11 +14,24 @@ public class InfernalArena
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
-    private static CelestialArenaQuests CAQuests { get => _CAQuests ??= new CelestialArenaQuests(); set => _CAQuests = value; }
+    private static CelestialArenaQuests CAQuests
+    {
+        get => _CAQuests ??= new CelestialArenaQuests();
+        set => _CAQuests = value;
+    }
     private static CelestialArenaQuests _CAQuests;
-
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
     public void ScriptMain(IScriptInterface Bot)
     {
         Core.SetOptions();
@@ -30,10 +43,14 @@ public class InfernalArena
 
     public void DoStory(bool ReturnEarly = false)
     {
-        Core.OneTimeMessage("SOLO-ONLY", "this map is solo only\n" +
-        "and anything past the duo's will require potions\n" +
-        "so the script wont go past that mob.\n" +
-        "[DO IT YOURSELF]", messageBox: false);
+        Core.OneTimeMessage(
+            "SOLO-ONLY",
+            "this map is solo only\n"
+                + "and anything past the duo's will require potions\n"
+                + "so the script wont go past that mob.\n"
+                + "[DO IT YOURSELF]",
+            messageBox: false
+        );
 
         if (Core.isCompletedBefore(ReturnEarly ? 9376 : 9377))
             return;
@@ -42,7 +59,10 @@ public class InfernalArena
 
         Story.PreLoad(this);
 
-        Core.EquipClass(ClassType.Solo);
+        if (Core.CheckInventory("ArchPaladin"))
+            Core.Equip("ArchPaladin");
+        else
+            Core.EquipClass(ClassType.Solo);
 
         // Maligned Magus 9356
         Story.KillQuest(9356, "infernalarena", "Infernal Mage");
@@ -96,39 +116,30 @@ public class InfernalArena
         Story.KillQuest(9372, "infernalarena", "Accursed Apephyrx");
 
         #region Fuck these guys
-        //Rest below require potions or aloooota luck and fuck that 
-        Core.Logger("The Remaining quests will require specific\n" +
-        "classes [thanks to famous youtuber deso]");
 
-        foreach (string Class in new[] { Core.CheckInventory("Legion DoomKnight") ? "Legion DoomKnight" : "Classic Legion DoomKnight", "Lord of Order", "Dragon of Time", "Void Highlord" })
-        {
-            if (Core.CheckInventory(Class))
-                Core.Logger($"{Class} Found!");
-            else Core.Logger($"{Class} not Found! good luck killing them");
-        }
 
-        // Reviled Returner 9373
-        //this ones barely soloable so gl
-        Core.JumpWait();
-        Core.BossClass(Core.CheckInventory("Void HighLord (IoDA)") ? "Void HighLord (IoDA)" : "Void Highlord");
+        // Reviled Returner 9373        
         Core.Logger("Boss: [Deadly Duo]");
         Story.KillQuest(9373, "infernalarena", "Deadly Duo");
 
         // Reign of the Deer 9374
-        Core.JumpWait();
-        Core.BossClass(Core.CheckInventory("Legion DoomKnight") ? "Legion DoomKnight" : "Classic Legion DoomKnight");
         Core.Logger("Boss: [Cervus Malus]");
         Story.KillQuest(9374, "infernalarena", "Cervus Malus");
 
+        string VHLCheck = Core.CheckInventory("Void HighLord (IoDA)") ? "Void HighLord (IoDA)" : "Void Highlord" ?? string.Empty;
+        if (!string.IsNullOrEmpty(VHLCheck))
+        {
+            Core.Equip(VHLCheck);
+            Bot.Skills.StartAdvanced(VHLCheck, false, Skua.Core.Models.Skills.ClassUseMode.Def);
+        }
+        else Core.EquipClass(ClassType.Solo);
+
+
         // Ars Infernum 9375
-        Core.JumpWait();
-        Core.BossClass("Dragon of Time");
         Core.Logger("Boss: [Key of Sholemoh]");
         Story.KillQuest(9375, "infernalarena", "Key of Sholemoh");
 
         // Unrepentant Culler 9376
-        Core.JumpWait();
-        Core.DodgeClass(Core.CheckInventory("Yami no Ronin") ? "Yami no Ronin" : "Lord of Order");
         Core.Logger("Boss: [Azalith's Scythe]");
         Bot.Options.AttackWithoutTarget = true;
         Story.KillQuest(9376, "infernalarena", "Azalith's Scythe");
@@ -137,13 +148,12 @@ public class InfernalArena
         if (!ReturnEarly)
         {
             // Lord of the Scarred Barrens  9377
-            Core.JumpWait();
-            // Core.DodgeClass();
-            Core.BossClass(Core.CheckInventory("Chaos Avenger") ? "Chaos Avenger" : Core.CheckInventory("Void HighLord (IoDA)") ? "Void HighLord (IoDA)" : "Void Highlord");
             Core.Logger("Boss: [Na'al]");
-            Core.Logger("this may take an hr or 2... or u may first try\n" +
-            "it so good luck(a kill has been gotten with vhl\n" +
-            "so its confirmd able to be done...)");
+            Core.Logger(
+                "this may take an hr or 2... or u may first try\n"
+                    + "it so good luck(a kill has been gotten with vhl\n"
+                    + "so its confirmd able to be done...)"
+            );
             Core.EnsureAccept(9377);
             Story.KillQuest(9377, "infernalarena", "Na'al");
             Core.EnsureComplete(9377);

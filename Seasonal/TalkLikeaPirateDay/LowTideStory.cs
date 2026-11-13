@@ -11,7 +11,12 @@ public class LowTideStory
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -51,7 +56,8 @@ public class LowTideStory
             Core.EnsureComplete(8839);
             Core.Logger("Completed Quest: [8839] - \"Committed to the Sea\"", "TryComplete");
         }
-        else Core.Logger("Already Completed: [8839] - \"Committed to the Sea\"", "QuestProgression");
+        else
+            Core.Logger("Already Completed: [8839] - \"Committed to the Sea\"", "QuestProgression");
 
         //Briny Gelatin 8840
         Story.KillQuest(8840, "lowtide", "Spectral Jellyfish");
@@ -60,11 +66,22 @@ public class LowTideStory
         Story.MapItemQuest(8841, "lowtide", 10522, 3);
 
         //Local Delicacies 8842
-        Story.KillQuest(8842, "lowtide", new[] { "Ghostly Eel", "Spectral Jellyfish" });
+        if (!Story.QuestProgression(8842))
+        {
+            Core.EnsureAccept(8842);
+            Core.HuntMonster("lowtide", "Ghostly Eel", "Eel Guts", 6);
+            Core.HuntMonster("lowtide", "Spectral Jellyfish", "Translucent Tentacle", 6);
+            Core.EnsureComplete(8842);
+        }
 
         //Myriad Andromeda 8843
-        Story.MapItemQuest(8843, "lowtide", 10523);
-        Story.KillQuest(8843, "lowtide", "Lone Pirate");
+        if (!Story.QuestProgression(8843))
+        {
+            Core.EnsureAccept(8843);
+            Core.GetMapItem(10523, 1, "lowtide");
+            Core.HuntMonster("lowtide", "Lone Pirate", "Fake Gold Teeth", 7);
+            Core.EnsureComplete(8843);
+        }
 
         //Ebbing Grudge 8844
         Story.MapItemQuest(8844, "lowtide", 10524);

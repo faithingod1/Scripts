@@ -12,9 +12,17 @@ public class Fiendshard_Story
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
-    private static Originul_Story Originul { get => _Originul ??= new Originul_Story(); set => _Originul = value; }
+    private static Originul_Story Originul
+    {
+        get => _Originul ??= new Originul_Story();
+        set => _Originul = value;
+    }
     private static Originul_Story _Originul;
 
     public void ScriptMain(IScriptInterface bot)
@@ -28,13 +36,12 @@ public class Fiendshard_Story
 
     public void Fiendshard_QuestlineP1()
     {
-        Story.PreLoad(this);
-
         Originul.Originul_Questline();
+
+        Story.PreLoad(this);
 
         Core.Logger("Making sure portal quest is done.. appearntly its required...? (though not stated?)");
         Core.Join("tercessuinotlim");
-
 
         // Sneak Attack
         if (!Story.QuestProgression(7892))
@@ -81,7 +88,13 @@ public class Fiendshard_Story
         if (!Story.QuestProgression(7897))
         {
             Core.EquipClass(ClassType.Solo);
-            Story.KillQuest(7897, "Fiendshard", new[] { "Dirtlicker", "Fiend Shard" });
+            if (!Story.QuestProgression(7897))
+            {
+                Core.EnsureAccept(7897);
+                Core.HuntMonster("fiendshard", "Dirtlicker", "Dirtlicker Defeated", 1);
+                Core.HuntMonster("fiendshard", "Fiend Shard", "Dirtlicker's Fiend Shard Shattered", 5);
+                Core.EnsureComplete(7897);
+            }
             Core.Jump("Enter", "Spawn");
         }
 

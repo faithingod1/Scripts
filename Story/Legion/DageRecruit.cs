@@ -11,7 +11,12 @@ public class DageRecruitStory
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -66,8 +71,13 @@ public class DageRecruitStory
         }
 
         //Island Sightseeing
-        Story.MapItemQuest(8561, "dagerecruit", 9885);
-        Story.KillQuest(8561, "dagerecruit", "Scared Wildcat");
+        if (!Story.QuestProgression(8561))
+        {
+            Core.EnsureAccept(8561);
+            Core.GetMapItem(9885, 1, "dagerecruit");
+            Core.HuntMonster("dagerecruit", "Scared Wildcat", "Wildlife Cleared", 10);
+            Core.EnsureComplete(8561);
+        }
 
         //Lure Crafted
         if (!Story.QuestProgression(8562))
@@ -158,7 +168,7 @@ public class DageRecruitStory
         // ManSlayer? More Like ManSLAIN
         Story.KillQuest(8587, "darkwarlegion", "Manslayer Fiend");
 
-        // Defeat Dirtlicker            
+        // Defeat Dirtlicker
         Story.KillQuest(8588, "darkwarlegion", "Dirtlicker");
     }
 }

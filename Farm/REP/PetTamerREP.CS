@@ -7,19 +7,29 @@ tags: pet, tamer, pettamer, pet tamer, rank, rep, reputation
 //cs_include Scripts/CoreFarms.cs
 //cs_include Scripts/CoreAdvanced.cs
 using Skua.Core.Interfaces;
+
 public class PetTamerREP
 {
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
 
     public void ScriptMain(IScriptInterface bot)
     {
         Core.SetOptions();
 
-        //Adv.BestGear(GenericGearBoost.dmgAll);
-        //Adv.BestGear(GenericGearBoost.rep);
         Farm.PetTamerREP();
+        Core.Logger("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
         Core.SetOptions(false);
     }

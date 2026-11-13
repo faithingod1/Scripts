@@ -19,18 +19,65 @@ public class SepulchuresOriginalHelm
     public IScriptInterface Bot => IScriptInterface.Instance;
 
     public CoreBots Core => CoreBots.Instance;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreDailies Daily { get => _Daily ??= new CoreDailies(); set => _Daily = value; }    private static CoreDailies _Daily;
-    private static Core13LoC LOC { get => _LOC ??= new Core13LoC(); set => _LOC = value; }    private static Core13LoC _LOC;
-    private static CoreToD TOD { get => _TOD ??= new CoreToD(); set => _TOD = value; }    private static CoreToD _TOD;
-    private static CoreDoomwood DW { get => _DW ??= new CoreDoomwood(); set => _DW = value; }    private static CoreDoomwood _DW;
-    public string[] GravelynsDoomFireTokenItems = { "Empowered Essence", "Gravelyn's Blessing", "Painful Memory Bubble", "Burning Passion Flame", "Father's Sorrowful Tear", "Gravelyn's DoomFire Token", "Necrotic Sword of Doom", "Sepulchure's DoomKnight Armor" };
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreDailies Daily
+    {
+        get => _Daily ??= new CoreDailies();
+        set => _Daily = value;
+    }
+    private static CoreDailies _Daily;
+    private static Core13LoC LOC
+    {
+        get => _LOC ??= new Core13LoC();
+        set => _LOC = value;
+    }
+    private static Core13LoC _LOC;
+    private static CoreToD TOD
+    {
+        get => _TOD ??= new CoreToD();
+        set => _TOD = value;
+    }
+    private static CoreToD _TOD;
+    private static CoreDoomwood DW
+    {
+        get => _DW ??= new CoreDoomwood();
+        set => _DW = value;
+    }
+    private static CoreDoomwood _DW;
+    public string[] GravelynsDoomFireTokenItems =
+    {
+        "Empowered Essence",
+        "Gravelyn's Blessing",
+        "Painful Memory Bubble",
+        "Burning Passion Flame",
+        "Father's Sorrowful Tear",
+        "Gravelyn's DoomFire Token",
+        "Necrotic Sword of Doom",
+        "Sepulchure's DoomKnight Armor",
+    };
 
     public void ScriptMain(IScriptInterface bot)
     {
-        Core.BankingBlackList.AddRange(new[] { "Necrotic Sword of Doom", "Sepulchure's DoomKnight Armor" });
+        Core.BankingBlackList.AddRange(
+            new[] { "Necrotic Sword of Doom", "Sepulchure's DoomKnight Armor" }
+        );
         Core.SetOptions();
 
         DoAll();
@@ -58,7 +105,16 @@ public class SepulchuresOriginalHelm
         DW.AQWZombies();
         TOD.MysteriousDungeon();
         LOC.Hero();
-        if (!Core.CheckInventory(new[] { "Lore's Champion Seal", "Gravelyn's DoomFire Token", "Royal ShadowScythe Blade" }))
+        if (
+            !Core.CheckInventory(
+                new[]
+                {
+                    "Lore's Champion Seal",
+                    "Gravelyn's DoomFire Token",
+                    "Royal ShadowScythe Blade",
+                }
+            )
+        )
         {
             GravelynsDoomFireToken();
             RoyalShadowScytheBlade();
@@ -92,7 +148,12 @@ public class SepulchuresOriginalHelm
                     Farm.EvilREP(10);
                     Core.EnsureAccept(5457);
                     while (!Bot.ShouldExit && !Core.CheckInventory(37039))
-                        Core.HuntMonsterMapID("necrodungeon", 9, "Essence of the Doomlord", log: false);
+                        Core.HuntMonsterMapID(
+                            "necrodungeon",
+                            9,
+                            "Essence of the Doomlord",
+                            log: false
+                        );
                     Core.EnsureComplete(5457);
                     Bot.Wait.ForPickup(37034);
                 }
@@ -102,7 +163,7 @@ public class SepulchuresOriginalHelm
             if (!Core.CheckInventory("Painful Memory Bubble"))
             {
                 Core.EnsureAccept(5458);
-                Core.KillMonster("swordhavenfalls", "r10", "Left", 1295, "Doomed Memories");
+                Core.KillMonster("swordhavenfalls", "r10", "Left", 1, "Doomed Memories");
                 Core.EnsureComplete(5458);
                 Bot.Wait.ForPickup("Painful Memory Bubble");
             }
@@ -142,5 +203,4 @@ public class SepulchuresOriginalHelm
         Farm.EvilREP(10);
         Core.BuyItem("shadowfall", 1639, "Royal ShadowScythe Blade", shopItemID: 26666);
     }
-
 }

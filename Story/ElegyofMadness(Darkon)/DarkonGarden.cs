@@ -6,12 +6,18 @@ tags: story, quest, elegy-of-madness, darkon, garden
 //cs_include Scripts/CoreBots.cs
 //cs_include Scripts/CoreStory.cs
 using Skua.Core.Interfaces;
+
 public class DarkonGarden
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
 
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -51,8 +57,13 @@ public class DarkonGarden
         Story.KillQuest(7491, "garden", "Creature 83");
 
         //Big, MEAN Bunnies 7492
-        Story.MapItemQuest(7492, "garden", 7326);
-        Story.KillQuest(7492, "garden", "Creature 35");
+        if (!Story.QuestProgression(7492))
+        {
+            Core.EnsureAccept(7492);
+            Core.GetMapItem(7326, 1, "garden");
+            Core.HuntMonster("garden", "Creature 35", "Mutated Tongue", 5);
+            Core.EnsureComplete(7492);
+        }
 
         //What Crack? 7493
         Story.MapItemQuest(7493, "garden", 7327);

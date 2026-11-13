@@ -11,7 +11,12 @@ public class ShadowVault
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -36,14 +41,20 @@ public class ShadowVault
         Story.KillQuest(6782, "ShadowVault", "Fallen Adventurer");
 
         //A Clue! A Clue! 6783
-        Story.KillQuest(6783, "ShadowVault", new[] { "Shadowscythe Minion", "Fallen Adventurer" });
+        if (!Story.QuestProgression(6783))
+        {
+            Core.EnsureAccept(6783);
+            Core.HuntMonster("shadowvault", "Shadowscythe Minion", "Aliens \"Talked\" With", 8);
+            Core.HuntMonster("shadowvault", "Fallen Adventurer", "A Clue", 1);
+            Core.EnsureComplete(6783);
+        }
 
         //Un-Cloaky! 6784
         if (!Story.QuestProgression(6784))
         {
             Core.EnsureAccept(6784);
             Core.GetMapItem(6311, 1, "ShadowVault");
-            Core.KillMonster("shadowvault", "cell", "r3a", "Left", "Shadowscythe Guard Slain");
+            Core.KillMonster("shadowvault", "r3a", "Left", "Shadowscythe Guard", "Shadowscythe Guard Slain");
             Story.KillQuest(6784, "ShadowVault", "Shadowscythe Guard");
             Core.EnsureComplete(6784);
         }
@@ -52,19 +63,42 @@ public class ShadowVault
         Story.MapItemQuest(6787, "ShadowVault", 6312);
 
         //Hole in the Wall 6788
-        Story.MapItemQuest(6788, "ShadowVault", 6313);
-        Story.KillQuest(6788, "ShadowVault", new[] { "Spiderscythe","Shadowscythe Minion" });
+        if (!Story.QuestProgression(6788))
+        {
+            Core.EnsureAccept(6788);
+            Core.GetMapItem(6313, 1, "ShadowVault");
+            Core.HuntMonster("shadowvault", "Spiderscythe", "Spider Smashed", 5);
+            Core.HuntMonster("shadowvault", "Shadowscythe Minion", "Minion Gored", 5);
+            Core.EnsureComplete(6788);
+        }
 
         //An Actual Skeleton... key? 6789
-        Story.KillQuest(6789, "ShadowVault", new[] { "Fallen Adventurer", "Spiderscythe", "Shadowscythe Minion" });
+        if (!Story.QuestProgression(6789))
+        {
+            Core.EnsureAccept(6789);
+            Core.HuntMonster("shadowvault", "Fallen Adventurer", "Random Bones", 7);
+            Core.HuntMonster("shadowvault", "Spiderscythe", "Webbing", 5);
+            Core.HuntMonster("shadowvault", "Shadowscythe Minion", "Super Hard Claw", 1);
+            Core.EnsureComplete(6789);
+        }
 
         //Open Sesame 6790
-        Story.MapItemQuest(6790, "ShadowVault", 6314);
-        Story.KillQuest(6790, "ShadowVault", "Shadowstryke");
+        if (!Story.QuestProgression(6790))
+        {
+            Core.EnsureAccept(6790);
+            Core.GetMapItem(6314, 1, "ShadowVault");
+            Core.HuntMonster("shadowvault", "Shadowstryke", "Stryke Squashed", 6);
+            Core.EnsureComplete(6790);
+        }
 
         //Magic the Door Open 6791
-        Story.MapItemQuest(6791, "ShadowVault", 6315, 5);
-        Story.KillQuest(6791, "ShadowVault", "Darkness");
+        if (!Story.QuestProgression(6791))
+        {
+            Core.EnsureAccept(6791);
+            Core.GetMapItem(6315, 5, "ShadowVault");
+            Core.HuntMonster("shadowvault", "Darkness", "Dark Magic", 8);
+            Core.EnsureComplete(6791);
+        }
 
         //Un-Stucky! 6792
         Story.MapItemQuest(6792, "ShadowVault", 6316);
@@ -81,6 +115,5 @@ public class ShadowVault
             Core.EnsureComplete(6794);
             Core.JumpWait();
         }
-
     }
 }

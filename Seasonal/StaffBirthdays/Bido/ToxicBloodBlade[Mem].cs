@@ -14,11 +14,30 @@ public class ToxicBloodBlade
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
-    private static CoreNation Nation { get => _Nation ??= new CoreNation(); set => _Nation = value; }    private static CoreNation _Nation;
-
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
+    private static CoreNation Nation
+    {
+        get => _Nation ??= new CoreNation();
+        set => _Nation = value;
+    }
+    private static CoreNation _Nation;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -28,7 +47,6 @@ public class ToxicBloodBlade
 
         Core.SetOptions(false);
     }
-
 
     public void GetBlade()
     {
@@ -49,9 +67,11 @@ public class ToxicBloodBlade
         //Concentrated Mana x30
         Core.RegisterQuests(6979);
         Core.EquipClass(ClassType.Solo);
-        while (!Bot.ShouldExit && !Core.CheckInventory("Concentrated Mana", 30) || !Core.CheckInventory(49085, 30))
+        while (
+            !Bot.ShouldExit && !Core.CheckInventory("Concentrated Mana", 30)
+            || !Core.CheckInventory(49085, 30)
+        )
             Core.HuntMonster("prison", "Piggy Drake", "Broken Piggy Bank", log: false);
-
 
         //Bido's Appreciation x50
         Core.EquipClass(ClassType.Solo);
@@ -68,6 +88,5 @@ public class ToxicBloodBlade
         Bot.Wait.ForPickup(55688);
         Core.ToBank(49085);
         Core.ToBank("Concentrated Mana", "Bido's Appreciation");
-
     }
 }

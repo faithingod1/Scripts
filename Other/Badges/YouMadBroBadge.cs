@@ -13,16 +13,26 @@ public class YouMadBroBadge
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
 
     public string OptionsStorage = "YouMadBro";
     public bool DontPreconfigure = true;
     public List<IOption> Options = new()
-{
-    new Option<bool>("Use Gold", "Use Gold?", "Buy farming mats?", false),
-    CoreBots.Instance.SkipOptions,
-};
+    {
+        new Option<bool>("Use Gold", "Use Gold?", $"[✔️] Use Gold = Buy the Dragon Scales & Ice Vapor\n[❌] Use Gold = Farm the Dragon Scales & Ice Vapor", true),
+        CoreBots.Instance.SkipOptions,
+    };
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -35,17 +45,18 @@ public class YouMadBroBadge
         Core.SetOptions(false);
     }
 
-    public void Badge(bool useGold = true)
+    public void Badge(bool useGold = true, bool FromAllBadge = false)
     {
-        useGold = Bot.Config!.Get<bool>("Use Gold");
+        if (!FromAllBadge)
+            useGold = Bot.Config!.Get<bool>("Use Gold");
+
         if (Core.HasWebBadge(badge))
         {
             Core.Logger($"Already have the {badge} badge");
             return;
         }
 
-        Farm.AlchemyREP(goldMethod: useGold);
-        Core.EquipClass(ClassType.Farm);
+        useGold = FromAllBadge || useGold;
         while (!Bot.ShouldExit && !Core.HasWebBadge(badge))
         {
             Core.AddDrop("Ice Vapor");
@@ -67,7 +78,18 @@ public class YouMadBroBadge
             }
 
             //to make sure it always has 1 DRS
-            Farm.AlchemyPacket("Dragon Scale", "Ice Vapor", trait: CoreFarms.AlchemyTraits.hOu, YMB: true);
+            Farm.AlchemyPacket(
+                 "Dragon Scale",
+                 "Ice Vapor",
+                   // If Alchemy rank is less than 5, use Jera rune
+                   Farm.FactionRank("Alchemy") < 5
+                         ? AlchemyRunes.Jera
+                     // Else if rank is less than 8 (but >= 5), use Fehu rune
+                     : Farm.FactionRank("Alchemy") < 8 ? AlchemyRunes.Fehu
+                     // Else (rank is 8 or higher), use Gebo rune
+                     : AlchemyRunes.Gebo,
+                 trait: CoreFarms.AlchemyTraits.hOu
+             );
         }
         Core.TrashCan("Dragon Scale", "Ice Vapor");
         Core.ToBank("Dragon Runestone", "Gold Voucher 100k");

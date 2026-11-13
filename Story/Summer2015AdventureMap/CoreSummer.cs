@@ -13,8 +13,18 @@ public class CoreSummer
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -68,16 +78,37 @@ public class CoreSummer
         }
 
         //Takai Me On (4267)
-        Story.KillQuest(4267, "dreadspace", new[] { "Defense Turret", "Vaderix" });
+        if (!Story.QuestProgression(4267))
+        {
+            Core.EnsureAccept(4267);
+            Core.HuntMonster("dreadspace", "Defense Turret", "Defense Turret deactivated", 6);
+            Core.HuntMonster("dreadspace", "Vaderix", "Alien defeated", 6);
+            Core.EnsureComplete(4267);
+        }
 
         //We are the HORG! (4268)
         Story.KillQuest(4268, "dreadspace", "Cyber Horg");
 
         //Fix the Holodeck (4269)
-        Story.KillQuest(4269, "dreadspace", new[] { "Undead Star Ranger", "Cyber Horg", "Undead Space Warrior", "Undead Space Marine" });
+        if (!Story.QuestProgression(4269))
+        {
+            Core.EnsureAccept(4269);
+            Core.HuntMonster("dreadspace", "Undead Space Warrior", "Holodeck Force Field", 7);
+            Core.HuntMonster("dreadspace", "Undead Star Ranger", "Holodeck EbilCorp AI");
+            Core.HuntMonster("dreadspace", "Undead Space Marine", "Holodeck Projector", 7);
+            Core.HuntMonster("dreadspace", "Cyber Horg", "Holodeck Power Source");
+            Core.EnsureComplete(4269);
+        }
 
         //Gorn in 60 Seconds (4270)
-        Story.KillQuest(4270, "dreadspace", new[] { "Dra'gorn", "Dra'gorn", "Dra'gorn" });
+        if (!Story.QuestProgression(4270))
+        {
+            Core.EnsureAccept(4270);
+            Core.HuntMonster("dreadspace", "Dra'gorn", "Bamboo Tube", 1);
+            Core.HuntMonster("dreadspace", "Dra'gorn", "Pointed Diamonds", 10);
+            Core.HuntMonster("dreadspace", "Dra'gorn", "Black Powder", 10);
+            Core.EnsureComplete(4270);
+        }
 
         //Captain Kirkland (4271)
         if (!Story.QuestProgression(4271))
@@ -134,7 +165,15 @@ public class CoreSummer
         Story.KillQuest(4282, "dreadspace", "Undead Space Marine");
 
         //Crew Cut (4283)
-        Story.KillQuest(4283, "dreadspace", new[] { "Vaderix", "Undead Space Marine", "Undead Space Warrior", "Cyber Horg" });
+        if (!Story.QuestProgression(4283))
+        {
+            Core.EnsureAccept(4283);
+            Core.HuntMonster("dreadspace", "Undead Space Marine", "Undead Space Marine defeated", 3);
+            Core.HuntMonster("dreadspace", "Undead Space Warrior", "Undead Space Warrior defeated", 3);
+            Core.HuntMonster("dreadspace", "Cyber Horg", "Cyber Horg defeated", 3);
+            Core.HuntMonster("dreadspace", "Vaderix", "Vaderix defeated", 7);
+            Core.EnsureComplete(4283);
+        }
 
         //Restore Life Support (4284)
         Story.KillQuest(4284, "dreadspace", "Cyber Horg");
@@ -212,12 +251,22 @@ public class CoreSummer
         Story.KillQuest(4313, "Drearia", "Dark Makai");
 
         //A Key Discovery - 4314
-        Story.MapItemQuest(4314, "Drearia", 3466);
-        Story.KillQuest(4314, "Drearia", "Dark Makai");
+        if (!Story.QuestProgression(4314))
+        {
+            Core.EnsureAccept(4314);
+            Core.GetMapItem(3466, 1, "Drearia");
+            Core.HuntMonster("drearia", "Dark Makai", "Front Door Key", 1);
+            Core.EnsureComplete(4314);
+        }
 
         //Creepy House... Yay! - 4315
-        Story.MapItemQuest(4315, "Drearia", 3467);
-        Story.KillQuest(4315, "Drearia", "Green Rat");
+        if (!Story.QuestProgression(4315))
+        {
+            Core.EnsureAccept(4315);
+            Core.GetMapItem(3467, 1, "Drearia");
+            Core.HuntMonster("drearia", "Green Rat", "Defeated Varmint", 3);
+            Core.EnsureComplete(4315);
+        }
 
         //Sparkling Books - 4316
         Story.MapItemQuest(4316, "Drearia", 3468);
@@ -226,8 +275,13 @@ public class CoreSummer
         Story.MapItemQuest(4317, "SwordHavenPink", 3469);
 
         //Pink Stinks! - 4318
-        Story.MapItemQuest(4318, "SwordHavenPink", 3486, 5);
-        Story.KillQuest(4318, "SwordHavenPink", "Pink Slime");
+        if (!Story.QuestProgression(4318))
+        {
+            Core.EnsureAccept(4318);
+            Core.GetMapItem(3486, 5, "SwordHavenPink");
+            Core.HuntMonster("swordhavenpink", "Pink Slime", "Squished Pink Slime", 8);
+            Core.EnsureComplete(4318);
+        }
 
         //Rats, RATS! - 4319
         Story.KillQuest(4319, "SewerPink", "Pink Rat");
@@ -236,12 +290,22 @@ public class CoreSummer
         Story.KillQuest(4320, "SewerPink", "Cutie Grumbley");
 
         //UnBEARable Sight - 4321
-        Story.MapItemQuest(4321, "PineWoodPink", 3470);
-        Story.KillQuest(4321, "PineWoodPink", "Pink Grizzly");
+        if (!Story.QuestProgression(4321))
+        {
+            Core.EnsureAccept(4321);
+            Core.GetMapItem(3470, 1, "PineWoodPink");
+            Core.HuntMonster("pinewoodpink", "Pink Grizzly", "Pink Teddy Bear", 5);
+            Core.EnsureComplete(4321);
+        }
 
         //Too Much Pink in Pinewood! - 4322
-        Story.MapItemQuest(4322, "PineWoodPink", 3471, 5);
-        Story.KillQuest(4322, "PineWoodPink", "Pink Shell Turtle");
+        if (!Story.QuestProgression(4322))
+        {
+            Core.EnsureAccept(4322);
+            Core.GetMapItem(3471, 5, "PineWoodPink");
+            Core.HuntMonster("pinewoodpink", "Pink Shell Turtle", "Bows", 5);
+            Core.EnsureComplete(4322);
+        }
 
         //Kill Sparkletooth - 4323
         Story.KillQuest(4323, "PineWoodPink", "Sparkletooth");
@@ -308,7 +372,13 @@ public class CoreSummer
         Story.KillQuest(1300, "Terrarium", "Death on Wings");
 
         // Doppelganger Wants to Hit You
-        Story.KillQuest(1308, "Terrarium", new[] { "Doppleganger of Will", "Doppleganger of Fred" });
+        if (!Story.QuestProgression(1308))
+        {
+            Core.EnsureAccept(1308);
+            Core.HuntMonster("terrarium", "Doppleganger Of Fred", "Doppelganger Demolished!", 1);
+            Core.HuntMonster("terrarium", "Doppleganger of Will", "Doppelganger Destroyed!", 1);
+            Core.EnsureComplete(1308);
+        }
 
         // Catapult Climb
         Story.MapItemQuest(1309, "Terrarium", 604);
@@ -372,7 +442,12 @@ public class CoreSummer
         Story.KillQuest(4350, "livingdungeon", "Seed Spitter");
 
         // Bark is worse than its bite
-        Story.KillQuest(4351, "livingdungeon", new[] { "Evil Plant Horror", "Titan Decay" });
+        if (!Story.QuestProgression(4351))
+        {
+            Core.EnsureAccept(4351);
+            Core.HuntMonster("livingdungeon", "Evil Plant Horror", "It's a CLUE!", 10);
+            Core.EnsureComplete(4351);
+        }
 
         // Knot what you expected
         Story.KillQuest(4352, "livingdungeon", "Weeping Widowmaker");
@@ -381,7 +456,14 @@ public class CoreSummer
         Story.KillQuest(4353, "livingdungeon", "Chia Warrior");
 
         // Leaf me alone!
-        Story.KillQuest(4354, "livingdungeon", new[] { "Seed Spitter", "Evil Plant Horror", "Titan Decay" });
+        if (!Story.QuestProgression(4354))
+        {
+            Core.EnsureAccept(4354);
+            Core.HuntMonster("livingdungeon", "Titan Decay", "Titan Decay defeated", 5);
+            Core.HuntMonster("livingdungeon", "Seed Spitter", "Seed Spitter de-seeded", 5);
+            Core.HuntMonster("livingdungeon", "Evil Plant Horror", "Evil Plant Horror defeated", 5);
+            Core.EnsureComplete(4354);
+        }
 
         // Evil Faerie Ambush!
         Story.KillQuest(4355, "livingdungeon", "Evil Tree Faerie");
@@ -390,19 +472,39 @@ public class CoreSummer
         Story.KillQuest(4356, "livingdungeon", "Vulchurion");
 
         // Committing Tree-son
-        Story.KillQuest(4357, "livingdungeon", new[] { "Evil Plant Horror", "Evil Tree Faerie", "Vulchurion" });
+        if (!Story.QuestProgression(4357))
+        {
+            Core.EnsureAccept(4357);
+            Core.HuntMonster("livingdungeon", "Evil Plant Horror", "Magic Tree Bark", 10);
+            Core.EnsureComplete(4357);
+        }
 
         // Heartwood
-        Story.KillQuest(4358, "livingdungeon", new[] { "Evil Plant Horror", "Evil Tree Faerie", "Vulchurion" });
+        if (!Story.QuestProgression(4358))
+        {
+            Core.EnsureAccept(4358);
+            Core.HuntMonster("livingdungeon", "Evil Plant Horror", "Titan's Heart", 1);
+            Core.EnsureComplete(4358);
+        }
 
         // Drayko BOSS FIGHT!
         Story.KillQuest(4359, "livingdungeon", "Drayko");
 
         // Foilaged again!
-        Story.KillQuest(4360, "livingdungeon", new[] { "Evil Plant Horror", "Evil Tree Faerie" });
+        if (!Story.QuestProgression(4360))
+        {
+            Core.EnsureAccept(4360);
+            Core.HuntMonster("livingdungeon", "Evil Plant Horror", "Monsters defeated", 15);
+            Core.EnsureComplete(4360);
+        }
 
         // Mind Games
-        Story.KillQuest(4361, "livingdungeon", new[] { "Evil Plant Horror", "Evil Tree Faerie" });
+        if (!Story.QuestProgression(4361))
+        {
+            Core.EnsureAccept(4361);
+            Core.HuntMonster("livingdungeon", "Evil Plant Horror", "Tree Titan Brain Chunk", 10);
+            Core.EnsureComplete(4361);
+        }
 
         // DRAGON vs TITAN
         Story.KillQuest(4362, "treetitanbattle", "Dakka the Dire Dragon");
@@ -413,9 +515,17 @@ public class CoreSummer
         // EPIC DROP!
         Story.KillQuest(4364, "livingdungeon", "Epic Drop");
 
-
-        Core.AddDrop("Wooden Ring", "Salad!", "Weeping Widowmaker Bone", "Chia in a pot!", "Fairy Phone", "Vulchurion Quill", "Drayko's Medallion", "Giant Dakka Fang");
-        // ------------------------------------------        
+        Core.AddDrop(
+            "Wooden Ring",
+            "Salad!",
+            "Weeping Widowmaker Bone",
+            "Chia in a pot!",
+            "Fairy Phone",
+            "Vulchurion Quill",
+            "Drayko's Medallion",
+            "Giant Dakka Fang"
+        );
+        // ------------------------------------------
         // Drayko Battle!
         if (!Core.CheckInventory("Drayko's Medallion"))
         {
@@ -499,12 +609,25 @@ public class CoreSummer
             // Bot.Wait.ForPickup("Giant Dakka Fang");
         }
     }
+
     public void LunaCove()
     {
         if (Core.CheckInventory("Your Moonstone"))
             return;
 
-        Core.AddDrop("Ritual Items", "Stale Chips", "Air Pump", "Shiny Stone", "Were Hair", "For the Horde!", "Werewolf Discovery", "Stolen Lycanstone", "Gravefang's Elixir", "Dis-Lycan this", "Your Moonstone");
+        Core.AddDrop(
+            "Ritual Items",
+            "Stale Chips",
+            "Air Pump",
+            "Shiny Stone",
+            "Were Hair",
+            "For the Horde!",
+            "Werewolf Discovery",
+            "Stolen Lycanstone",
+            "Gravefang's Elixir",
+            "Dis-Lycan this",
+            "Your Moonstone"
+        );
 
         //4399|Time to Rock this Finale!
         if (!Core.CheckInventory("Your Moonstone"))
@@ -602,7 +725,6 @@ public class CoreSummer
             Bot.Wait.ForPickup("Your Moonstone");
         }
     }
-
 
     public void CyserosSecret()
     {

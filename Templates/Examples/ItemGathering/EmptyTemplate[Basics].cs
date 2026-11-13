@@ -36,25 +36,9 @@ public class DefaultTemplate
         Core.SetOptions(false);
     }
 
-    public void Example(bool TestMode = false)
+    void Example()
     {
-        // Test Area vv
         
-        // Test Area ^^
-
-        // Optional Test Mode
-        if (TestMode)
-        {
-            if (Core.CheckInventory("item", 1))
-                return;
-
-            Core.RegisterQuests(000);
-            while (!Bot.ShouldExit && !Core.CheckInventory("item", 1))
-            {
-                Core.HuntMonster("map", "mob", "item", 1, isTemp: false, log: false);
-            }
-            Core.CancelRegisteredQuests();
-        }
     }
 
 

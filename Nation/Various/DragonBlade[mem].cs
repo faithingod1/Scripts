@@ -7,26 +7,47 @@ tags: null
 //cs_include Scripts/CoreFarms.cs
 //cs_include Scripts/Nation/CoreNation.cs
 using Skua.Core.Interfaces;
+using Skua.Core.Models.Items;
+using Skua.Core.Models.Quests;
 
 public class DragonBladeofNulgath
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreNation Nation { get => _Nation ??= new CoreNation(); set => _Nation = value; }    private static CoreNation _Nation;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreNation Nation
+    {
+        get => _Nation ??= new CoreNation();
+        set => _Nation = value;
+    }
+    private static CoreNation _Nation;
 
     public readonly string[] TwistedItems =
     {
         "DragonFire of Nulgath",
         "Crimson Plate of Nulgath",
-        "Crimson Face Plate of Nulgath"
+        "Crimson Face Plate of Nulgath",
     };
 
     public void ScriptMain(IScriptInterface bot)
     {
         Core.BankingBlackList.AddRange(Nation.bagDrops);
         Core.BankingBlackList.AddRange(TwistedItems);
-        Core.BankingBlackList.AddRange(new[] { "DragonBlade of Nulgath", "Combat Trophy", "Basic War Sword", "Behemoth Blade of Shadow", "Behemoth Blade of Light" });
+        Core.BankingBlackList.AddRange(
+            new[]
+            {
+                "DragonBlade of Nulgath",
+                "Combat Trophy",
+                "Basic War Sword",
+                "Behemoth Blade of Shadow",
+                "Behemoth Blade of Light",
+            }
+        );
         Core.SetOptions();
 
         GetDragonBlade();
@@ -34,16 +55,41 @@ public class DragonBladeofNulgath
         Core.SetOptions(false);
     }
 
-    public void GetDragonBlade()
+    /// <summary>
+    /// Farms DragonBlade of Nulgath or Ebony DragonBlade of Nulgath when the seasonal reward is active.
+    /// </summary>
+    public void GetDragonBlade(bool DbladeOnly = false)
     {
-        if (Core.CheckInventory("DragonBlade of Nulgath") || (!Core.IsMember))
+        Quest DBON = Core.InitializeWithRetries(() => Bot.Quests.EnsureLoad(766));
+        ItemBase[] Rewards = [.. DBON.Rewards];
+
+        bool SeasonalActive = !DbladeOnly && Rewards.Any(x => x.Name == "Ebony DragonBlade of Nulgath");
+        string TargetBlade = SeasonalActive ? "Ebony DragonBlade of Nulgath" : "DragonBlade of Nulgath";
+
+        if (!Core.IsMember || Core.CheckInventory(TargetBlade))
         {
-            Core.Logger($"{(Core.CheckInventory("DragonBlade of Nulgath") ? "\"DragonBlade of Nulgath\" owned" : "Not an Member cannot get \"DragonBlade of Nulgath\"")}");
+            Core.Logger(!Core.IsMember
+                ? "Not a Member, cannot get DragonBlade of Nulgath."
+                : $"\"{TargetBlade}\" owned.");
             return;
         }
 
-        Core.AddDrop(Nation.bagDrops.Concat(TwistedItems).ToArray().Concat(new[] { "DragonBlade of Nulgath", "Combat Trophy", "Basic War Sword", "Behemoth Blade of Shadow", "Behemoth Blade of Light" }).ToArray());
+        Core.AddDrop(
+            Nation.bagDrops
+                .Concat(TwistedItems)
+                .Concat(new[]
+                {
+                "DragonBlade of Nulgath",
+                "Combat Trophy",
+                "Basic War Sword",
+                "Behemoth Blade of Shadow",
+                "Behemoth Blade of Light",
+                "Ebony DragonBlade of Nulgath"
+                })
+                .ToArray()
+        );
 
+        Core.EnsureAccept(766);
         BehemothBladeof("Shadow");
         BehemothBladeof("Light");
 
@@ -57,10 +103,9 @@ public class DragonBladeofNulgath
 
         Nation.FarmTotemofNulgath(3);
 
-        Core.EnsureAccept(766);
         Core.HuntMonster("underworld", "Legion Fenrir", "Legion Fenrir Rune");
-        Core.EnsureComplete(766, 5483);
-        Bot.Wait.ForPickup("DragonBlade of Nulgath");
+        Core.EnsureComplete(766);
+        Bot.Wait.ForPickup(TargetBlade);
     }
 
     public void BehemothBladeof(string blade)

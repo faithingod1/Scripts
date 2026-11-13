@@ -11,7 +11,12 @@ public class CoreIsleOfFotia
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -21,6 +26,7 @@ public class CoreIsleOfFotia
 
         Core.SetOptions(false);
     }
+
     public void CompleteALL()
     {
         Fotia();
@@ -29,7 +35,6 @@ public class CoreIsleOfFotia
         Judgement();
         DageFortress();
     }
-
 
     public void Fotia()
     {
@@ -195,9 +200,7 @@ public class CoreIsleOfFotia
         //Challenged Allegiance to Dage 3042
         Story.KillQuest(3042, "Judgement", "Ultra Aeacus");
         Bot.Lite.DisableMonsterAnimation = false;
-
     }
-
 
     public void DageFortress(bool map = false)
     {
@@ -215,8 +218,13 @@ public class CoreIsleOfFotia
         Story.KillQuest(4249, "DageFortress", "Sullied Master");
 
         //The Key to Discovery 4250
-        Story.MapItemQuest(4250, "DageFortress", 3406);
-        Story.KillQuest(4250, "DageFortress", "Tainted Seneschal");
+        if (!Story.QuestProgression(4250))
+        {
+            Core.EnsureAccept(4250);
+            Core.GetMapItem(3406, 1, "DageFortress");
+            Core.HuntMonster("dagefortress", "Tainted Seneschal", "Skeleton Key", 1);
+            Core.EnsureComplete(4250);
+        }
 
         //Locate the Compass Stone 4251
         if (!Story.QuestProgression(4251) || (map && !Core.CheckInventory("Compass Stone")))
@@ -239,14 +247,20 @@ public class CoreIsleOfFotia
 
         //Defeat the Underworld Guardian 4258
         Story.KillQuest(4258, "DageFortress", "Grrrberus");
-
     }
 
     public void FlowerPower(string? item = null, int quant = 1, bool isTemp = false)
     {
         Core.EnsureAccept(3036);
 
-        while (!Bot.ShouldExit && (isTemp ? !Bot.TempInv.Contains("Delivered Asphodel Flower", quant) : !Bot.Inventory.Contains("Delivered Asphodel Flower", quant)))
+        while (
+            !Bot.ShouldExit
+            && (
+                isTemp
+                    ? !Bot.TempInv.Contains("Delivered Asphodel Flower", quant)
+                    : !Bot.Inventory.Contains("Delivered Asphodel Flower", quant)
+            )
+        )
         {
             if (Bot.Map.Name != "judgement")
             {
@@ -261,11 +275,19 @@ public class CoreIsleOfFotia
                 Bot.Player.SetSpawnPoint();
             }
 
-            foreach (var mob in Bot.Monsters.CurrentAvailableMonsters.Where(x => x != null && x.Name.EndsWith("Mourner")))
+            foreach (
+                var mob in Bot.Monsters.CurrentAvailableMonsters.Where(x =>
+                    x != null && x.Name.EndsWith("Mourner")
+                )
+            )
             {
                 Bot.Kill.Monster(mob);
                 Bot.Wait.ForMonsterDeath();
-                if (isTemp ? Bot.TempInv.Contains("Delivered Asphodel Flower", quant) : Bot.Inventory.Contains("Delivered Asphodel Flower", quant))
+                if (
+                    isTemp
+                        ? Bot.TempInv.Contains("Delivered Asphodel Flower", quant)
+                        : Bot.Inventory.Contains("Delivered Asphodel Flower", quant)
+                )
                 {
                     break;
                 }
@@ -321,5 +343,4 @@ public class CoreIsleOfFotia
         }
         Core.BuyItem("DageFortress", 1144, "Palace Map");
     }
-
 }

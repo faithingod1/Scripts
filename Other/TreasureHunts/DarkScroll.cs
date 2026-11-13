@@ -12,8 +12,18 @@ public class DarkScroll
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
 
     public void ScriptMain(IScriptInterface Bot)
     {
@@ -42,10 +52,10 @@ public class DarkScroll
                     Core.BuyItem("zazul", 336, "Libro dell'Inferno");
 
                 Core.EquipClass(ClassType.Solo);
-                Adv.GearStore();
+                Adv.GearStore(EnhAfter: true);
                 Core.Logger($"Step 3 Amethyst Gem");
                 Core.HuntMonster("onslaughttower", "Maximillian Lionfang", "Amethyst Gem", isTemp: false, log: false);
-                Adv.GearStore(true);
+                Adv.GearStore(true, EnhAfter: true);
 
                 //Amethyst Inferno Tome
                 Core.Logger($"Step 4 Amethyst Inferno Tome");
@@ -88,6 +98,5 @@ public class DarkScroll
             Core.EnsureComplete(3003, 41969);
         }
         Core.Logger("All rewards gotten, congrats.");
-
     }
 }

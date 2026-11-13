@@ -8,7 +8,6 @@ tags: concert, metal necro, doom metal necro, neo metal necro
 //cs_include Scripts/CoreFarms.cs
 //cs_include Scripts/CoreDailies.cs
 //cs_include Scripts/CoreAdvanced.cs
-//cs_include Scripts/Other/Concerts/NeoMetalNecro.cs
 //cs_include Scripts/Story/LordsofChaos/Core13LoC.cs
 //cs_include Scripts/Evil/ADK.cs
 //cs_include Scripts/Evil/VordredsArmor.cs
@@ -21,9 +20,17 @@ public class BattleConcertClassQuests
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
-    private static VordredArmor VA { get => _VA ??= new VordredArmor(); set => _VA = value; }
+    private static VordredArmor VA
+    {
+        get => _VA ??= new VordredArmor();
+        set => _VA = value;
+    }
     private static VordredArmor _VA;
 
     public void ScriptMain(IScriptInterface Bot)
@@ -105,10 +112,7 @@ public class BattleConcertClassQuests
         Core.AddDrop("Bone Pick");
         Story.KillQuest(9327, "brainmeat", "Brain Matter");
 
-
         //Class Quest
         // Doom Metal Necro Class 9328
-
-
     }
 }

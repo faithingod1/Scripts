@@ -8,16 +8,39 @@ tags: story, quest, nation, citadel-ruins
 //cs_include Scripts/CoreStory.cs
 //cs_include Scripts/Nation/CoreNation.cs
 using Skua.Core.Interfaces;
+using Skua.Core.Models.Items;
 
 public class CitadelRuins
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreNation Nation { get => _Nation ??= new CoreNation(); set => _Nation = value; }    private static CoreNation _Nation;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreNation Nation
+    {
+        get => _Nation ??= new CoreNation();
+        set => _Nation = value;
+    }
+    private static CoreNation _Nation;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
-    public string[] rewards = { "Purified Claymore of Destiny", "Good Iron Wing 1", "Spinal Tap of Retribution", "Purified Claw of Nulgath", "Mage's Gratitude" };
+    public string[] rewards =
+    {
+        "Purified Claymore of Destiny",
+        "Good Iron Wing 1",
+        "Spinal Tap of Retribution",
+        "Purified Claw of Nulgath",
+        "Mage's Gratitude",
+    };
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -38,10 +61,8 @@ public class CitadelRuins
         CasparillasQuests();
     }
 
-
     public void CasparillasQuests()
     {
-
         if (Core.isCompletedBefore(6682))
             return;
 
@@ -91,8 +112,12 @@ public class CitadelRuins
 
         // Staying Humble
         Core.AddDrop("Elite Void Sword Pet");
-        Story.KillQuest(6682, "underlair", "ArchFiend DragonLord");
-
+        if (!Story.QuestProgression(6682))
+        {
+            Core.EnsureAccept(6682);
+            Core.KillArchFiendDragonLord("Twisted Armor Piece", 3);
+            Core.EnsureComplete(6682);
+        }
     }
 
     public void CutieMakaisQuest()
@@ -103,19 +128,36 @@ public class CitadelRuins
         Story.PreLoad(this);
 
         // Drearia On Demand
-        Story.MapItemQuest(4312, "drearia", 3485);
-        Story.KillQuest(4312, "drearia", new[] { "Dark Makai", "Evil Elemental", "Green Rat" });
+        if (!Story.QuestProgression(4312))
+        {
+            Core.EnsureAccept(4312);
+            Core.GetMapItem(3485, 1, "drearia");
+            Core.HuntMonster("drearia", "Dark Makai", "Dark Makai Notes", 1);
+            Core.HuntMonster("drearia", "Evil Elemental", "Evil Elemental Notes", 1);
+            Core.HuntMonster("drearia", "Green Rat", "Green Rat Notes", 1);
+            Core.EnsureComplete(4312);
+        }
 
         // Plant a Little Seed and Nature Grows
         Story.KillQuest(4313, "drearia", "Dark Makai");
 
         // A Key Discovery
-        Story.MapItemQuest(4314, "drearia", 3466);
-        Story.KillQuest(4314, "drearia", "Green Rat");
+        if (!Story.QuestProgression(4314))
+        {
+            Core.EnsureAccept(4314);
+            Core.GetMapItem(3466, 1, "drearia");
+            Core.HuntMonster("drearia", "Green Rat", "Front Door Key", 1);
+            Core.EnsureComplete(4314);
+        }
 
         // Creepy House... Yay!
-        Story.MapItemQuest(4315, "drearia", 3467);
-        Story.KillQuest(4315, "drearia", "Green Rat");
+        if (!Story.QuestProgression(4315))
+        {
+            Core.EnsureAccept(4315);
+            Core.GetMapItem(3467, 1, "drearia");
+            Core.HuntMonster("drearia", "Green Rat", "Defeated Varmint", 3);
+            Core.EnsureComplete(4315);
+        }
 
         // Sparkling Books
         Story.MapItemQuest(4316, "drearia", 3468);
@@ -124,8 +166,13 @@ public class CitadelRuins
         Story.MapItemQuest(4317, "swordhavenpink", 3469);
 
         // Pink Stinks!
-        Story.MapItemQuest(4318, "swordhavenpink", 3486, 5);
-        Story.KillQuest(4318, "swordhavenpink", "Pink Slime");
+        if (!Story.QuestProgression(4318))
+        {
+            Core.EnsureAccept(4318);
+            Core.GetMapItem(3486, 5, "swordhavenpink");
+            Core.HuntMonster("swordhavenpink", "Pink Slime", "Squished Pink Slime", 8);
+            Core.EnsureComplete(4318);
+        }
 
         // Rats, RATS!
         Story.KillQuest(4319, "sewerpink", "Pink Rat");
@@ -134,22 +181,31 @@ public class CitadelRuins
         Story.KillQuest(4320, "sewerpink", "Cutie Grumbley");
 
         // UnBEARable Sight
-        Story.MapItemQuest(4321, "pinewoodpink", 3470);
-        Story.KillQuest(4321, "pinewoodpink", "Pink Grizzly");
+        if (!Story.QuestProgression(4321))
+        {
+            Core.EnsureAccept(4321);
+            Core.GetMapItem(3470, 1, "pinewoodpink");
+            Core.HuntMonster("pinewoodpink", "Pink Grizzly", "Pink Teddy Bear", 5);
+            Core.EnsureComplete(4321);
+        }
 
         // Too Much Pink in Pinewood!
-        Story.MapItemQuest(4322, "pinewoodpink", 3471, 5);
-        Story.KillQuest(4322, "pinewoodpink", "Pink Shell Turtle");
+        if (!Story.QuestProgression(4322))
+        {
+            Core.EnsureAccept(4322);
+            Core.GetMapItem(3471, 5, "pinewoodpink");
+            Core.HuntMonster("pinewoodpink", "Pink Shell Turtle", "Bows", 5);
+            Core.EnsureComplete(4322);
+        }
 
         // Kill Sparkletooth
         Story.KillQuest(4323, "pinewoodpink", "Sparkletooth");
 
-        // The Citadorable Plot   
+        // The Citadorable Plot
         Story.MapItemQuest(4324, "Citadel", 3472);
 
-        // Fuzzy Run Minigame        
+        // Fuzzy Run Minigame
         Story.KillQuest(4325, "pinewoodpink", "Pink Grizzly");
-
     }
 
     public void MurrysQuests()
@@ -173,7 +229,6 @@ public class CitadelRuins
             Core.HuntMonster("Citadel", "Grand Inquisitor", "Ring of Evil Intent");
             Core.EnsureComplete(182);
         }
-
     }
 
     public void PolishsQuestsTercessuinotlim()
@@ -183,7 +238,13 @@ public class CitadelRuins
 
         Story.PreLoad(this);
 
-        Core.AddDrop("Unidentified 9", "Unidentified 28", "Dark Crystal Shard", "Claw of Nulgath", "Relic of Chaos");
+        Core.AddDrop(
+            "Unidentified 9",
+            "Unidentified 28",
+            "Dark Crystal Shard",
+            "Claw of Nulgath",
+            "Relic of Chaos"
+        );
 
         // "Tercessuinotlim"
 
@@ -221,8 +282,13 @@ public class CitadelRuins
         // "citadelruins";
 
         //get ready to amplify
-        Story.MapItemQuest(6172, "citadelruins", 5592);
-        Story.KillQuest(6172, "citadelruins", "Mana Sprites");
+        if (!Story.QuestProgression(6172))
+        {
+            Core.EnsureAccept(6172);
+            Core.GetMapItem(5592, 1, "citadelruins");
+            Core.HuntMonster("citadelruins", "Mana Sprites", "Siphoned Mana", 8);
+            Core.EnsureComplete(6172);
+        }
 
         //break the seal
         Story.MapItemQuest(6173, "citadelruins", 5602);
@@ -237,8 +303,13 @@ public class CitadelRuins
         }
 
         //grab a clue
-        Story.MapItemQuest(6175, "citadelruins", 5593, 5);
-        Story.KillQuest(6175, "citadelruins", "Inquisitor Hobo");
+        if (!Story.QuestProgression(6175))
+        {
+            Core.EnsureAccept(6175);
+            Core.GetMapItem(5593, 5, "citadelruins");
+            Core.HuntMonster("citadelruins", "Inquisitor Hobo", "Clue Found", 1);
+            Core.EnsureComplete(6175);
+        }
         Core.Sleep(2500);
 
         //unlock the door
@@ -251,19 +322,34 @@ public class CitadelRuins
         }
 
         //search the labs
-        Story.MapItemQuest(6177, "citadelruins", new[] { 5594, 5595, 5596 });
-        Story.KillQuest(6177, "citadelruins", "Inquisitor Hobo");
+        if (!Story.QuestProgression(6177))
+        {
+            Core.EnsureAccept(6177);
+            Core.GetMapItems(new[] { (5594, 1), (5595, 1), (5596, 1) }, "citadelruins");
+            Core.HuntMonster("citadelruins", "Inquisitor Hobo", "Inquisitors Defeated", 6);
+            Core.EnsureComplete(6177);
+        }
 
         //break another seal
-        Story.MapItemQuest(6178, "citadelruins", 5597);
-        Story.KillQuest(6178, "citadelruins", "Mana Sprites");
+        if (!Story.QuestProgression(6178))
+        {
+            Core.EnsureAccept(6178);
+            Core.GetMapItem(5597, 1, "citadelruins");
+            Core.HuntMonster("citadelruins", "Mana Sprites", "Siphoned Mana", 8);
+            Core.EnsureComplete(6178);
+        }
 
         //inspect time
         Story.MapItemQuest(6179, "citadelruins", 5598);
 
         //find the parts
-        Story.MapItemQuest(6180, "citadelruins", new[] { 5599, 5600, 5601 });
-        Story.KillQuest(6180, "citadelruins", "Inquisitor Hobo");
+        if (!Story.QuestProgression(6180))
+        {
+            Core.EnsureAccept(6180);
+            Core.GetMapItems(new[] { (5599, 1), (5600, 1), (5601, 1) }, "citadelruins");
+            Core.HuntMonster("citadelruins", "Inquisitor Hobo", "Missing Parts", 6);
+            Core.EnsureComplete(6180);
+        }
 
         //defeat the grand inquisitor
         Story.KillQuest(6181, "citadelruins", "Grand Inquisitor Murry");

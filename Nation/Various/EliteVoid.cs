@@ -9,13 +9,24 @@ tags: null
 //cs_include Scripts/Story/Nation/CitadelRuins.cs
 //cs_include Scripts/Nation/CoreNation.cs
 using Skua.Core.Interfaces;
+using Skua.Core.Models.Items;
 
 public class EliteVoid
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CitadelRuins CitadelRuins { get => _CitadelRuins ??= new CitadelRuins(); set => _CitadelRuins = value; }    private static CitadelRuins _CitadelRuins;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CitadelRuins CitadelRuins
+    {
+        get => _CitadelRuins ??= new CitadelRuins();
+        set => _CitadelRuins = value;
+    }
+    private static CitadelRuins _CitadelRuins;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -28,8 +39,25 @@ public class EliteVoid
 
     public void GetAll()
     {
-        string[] EliteVoidSet = { "Elite Void", "Elite Void Horns", "Elite Void Plume", "Elite Void Cape", "Elite Void Spiked Cape", "Elite Void Sword", "Elite Void Broadsword", "Elite Void Sword Pet" };
-        string[] ChooseRewardQuest = { "Elite Void", "Elite Void Horns", "Elite Void Plume", "Elite Void Cape", "Elite Void Spiked Cape" };
+        string[] EliteVoidSet =
+        {
+            "Elite Void",
+            "Elite Void Horns",
+            "Elite Void Plume",
+            "Elite Void Cape",
+            "Elite Void Spiked Cape",
+            "Elite Void Sword",
+            "Elite Void Broadsword",
+            "Elite Void Sword Pet",
+        };
+        string[] ChooseRewardQuest =
+        {
+            "Elite Void",
+            "Elite Void Horns",
+            "Elite Void Plume",
+            "Elite Void Cape",
+            "Elite Void Spiked Cape",
+        };
 
         if (Core.CheckInventory(EliteVoidSet, toInv: false))
             return;
@@ -87,8 +115,7 @@ public class EliteVoid
             {
                 //Staying Humble 6682
                 Core.EnsureAccept(6682);
-                Core.EquipClass(ClassType.Farm);
-                Core.HuntMonster("underlair", "ArchFiend DragonLord", "Twisted Armor Piece", 3);
+                Core.KillArchFiendDragonLord("Twisted Armor Piece", 3);
                 Core.EnsureComplete(6682);
             }
         }

@@ -8,13 +8,18 @@ tags: mourning cygnus, extinguished eridanus, quest, reward, astravian oracle se
 //cs_include Scripts/CoreAdvanced.cs
 using Skua.Core.Interfaces;
 using Skua.Core.Models.Items;
+
 // using Skua.Core.Options;
 
 public class AstravianOracleSet
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
 
     public void ScriptMain(IScriptInterface Bot)
@@ -40,7 +45,6 @@ public class AstravianOracleSet
             Core.AddDrop(item.Name);
 
         Core.EquipClass(ClassType.Farm);
-        //Adv.BestGear(RacialGearBoost.Elemental);
         foreach (ItemBase item in RewardOptions)
         {
             while (!Bot.ShouldExit && !Core.CheckInventory(item.ID, quant))
@@ -61,7 +65,6 @@ public class AstravianOracleSet
             Core.AddDrop(item.Name);
 
         Core.EquipClass(ClassType.Farm);
-        //Adv.BestGear(RacialGearBoost.Human);
 
         foreach (ItemBase item in RewardOptions)
         {

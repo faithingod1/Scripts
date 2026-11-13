@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using Skua.Core.Interfaces;
 using Skua.Core.Models;
 using Skua.Core.Models.Auras;
+using Skua.Core.Models.Items;
 using Skua.Core.Models.Monsters;
 using Skua.Core.Models.Skills;
 
@@ -20,12 +21,25 @@ public class CoreAOR
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
-    private static CoreSoW SoW { get => _SoW ??= new CoreSoW(); set => _SoW = value; }
+    private static CoreSoW SoW
+    {
+        get => _SoW ??= new CoreSoW();
+        set => _SoW = value;
+    }
     private static CoreSoW _SoW;
+    private bool _voiceChargeDetected;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -53,25 +67,49 @@ public class CoreAOR
         ThelimaCity(false, false);
         MountMaleno(false, false);
         SanctuaryAiwass(false, false);
-        ForgeAlbedo();
-    }
+        ForgeAlbedo(false, false);
+        FortLuma(false, false);
+        WarWickForest(false, false);
+        MagnumOpus(false, false);
+        RubedoPeak(false, false);
+        ForgeCitrinitas(false, false);
 
+    }
 
     public void TerminaTemple(bool seaVoice = false, bool coldThunder = false)
     {
-        if (Core.isCompletedBefore(coldThunder ? 9851 : seaVoice ? 9351 : 10438))
+        if (
+            Core.isCompletedBefore(
+                coldThunder ? 9851
+                : seaVoice ? 9351
+                : 10438
+            )
+        )
             return;
 
         SoW.ManaCradle();
         Story.PreLoad(this);
 
         // Familiar Faces (9213)
-        Story.MapItemQuest(9213, "terminatemple", new[] { 11625, 11626, 11627 });
-        Story.KillQuest(9213, "terminatemple", "Termina Defender");
+        if (!Story.QuestProgression(9213))
+        {
+            Core.EnsureAccept(9213);
+            Core.GetMapItems(new[] { (11625, 1), (11626, 1), (11627, 1) }, "terminatemple");
+            Core.Logger("resetting map data ( mobs can bug out and become unattackable)");
+            Core.Join("whitemap-100000");
+            Core.Join("terminatemple");
+            Core.HuntMonster("terminatemple", "Termina Defender", "Defender Trained", 7);
+            Core.EnsureComplete(9213);
+        }
 
         // Loaded Resume (9214)
-        Story.MapItemQuest(9214, "terminatemple", new[] { 11628, 11629, 11630 });
-        Story.KillQuest(9214, "terminatemple", "Clandestine Guard");
+        if (!Story.QuestProgression(9214))
+        {
+            Core.EnsureAccept(9214);
+            Core.GetMapItems(new[] { (11628, 1), (11629, 1), (11630, 1) }, "terminatemple");
+            Core.HuntMonster("terminatemple", "Clandestine Guard", "Guard Fought", 7);
+            Core.EnsureComplete(9214);
+        }
 
         if (!seaVoice && !coldThunder)
             return;
@@ -104,30 +142,55 @@ public class CoreAOR
         Story.KillQuest(9225, "ashray", "Kitefin Shark Bait");
 
         // Angry Angler (9226)
-        Story.MapItemQuest(9226, "ashray", new[] { 11663, 11664 });
-        Story.KillQuest(9226, "ashray", "Ashray Fisherman");
+        if (!Story.QuestProgression(9226))
+        {
+            Core.EnsureAccept(9226);
+            Core.GetMapItems(new[] { (11663, 1), (11664, 1) }, "ashray");
+            Core.HuntMonster("ashray", "Ashray Fisherman", "Fisherman's Trident", 4);
+            Core.EnsureComplete(9226);
+        }
 
         // Slimy Scavenger (9227)
         Story.KillQuest(9227, "ashray", "Ghostly Eel");
 
         // Troubled Waters (9228)
-        Story.MapItemQuest(9228, "ashray", 11665);
-        Story.KillQuest(9228, "ashray", "Stagnant Water");
+        if (!Story.QuestProgression(9228))
+        {
+            Core.EnsureAccept(9228);
+            Core.GetMapItem(11665, 1, "ashray");
+            Core.HuntMonster("ashray", "Stagnant Water", "Elemental Cleared", 8);
+            Core.EnsureComplete(9228);
+        }
 
         // Washed Ink (9229)
-        Story.MapItemQuest(9229, "ashray", 11666);
-        Story.KillQuest(9229, "ashray", "Ashray Fisherman");
+        if (!Story.QuestProgression(9229))
+        {
+            Core.EnsureAccept(9229);
+            Core.GetMapItem(11666, 1, "ashray");
+            Core.HuntMonster("ashray", "Ashray Fisherman", "Fisherman Repelled", 8);
+            Core.EnsureComplete(9229);
+        }
 
         // Fishy Hospitality (9230)
         Story.KillQuest(9230, "ashray", "Kitefin Shark Bait");
 
         // Doctoring Papers (9231)
-        Story.MapItemQuest(9231, "ashray", 11667);
-        Story.KillQuest(9231, "ashray", "Ghostly Eel");
+        if (!Story.QuestProgression(9231))
+        {
+            Core.EnsureAccept(9231);
+            Core.GetMapItem(11667, 1, "ashray");
+            Core.HuntMonster("ashray", "Ghostly Eel", "Excorsized Eel", 8);
+            Core.EnsureComplete(9231);
+        }
 
         // Psychic Pollution (9232)
-        Story.MapItemQuest(9232, "ashray", 11668);
-        Story.KillQuest(9232, "ashray", "Stagnant Water");
+        if (!Story.QuestProgression(9232))
+        {
+            Core.EnsureAccept(9232);
+            Core.GetMapItem(11668, 1, "ashray");
+            Core.HuntMonster("ashray", "Stagnant Water", "Water Samples", 3);
+            Core.EnsureComplete(9232);
+        }
 
         // Duck Dive (9233)
         Story.MapItemQuest(9233, "ashray", new[] { 11669, 11670 });
@@ -150,30 +213,61 @@ public class CoreAOR
         Story.KillQuest(9243, "sunlightzone", "Spectral Jellyfish");
 
         // Efficient Division (9244)
-        Story.MapItemQuest(9244, "sunlightzone", new[] { 11705, 11706 });
-        Story.KillQuest(9244, "sunlightzone", "Blighted Water");
+        if (!Story.QuestProgression(9244))
+        {
+            Core.EnsureAccept(9244);
+            Core.GetMapItems(new[] { (11705, 1), (11706, 1) }, "sunlightzone");
+            Core.HuntMonster("sunlightzone", "Blighted Water", "Mopped Water", 6);
+            Core.EnsureComplete(9244);
+        }
 
         // Tech Illiterate (9245)
-        Story.MapItemQuest(9245, "sunlightzone", 11707, 3);
-        Story.KillQuest(9245, "sunlightzone", "Spectral Jellyfish");
+        if (!Story.QuestProgression(9245))
+        {
+            Core.EnsureAccept(9245);
+            Core.GetMapItem(11707, 3, "sunlightzone");
+            Core.HuntMonster("sunlightzone", "Spectral Jellyfish", "Jelly Filling", 6);
+            Core.EnsureComplete(9245);
+        }
 
         // Plugging Leaks (9246)
-        Story.KillQuest(9246, "sunlightzone", new[] { "Spectral Jellyfish", "Blighted Water" });
+        if (!Story.QuestProgression(9246))
+        {
+            Core.EnsureAccept(9246);
+            Core.HuntMonster("sunlightzone", "Spectral Jellyfish", "Stinging Tentacles", 6);
+            Core.HuntMonster("sunlightzone", "Blighted Water", "Grainy Water", 6);
+            Core.EnsureComplete(9246);
+        }
 
         // Shared History (9247)
         Story.MapItemQuest(9247, "sunlightzone", new[] { 11708, 11709, 11710 });
 
         // Flat Scares (9248)
-        Story.MapItemQuest(9248, "sunlightzone", 11711);
-        Story.KillQuest(9248, "sunlightzone", "Astravian Illusion");
+        if (!Story.QuestProgression(9248))
+        {
+            Core.EnsureAccept(9248);
+            Core.GetMapItem(11711, 1, "sunlightzone");
+            Core.HuntMonster("sunlightzone", "Astravian Illusion", "Astravian Dispelled", 10);
+            Core.EnsureComplete(9248);
+        }
 
         // Fishy Bully (9249)
-        Story.MapItemQuest(9249, "sunlightzone", 11712, 5);
-        Story.KillQuest(9249, "sunlightzone", "Infernal Illusion");
+        if (!Story.QuestProgression(9249))
+        {
+            Core.EnsureAccept(9249);
+            Core.GetMapItem(11712, 5, "sunlightzone");
+            Core.HuntMonster("sunlightzone", "Infernal Illusion", "Infernal Dispelled", 10);
+            Core.EnsureComplete(9249);
+        }
 
         // Faint Howls (9250)
-        Story.MapItemQuest(9250, "sunlightzone", 11713);
-        Story.KillQuest(9250, "sunlightzone", "Seraphic Illusion");
+        if (!Story.QuestProgression(9250))
+        {
+            Core.EnsureAccept(9250);
+            Core.GetMapItem(11713, 1, "sunlightzone");
+            Core.HuntMonster("sunlightzone", "Seraphic Illusion", "Seraph Dispelled", 10);
+            Core.EnsureComplete(9250);
+        }
 
         // Down the Digestive Tract (9251)
         Story.KillQuest(9251, "sunlightzone", "Marine Snow");
@@ -197,7 +291,13 @@ public class CoreAOR
         Story.MapItemQuest(9260, "twilightzone", 11750, 4);
 
         // Parched Throats (9261)
-        Story.KillQuest(9261, "twilightzone", new[] { "Whale Louse", "Polymelia Lamprey" });
+        if (!Story.QuestProgression(9261))
+        {
+            Core.EnsureAccept(9261);
+            Core.HuntMonster("twilightzone", "Whale Louse", "Louse Antennae", 6);
+            Core.HuntMonster("twilightzone", "Polymelia Lamprey", "Lamprey Tooth", 6);
+            Core.EnsureComplete(9261);
+        }
 
         // Morning Stretches (9262)
         Story.MapItemQuest(9262, "twilightzone", new[] { 11751, 11752 });
@@ -212,7 +312,13 @@ public class CoreAOR
         Story.MapItemQuest(9265, "twilightzone", new[] { 11753, 11754, 11755 });
 
         // Exhausted Spirits (9266)
-        Story.KillQuest(9266, "twilightzone", new[] { "Decay Spirit", "Ice Guardian" });
+        if (!Story.QuestProgression(9266))
+        {
+            Core.EnsureAccept(9266);
+            Core.HuntMonster("twilightzone", "Decay Spirit", "Spirit Restrained", 7);
+            Core.HuntMonster("twilightzone", "Ice Guardian", "Guardian Restrained", 7);
+            Core.EnsureComplete(9266);
+        }
 
         // Singing to Whales (9267)
         if (!Story.QuestProgression(9267))
@@ -241,7 +347,13 @@ public class CoreAOR
         Story.KillQuest(9271, "sunlightzone", "Blighted Water");
 
         // Dollar Store Mogloween Costume (9272)
-        Story.KillQuest(9272, "sunlightzone", new[] { "Astravian Illusion", "Infernal Illusion" });
+        if (!Story.QuestProgression(9272))
+        {
+            Core.EnsureAccept(9272);
+            Core.HuntMonster("sunlightzone", "Infernal Illusion", "Infernal Dispersed", 4);
+            Core.HuntMonster("sunlightzone", "Astravian Illusion", "Astravian Dispersed", 4);
+            Core.EnsureComplete(9272);
+        }
 
         // Sea Snow Angels (9273)
         Story.KillQuest(9273, "sunlightzone", "Marine Snow");
@@ -267,29 +379,62 @@ public class CoreAOR
         Story.MapItemQuest(9292, "midnightzone", new[] { 11842, 11843, 11844 });
 
         // Radical Renovation (9293)
-        Story.MapItemQuest(9293, "midnightzone", 11845);
-        Story.KillQuest(9293, "midnightzone", "Polymelia Lamprey");
+        if (!Story.QuestProgression(9293))
+        {
+            Core.EnsureAccept(9293);
+            Core.GetMapItem(11845, 1, "midnightzone");
+            Core.HuntMonster("midnightzone", "Polymelia Lamprey", "Lamprey Limb", 8);
+            Core.EnsureComplete(9293);
+        }
 
         // Graveyard Shift (9294)
-        Story.KillQuest(9294, "midnightzone", new[] { "Vowed ShadowSlayer", "Vowed ShadowSlayer" });
+        if (!Story.QuestProgression(9294))
+        {
+            Core.EnsureAccept(9294);
+            Core.HuntMonster("midnightzone", "Vowed Shadowslayer", "Slayer Subdued", 8);
+            Core.HuntMonster("midnightzone", "Vowed Shadowslayer", "Key Card", 1);
+            Core.EnsureComplete(9294);
+        }
 
         // Educational Execution (9295)
-        Story.MapItemQuest(9295, "midnightzone", 11846);
-        Story.KillQuest(9295, "midnightzone", "Undead Prisoner");
+        if (!Story.QuestProgression(9295))
+        {
+            Core.EnsureAccept(9295);
+            Core.GetMapItem(11846, 1, "midnightzone");
+            Core.HuntMonster("midnightzone", "Undead Prisoner", "Prisoner Subdued", 10);
+            Core.EnsureComplete(9295);
+        }
 
         // Vows For Ignorance (9296)
-        Story.MapItemQuest(9296, "midnightzone", 11847);
-        Story.KillQuest(9296, "midnightzone", new[] { "Undead Prisoner", "Vowed ShadowSlayer" });
+        if (!Story.QuestProgression(9296))
+        {
+            Core.EnsureAccept(9296);
+            Core.GetMapItem(11847, 1, "midnightzone");
+            Core.HuntMonster("midnightzone", "Undead Prisoner", "Bone Sample", 6);
+            Core.HuntMonster("midnightzone", "Vowed Shadowslayer", "Slayer's Written Vow", 6);
+            Core.EnsureComplete(9296);
+        }
 
         // Protein Shake (9297)
-        Story.MapItemQuest(9297, "midnightzone", 11848, 3);
-        Story.KillQuest(9297, "midnightzone", "Shadow Viscera");
+        if (!Story.QuestProgression(9297))
+        {
+            Core.EnsureAccept(9297);
+            Core.GetMapItem(11848, 3, "midnightzone");
+            Core.HuntMonster("midnightzone", "Shadow Viscera", "Viscera Sample", 6);
+            Core.EnsureComplete(9297);
+        }
 
         // Duty Beyond Death (9298)
         Story.KillQuest(9298, "midnightzone", "Venerated Wraith");
 
         // Designated Taunters (9299)
-        Story.KillQuest(9299, "midnightzone", new[] { "Shadow Viscera", "Venerated Wraith" });
+        if (!Story.QuestProgression(9299))
+        {
+            Core.EnsureAccept(9299);
+            Core.HuntMonster("midnightzone", "Shadow Viscera", "Shadow Captured", 7);
+            Core.HuntMonster("midnightzone", "Venerated Wraith", "Wraith Appeased", 7);
+            Core.EnsureComplete(9299);
+        }
 
         // Beloved Simulacrum (9230)
         Story.MapItemQuest(9300, "midnightzone", 11849, 4);
@@ -313,8 +458,13 @@ public class CoreAOR
         MidnightZone(seaVoice, coldThunder);
 
         // Shark Kiting (9306)
-        Story.MapItemQuest(9306, "abyssalzone", 11914);
-        Story.KillQuest(9306, "abyssalzone", "Kitefin Shark Bait");
+        if (!Story.QuestProgression(9306))
+        {
+            Core.EnsureAccept(9306);
+            Core.GetMapItem(11914, 1, "abyssalzone");
+            Core.HuntMonster("abyssalzone", "Kitefin Shark Bait", "Shark Fin", 8);
+            Core.EnsureComplete(9306);
+        }
 
         // Suckered Blockade (9307)
         Story.MapItemQuest(9307, "abyssalzone", 11893, 6);
@@ -324,15 +474,31 @@ public class CoreAOR
         Story.KillQuest(9308, "abyssalzone", "Blighted Water");
 
         // Sodden Secrets (9309)
-        Story.MapItemQuest(9309, "abyssalzone", 11895, 3);
-        Story.KillQuest(9309, "abyssalzone", "Shadow Viscera");
+        if (!Story.QuestProgression(9309))
+        {
+            Core.EnsureAccept(9309);
+            Core.GetMapItem(11895, 3, "abyssalzone");
+            Core.HuntMonster("abyssalzone", "Shadow Viscera", "Shadow Sample", 7);
+            Core.EnsureComplete(9309);
+        }
 
         // The Hidden Corpse (9310)
-        Story.KillQuest(9310, "abyssalzone", new[] { "Shadow Viscera", "Blighted Water" });
+        if (!Story.QuestProgression(9310))
+        {
+            Core.EnsureAccept(9310);
+            Core.HuntMonster("abyssalzone", "Shadow Viscera", "Shadow Organs", 6);
+            Core.HuntMonster("abyssalzone", "Blighted Water", "Decayed Elemental Gem", 6);
+            Core.EnsureComplete(9310);
+        }
 
         // Octo-Flake Fish Feed (9311)
-        Story.MapItemQuest(9311, "abyssalzone", 11896);
-        Story.KillQuest(9311, "abyssalzone", "Foam Scavenger");
+        if (!Story.QuestProgression(9311))
+        {
+            Core.EnsureAccept(9311);
+            Core.GetMapItem(11896, 1, "abyssalzone");
+            Core.HuntMonster("abyssalzone", "Foam Scavenger", "Foamy Residue", 10);
+            Core.EnsureComplete(9311);
+        }
 
         // Completely Surrounded (9312)
         Story.MapItemQuest(9312, "abyssalzone", 11897, 6);
@@ -342,8 +508,14 @@ public class CoreAOR
         Story.KillQuest(9313, "abyssalzone", "Necro Adipocere");
 
         // In the Grip of Justice (9314)
-        Story.MapItemQuest(9314, "abyssalzone", 11899);
-        Story.KillQuest(9314, "abyssalzone", new[] { "Necro Adipocere", "Foam Scavenger" });
+        if (!Story.QuestProgression(9314))
+        {
+            Core.EnsureAccept(9314);
+            Core.GetMapItem(11899, 1, "abyssalzone");
+            Core.HuntMonster("abyssalzone", "Necro Adipocere", "Necro Wax", 3);
+            Core.HuntMonster("abyssalzone", "Foam Scavenger", "Scavenger Tentacle", 7);
+            Core.EnsureComplete(9314);
+        }
 
         // Together as One (9315)
         if (!Story.QuestProgression(9315))
@@ -363,8 +535,13 @@ public class CoreAOR
         AbyssalZone(seaVoice, coldThunder);
 
         // Unsung Heroes (9329)
-        Story.MapItemQuest(9329, "trenchobserve", 11975);
-        Story.KillQuest(9329, "trenchobserve", "Venerated Wraith");
+        if (!Story.QuestProgression(9329))
+        {
+            Core.EnsureAccept(9329);
+            Core.GetMapItem(11975, 1, "trenchobserve");
+            Core.HuntMonster("trenchobserve", "Venerated Wraith", "Wraith I.D Card", 8);
+            Core.EnsureComplete(9329);
+        }
 
         // Watertight Guarantee (9330)
         if (!Story.QuestProgression(9330))
@@ -384,8 +561,13 @@ public class CoreAOR
             return;
 
         // Enemy in Need (9333)
-        Story.MapItemQuest(9333, "trenchobserve", 11978, 4);
-        Story.KillQuest(9333, "trenchobserve", "Seabase Turret");
+        if (!Story.QuestProgression(9333))
+        {
+            Core.EnsureAccept(9333);
+            Core.GetMapItem(11978, 4, "trenchobserve");
+            Core.HuntMonster("trenchobserve", "Seabase Turret", "Turret Disarmed", 6);
+            Core.EnsureComplete(9333);
+        }
 
         // Here Lies Shadow (9334)
         Story.MapItemQuest(9334, "trenchobserve", new[] { 11979, 11981 });
@@ -398,8 +580,14 @@ public class CoreAOR
         Story.KillQuest(9336, "trenchobserve", "Necro Adipocere");
 
         // Hadal Havoc (9337)
-        Story.MapItemQuest(9337, "trenchobserve", 11982);
-        Story.KillQuest(9337, "trenchobserve", new[] { "Necro Adipocere", "Sea Spirit" });
+        if (!Story.QuestProgression(9337))
+        {
+            Core.EnsureAccept(9337);
+            Core.GetMapItem(11982, 1, "trenchobserve");
+            Core.HuntMonster("trenchobserve", "Necro Adipocere", "Waxen Limb", 3);
+            Core.HuntMonster("trenchobserve", "Sea Spirit", "Spirit Stinger", 7);
+            Core.EnsureComplete(9337);
+        }
 
         // See You on the Other Side (9338)
         if (!Story.QuestProgression(9338))
@@ -415,56 +603,24 @@ public class CoreAOR
     {
         if (Core.isCompletedBefore(9348))
             return;
+
         SoW.ManaCradle();
         DeepWater(panopticonMerge: false, seaVoice: false, coldThunder: false);
         Story.PreLoad(this);
+        Core.EnsureAccept(9348);
 
-        if (!Core.isCompletedBefore(9348))
-        {
-            Core.EnsureAccept(9348);
+        FightVoiceInTheSea("Voice in the Sea Defeated", isTemp: true);
 
-            // Define the possible solo classes
-            string[] PossibleSoloClasses = new[] { "Chaos Avenger", "Verus Doomknight", "Void Highlord", "ArchPaladin" };
-
-            if (!Core.CheckInventory(PossibleSoloClasses, any: true))
-                Core.Logger("no Soloing classes found stopping (go get AP atleast and rerun)", stopBot: true);
-
-            // Find the first available class in inventory or bank
-            string? selectedClass = PossibleSoloClasses.FirstOrDefault(className =>
-                Bot.Inventory.Items.Any(item => item.Name == className) ||
-                Bot.Bank.Items.Any(item => item.Name == className)
-            );
-
-            Core.Logger($"Soloing \"Voice of the Sea\" with {selectedClass}");
-
-            Adv.GearStore();
-
-            // Adv.SmartEnhance(selectedClass);
-
-            // Call the KillThing method with the specified parameters
-            KillThing(
-                map: "seavoice",
-                mobMapID: 1,
-                targetAuraName: "Oxidize",
-                ItemUsed: 78994,
-                Class: selectedClass,
-                item: "Voice in the Sea Defeated",
-                quant: 1,
-                isTemp: true
-            );
-            Adv.GearStore(true);
-            Core.EnsureComplete(9348);
-            Core.SellItem("Vigil", all: true);
-        }
-
+        Adv.GearStore(true, EnhAfter: true);
+        Core.EnsureComplete(9348);
+        Core.SellItem("Vigil", all: true);
     }
-
     public void Balemorale(bool seaVoice = false, bool coldThunder = false)
     {
         if (Core.isCompletedBefore(9729))
             return;
 
-        TerminaTemple(false, false);
+        TerminaTemple(seaVoice, coldThunder);
 
         Core.EquipClass(ClassType.Farm);
 
@@ -481,19 +637,35 @@ public class CoreAOR
         Story.MapItemQuest(9722, "balemorale", new[] { 13177, 13178 });
 
         // Chaotic Roots (9723)
-        Story.MapItemQuest(9723, "balemorale", new[] { 13179, 13180 });
-        Story.KillQuest(9723, "balemorale", "Chaos Spider");
+        if (!Story.QuestProgression(9723))
+        {
+            Core.EnsureAccept(9723);
+            Core.GetMapItems(new[] { (13179, 1), (13180, 1) }, "balemorale");
+            Core.HuntMonster("balemorale", "Chaos Spider", "Spider Legs", 128);
+            Core.EnsureComplete(9723);
+        }
 
         // Eroding Era (9724)
-        Story.KillQuest(9724, "balemorale", "Chaos Crystal");
+        if (!Story.QuestProgression(9724))
+        {
+            Core.EnsureAccept(9724);
+            Core.KillMonster("balemorale", "r13", "Left", "*", "Chaotic Shard", 50);
+            Core.EnsureComplete(9724);
+        }
 
         // Old Wolf (9725)
         Story.MapItemQuest(9725, "balemorale", 13181, 5);
         Story.MapItemQuest(9725, "balemorale", 13182);
 
         // Abandoned Cradle (9726)
-        Story.MapItemQuest(9726, "balemorale", 13183);
-        Story.KillQuest(9726, "balemorale", new[] { "Chaos Spider", "Chaos Crystal" });
+        if (!Story.QuestProgression(9726))
+        {
+            Core.EnsureAccept(9726);
+            Core.GetMapItem(13183, 1, "balemorale");
+            Core.HuntMonster("balemorale", "Chaos Spider", "Chaotic Venom", 9);
+            Core.HuntMonster("balemorale", "Chaos Crystal", "Violet Core", 9);
+            Core.EnsureComplete(9726);
+        }
 
         // Shockwaves (9727)
         Story.KillQuest(9727, "balemorale", "Skye Warrior");
@@ -522,35 +694,51 @@ public class CoreAOR
 
         Core.EquipClass(ClassType.Farm);
 
-        // Skye's Raindrops 9732 
+        // Skye's Raindrops 9732
         Story.KillQuest(9732, "castleeblana", "Skye Warrior");
 
-        // Doctor's Orders 9733 
+        // Doctor's Orders 9733
         Story.MapItemQuest(9733, "castleeblana", 13202, 5);
         Story.MapItemQuest(9733, "castleeblana", 13203);
 
         // Shockwave's Ripples 9734
         Story.KillQuest(9734, "castleeblana", "Skye Executor");
 
-        // Caretaker's Shadow 9735 
-        Story.MapItemQuest(9735, "castleeblana", 13204);
-        Story.KillQuest(9735, "castleeblana", new[] { "Skye Warrior", "Skye Executor", "Skye Executor" });
+        // Caretaker's Shadow 9735
+        if (!Story.QuestProgression(9735))
+        {
+            Core.EnsureAccept(9735);
+            Core.GetMapItem(13204, 1, "castleeblana");
+            Core.HuntMonster("castleeblana", "Skye Warrior", "Warrior's Shockstone", 6);
+            Core.HuntMonster("castleeblana", "Skye Executor", "Executor's Shockstone", 9);
+            Core.EnsureComplete(9735);
+        }
 
-        // Harbinger's Tears 9736 
+        // Harbinger's Tears 9736
         Story.KillQuest(9736, "castleeblana", "Bananach Raven");
 
-        // Spectre of Hunger 9737 
-        Story.MapItemQuest(9737, "castleeblana", 13205);
-        Story.KillQuest(9737, "castleeblana", "Fear Gorta");
+        // Spectre of Hunger 9737
+        if (!Story.QuestProgression(9737))
+        {
+            Core.EnsureAccept(9737);
+            Core.GetMapItem(13205, 1, "castleeblana");
+            Core.HuntMonster("castleeblana", "Fear Gorta", "Gorta Rag", 10);
+            Core.EnsureComplete(9737);
+        }
 
-        // InnJustice 9738 
-        Story.MapItemQuest(9738, "castleeblana", 13206);
-        Story.KillQuest(9738, "castleeblana", new[] { "Bananach Raven", "Fear Gorta" });
-
-        // Find Shelter in... 9739 
+        // InnJustice 9738
+        if (!Story.QuestProgression(9738))
+        {
+            Core.EnsureAccept(9738);
+            Story.MapItemQuest(9738, "castleeblana", 13206);
+            Core.HuntMonster("castleeblana", "Fear Gorta", "Hunger Leaves", 9);
+            Core.HuntMonster("castleeblana", "Bananach Raven", "Electrified Feather", 9);
+            Core.EnsureComplete(9738);
+        }
+        // Find Shelter in... 9739
         Story.MapItemQuest(9739, "castleeblana", new[] { 13207, 13208 });
 
-        // Heavy Handed 9740 
+        // Heavy Handed 9740
         Story.KillQuest(9740, "castleeblana", "Skye Warrior");
 
         // Miserable Monsoon 9741
@@ -566,8 +754,13 @@ public class CoreAOR
         Castleeblana(seaVoice, coldThunder);
 
         // Wicker Magic (9755)
-        Story.MapItemQuest(9755, "loughshine", 13273);
-        Story.KillQuest(9755, "loughshine", "Skye Cailleach");
+        if (!Story.QuestProgression(9755))
+        {
+            Core.EnsureAccept(9755);
+            Core.GetMapItem(13273, 1, "loughshine");
+            Core.HuntMonster("loughshine", "Skye Cailleach", "Cailleach's Shockstone", 5);
+            Core.EnsureComplete(9755);
+        }
 
         // Maigh Eo (9756)
         Story.KillQuest(9756, "loughshine", "Scorched Elder Yew");
@@ -577,7 +770,13 @@ public class CoreAOR
         Story.MapItemQuest(9757, "loughshine", 13275);
 
         // Wisened Yew (9758)
-        Story.KillQuest(9758, "loughshine", new[] { "Skye Cailleach", "Scorched Elder Yew" });
+        if (!Story.QuestProgression(9758))
+        {
+            Core.EnsureAccept(9758);
+            Core.HuntMonster("loughshine", "Skye Cailleach", "Cailleach's Twine", 3);
+            Core.HuntMonster("loughshine", "Scorched Elder Yew", "Yew Aril", 3);
+            Core.EnsureComplete(9758);
+        }
 
         // Dragonflare (9759)
         Story.MapItemQuest(9759, "loughshine", 13276);
@@ -586,16 +785,27 @@ public class CoreAOR
         Story.KillQuest(9760, "loughshine", "Skye Executor");
 
         // Grace of Three (9761)
-        Story.MapItemQuest(9761, "loughshine", 13277);
-        Story.KillQuest(9761, "loughshine", "Energy Elemental");
+        if (!Story.QuestProgression(9761))
+        {
+            Core.EnsureAccept(9761);
+            Core.GetMapItem(13277, 1, "loughshine");
+            Core.HuntMonster("loughshine", "Energy Elemental", "Electric Plasma", 12);
+            Core.EnsureComplete(9761);
+        }
 
         // Iubhair (9762)
         Story.MapItemQuest(9762, "loughshine", 13278, 5);
         Story.MapItemQuest(9762, "loughshine", 13279);
 
         // Parting the Clouds (9763)
-        Story.MapItemQuest(9763, "loughshine", 13280);
-        Story.KillQuest(9763, "loughshine", new[] { "Skye Executor", "Energy Elemental" });
+        if (!Story.QuestProgression(9763))
+        {
+            Core.EnsureAccept(9763);
+            Core.GetMapItem(13280, 1, "loughshine");
+            Core.HuntMonster("loughshine", "Skye Executor", "Executor's Initials", 8);
+            Core.HuntMonster("loughshine", "Energy Elemental", "Energy Core", 8);
+            Core.EnsureComplete(9763);
+        }
 
         // Arrester (9764)
         if (!Story.QuestProgression(9764))
@@ -614,19 +824,35 @@ public class CoreAOR
         Loughshine(seaVoice, coldThunder);
 
         // Till When? (9768)
-        Story.MapItemQuest(9768, "naoisegrave", 13296);
-        Story.KillQuest(9768, "naoisegrave", "Bananach Raven");
+        if (!Story.QuestProgression(9768))
+        {
+            Core.EnsureAccept(9768);
+            Core.GetMapItem(13296, 1, "naoisegrave");
+            Core.HuntMonster("naoisegrave", "Bananach Raven", "Corvus Feather", 10);
+            Core.EnsureComplete(9768);
+        }
 
         // Energetic Feud (9769)
-        Story.MapItemQuest(9769, "naoisegrave", 13297);
-        Story.KillQuest(9769, "naoisegrave", "Energy Elemental");
+        if (!Story.QuestProgression(9769))
+        {
+            Core.EnsureAccept(9769);
+            Core.GetMapItem(13297, 1, "naoisegrave");
+            Core.HuntMonster("naoisegrave", "Energy Elemental", "Overdriven Electron", 10);
+            Core.EnsureComplete(9769);
+        }
 
         // Glacial Seal (9774)
         Story.MapItemQuest(9774, "naoisegrave", new[] { 13298, 13299 });
 
         // The Cold Wind Guides (9770)
-        Story.MapItemQuest(9770, "naoisegrave", 13300);
-        Story.KillQuest(9770, "naoisegrave", new[] { "Energy Elemental", "Bananach Raven" });
+        if (!Story.QuestProgression(9770))
+        {
+            Core.EnsureAccept(9770);
+            Core.GetMapItem(13300, 1, "naoisegrave");
+            Core.HuntMonster("naoisegrave", "Energy Elemental", "Frozen Lightning", 6);
+            Core.HuntMonster("naoisegrave", "Bananach Raven", "Warm Raven Tear", 10);
+            Core.EnsureComplete(9770);
+        }
 
         // Cold Callers (9771)
         Story.KillQuest(9771, "naoisegrave", "Ice Guardian");
@@ -636,8 +862,13 @@ public class CoreAOR
 
         // Of The Sorrows (9773)
         Core.EquipClass(ClassType.Solo);
-        Story.MapItemQuest(9773, "naoisegrave", 13301);
-        Story.KillQuest(9773, "naoisegrave", "Warden Iseul");
+        if (!Story.QuestProgression(9773))
+        {
+            Core.EnsureAccept(9773);
+            Core.GetMapItem(13301, 1, "naoisegrave");
+            Core.HuntMonster("naoisegrave", "Warden Iseul ", "Iseul's Mask", 1);
+            Core.EnsureComplete(9773);
+        }
 
         // Cold-Blooded Torture (9775)
         Story.KillQuest(9775, "naoisegrave", "Ice Guardian");
@@ -666,7 +897,13 @@ public class CoreAOR
         Story.KillQuest(9806, "liatarahill", "Garde Wraith");
 
         // True Nature (9807)
-        Story.KillQuest(9807, "liatarahill", new[] { "Undead Garde", "Garde Wraith" });
+        if (!Story.QuestProgression(9807))
+        {
+            Core.EnsureAccept(9807);
+            Core.HuntMonster("liatarahill", "Undead Garde ", "Garde's Sprouts", 6);
+            Core.HuntMonster("liatarahill", "Garde Wraith", "Wraith's Breath", 12);
+            Core.EnsureComplete(9807);
+        }
 
         // Deafly Pride (9808)
         Story.MapItemQuest(9808, "liatarahill", new[] { 13364, 13365 });
@@ -680,19 +917,36 @@ public class CoreAOR
         }
 
         // Last Snowfall (9810)
-        Story.MapItemQuest(9810, "liatarahill", 13368);
-        Story.KillQuest(9810, "liatarahill", new[] { "Undead Garde", "Garde Wraith" });
+        if (!Story.QuestProgression(9810))
+        {
+            Core.EnsureAccept(9810);
+            Core.GetMapItem(13368, 1, "liatarahill");
+            Core.HuntMonster("liatarahill", "Undead Garde ", "Garde's Bones", 50);
+            Core.HuntMonster("liatarahill", "Garde Wraith", "Wraith's Soul", 3);
+            Core.EnsureComplete(9810);
+        }
 
         // Spring Melt (9811)
-        Story.MapItemQuest(9811, "liatarahill", 13366);
-        Story.KillQuest(9811, "liatarahill", "Ice Guardian");
+        if (!Story.QuestProgression(9811))
+        {
+            Core.EnsureAccept(9811);
+            Core.GetMapItem(13366, 1, "liatarahill");
+            Core.HuntMonster("liatarahill", "Ice Guardian", "Icy Fractal", 3);
+            Core.EnsureComplete(9811);
+        }
 
         // Connla (9812)
         Story.KillQuest(9812, "liatarahill", "Skye Cailleach");
 
         // Dumha na nGiall (9813)
-        Story.MapItemQuest(9813, "liatarahill", 13367);
-        Story.KillQuest(9813, "liatarahill", new[] { "Ice Guardian", "Skye Cailleach" });
+        if (!Story.QuestProgression(9813))
+        {
+            Core.EnsureAccept(9813);
+            Core.GetMapItem(13367, 1, "liatarahill");
+            Core.HuntMonster("liatarahill", "Ice Guardian", "Frozen Blessing", 12);
+            Core.HuntMonster("liatarahill", "Skye Cailleach", "Cailleach's Mask", 9);
+            Core.EnsureComplete(9813);
+        }
 
         // Changeling (9814)
         if (!Story.QuestProgression(9814))
@@ -701,7 +955,6 @@ public class CoreAOR
             Story.KillQuest(9814, "liatarahill", "Warden Illaria");
             Core.EquipClass(ClassType.Farm);
         }
-
     }
 
     public void CastleGaheris(bool seaVoice = false, bool coldThunder = false)
@@ -712,8 +965,13 @@ public class CoreAOR
         LiaTaraHill(seaVoice, coldThunder);
 
         // Needs of the Few (9819)
-        Story.MapItemQuest(9819, "castlegaheris", 13378);
-        Story.KillQuest(9819, "castlegaheris", "Energy Elemental");
+        if (!Story.QuestProgression(9819))
+        {
+            Core.EnsureAccept(9819);
+            Core.GetMapItem(13378, 1, "castlegaheris");
+            Core.HuntMonster("castlegaheris", "Energy Elemental ", "Electronic Gem", 18);
+            Core.EnsureComplete(9819);
+        }
 
         // Lost and Numb (9820)
         Story.KillQuest(9820, "castlegaheris", "Ice Guardian");
@@ -722,7 +980,13 @@ public class CoreAOR
         Story.MapItemQuest(9821, "castlegaheris", new[] { 13379, 13380, 13381 });
 
         // Strangled Sobs (9822)
-        Story.KillQuest(9822, "castlegaheris", new[] { "Energy Elemental", "Ice Guardian" });
+        if (!Story.QuestProgression(9822))
+        {
+            Core.EnsureAccept(9822);
+            Core.HuntMonster("castlegaheris", "Energy Elemental ", "Shock Enhancer", 9);
+            Core.HuntMonster("castlegaheris", "Ice Guardian", "Frozen Eye", 9);
+            Core.EnsureComplete(9822);
+        }
 
         // Distant Care (9823)
         Story.KillQuest(9823, "castlegaheris", "Dark Cage");
@@ -737,7 +1001,13 @@ public class CoreAOR
         Story.MapItemQuest(9826, "castlegaheris", new[] { 13382, 13383 });
 
         // Life's Latest Lows (9827)
-        Story.KillQuest(9827, "castlegaheris", new[] { "Glacial Crystal", "Elemental Hybrid" });
+        if (!Story.QuestProgression(9827))
+        {
+            Core.EnsureAccept(9827);
+            Core.HuntMonster("castlegaheris", "Glacial Crystal", "Glaceran Ice", 32);
+            Core.HuntMonster("castlegaheris", "Elemental Hybrid", "Hybrid Remnants", 32);
+            Core.EnsureComplete(9827);
+        }
 
         // Vow of Misery (9828)
         if (!Story.QuestProgression(9828))
@@ -775,40 +1045,39 @@ public class CoreAOR
 
         TerminaTemple(seaVoice, coldThunder);
 
+        Story.PreLoad(this);
         #region Useable Monsters
         string[] UseableMonsters = new[]
         {
-    "Noelle Knight", // UseableMonsters[0],
-	"Drow Soldier", // UseableMonsters[1],
-	"Dwarven Aegis", // UseableMonsters[2],
-	"Maleno Elemental", // UseableMonsters[3],
-	"Maleno Match", // UseableMonsters[4],
-	"Flame of Maleno", // UseableMonsters[5],
-	"Eternal Flames", // UseableMonsters[6]
-};
+            "Noelle Knight", // UseableMonsters[0],
+            "Drow Soldier", // UseableMonsters[1],
+            "Dwarven Aegis", // UseableMonsters[2],
+            "Maleno Elemental", // UseableMonsters[3],
+            "Maleno Match", // UseableMonsters[4],
+            "Flame of Maleno", // UseableMonsters[5],
+            "Eternal Flames", // UseableMonsters[6]
+        };
         #endregion Useable Monsters
 
         // 10347 | Sister Statues
         Story.MapItemQuest(10347, "thelimacity", new[] { 14770, 14771 });
 
-
         // 10348 | Starstruck Chivalry
         if (!Story.QuestProgression(10348))
             Core.HuntMonsterQuest(10348, "thelimacity", UseableMonsters[0]);
 
-
         // 10349 | Black Dahlia
         Story.MapItemQuest(10349, "thelimacity", new[] { 14772, 14773 });
-
 
         // 10350 | Talls and Stouts
         if (!Story.QuestProgression(10350))
         {
-            Core.HuntMonsterQuest(10350,
-                ("thelimacity", UseableMonsters[2], ClassType.Farm),
-                ("thelimacity", UseableMonsters[1], ClassType.Farm));
+            Core.EnsureAccept(10350);
+            Core.EquipClass(ClassType.Farm);
+            Core.HuntMonster("thelimacity", UseableMonsters[1], "Black Glass Pendant", 9);
+            Core.HuntMonster("thelimacity", UseableMonsters[2], "Golden Ram Horn", 9);
+            Core.EnsureComplete(10350);
         }
-
 
         // 10351 | A Lost Matchstick
         if (!Story.QuestProgression(10351))
@@ -819,44 +1088,38 @@ public class CoreAOR
             Core.EnsureComplete(10351);
         }
 
-
         // 10352 | Flash Fire
         Story.MapItemQuest(10352, "thelimacity", 14775, 4);
-
 
         // 10353 | Unio Naturalis
         if (!Story.QuestProgression(10353))
         {
-            Core.HuntMonsterQuest(10353,
-                ("thelimacity", UseableMonsters[3], ClassType.Solo));
+            Core.HuntMonsterQuest(10353, ("thelimacity", UseableMonsters[3], ClassType.Solo));
         }
-
 
         // 10354 | A Friend's Distant Laugh
         if (!Story.QuestProgression(10354))
         {
-            Core.HuntMonsterQuest(10354,
-                ("thelimacity", UseableMonsters[4], ClassType.Farm));
+            Core.HuntMonsterQuest(10354, ("thelimacity", UseableMonsters[4], ClassType.Farm));
         }
-
 
         // 10355 | Putrefaction
         if (!Story.QuestProgression(10355))
         {
-            Core.HuntMonsterQuest(10355,
-                ("thelimacity", UseableMonsters[3], ClassType.Solo),
-                ("thelimacity", UseableMonsters[4], ClassType.Farm));
+            Core.EnsureAccept(10355);
+            Core.EquipClass(ClassType.Solo);
+            Core.HuntMonster("thelimacity", UseableMonsters[3], "Black Flame", 3);
+            Core.EquipClass(ClassType.Farm);
+            Core.HuntMonster("thelimacity", UseableMonsters[4], "Burnt Hair", 12);
+            Core.EnsureComplete(10355);
         }
-
 
         // 10356 | Enatiodromia
         if (!Story.QuestProgression(10356))
         {
-            Core.HuntMonsterQuest(10356,
-                ("thelimacity", UseableMonsters[5], ClassType.Solo));
+            Core.EquipClass(ClassType.Solo);
+            Core.HuntMonsterQuest(10356, ("thelimacity", UseableMonsters[5], ClassType.Solo));
         }
-
-
     }
 
     public void MountMaleno(bool seaVoice = false, bool coldThunder = false)
@@ -869,78 +1132,82 @@ public class CoreAOR
         #region Useable Monsters
         string[] UseableMonsters = new[]
         {
-    "Soul Raven", // UseableMonsters[0],
-	"Maleno Match", // UseableMonsters[1],
-	"Maleno Elemental", // UseableMonsters[2],
-	"Draconian Bandit", // UseableMonsters[3],
-	"Idalion", // UseableMonsters[4]
-};
+            "Soul Raven", // UseableMonsters[0],
+            "Maleno Match", // UseableMonsters[1],
+            "Maleno Elemental", // UseableMonsters[2],
+            "Draconian Bandit", // UseableMonsters[3],
+            "Idalion", // UseableMonsters[4]
+        };
         #endregion Useable Monsters
 
         // 10359 | A-Luring Song
-        Story.MapItemQuest(10359, "mountmaleno", 14805);
-        Story.KillQuest(10359, "mountmaleno", "Soul Raven");
-
+        if (!Story.QuestProgression(10359))
+        {
+            Core.EnsureAccept(10359);
+            Core.GetMapItem(14805, 1, "mountmaleno");
+            Core.HuntMonster("mountmaleno", "Soul Raven", "Soul Song", 15);
+            Core.EnsureComplete(10359);
+        }
 
         // 10360 | Splendid Ashes, Pompous Grave
         if (!Story.QuestProgression(10360))
         {
-            Core.HuntMonsterQuest(10360,
-                ("mountmaleno", UseableMonsters[1], ClassType.Farm));
+            Core.HuntMonsterQuest(10360, ("mountmaleno", UseableMonsters[1], ClassType.Farm));
         }
 
-
         // 10361 | Echolocation
-        Story.MapItemQuest(10361, new[] {
-            (14806, 1, "mountmaleno"),
-            (14807, 5, "mountmaleno")
-        });
-
+        Story.MapItemQuest(10361, new[] { (14806, 1, "mountmaleno"), (14807, 5, "mountmaleno") });
 
         // 10362 | Chymerical Ash
         if (!Story.QuestProgression(10362))
         {
-            Core.HuntMonsterQuest(10362,
-                ("mountmaleno", UseableMonsters[0], ClassType.Farm),
-                ("mountmaleno", UseableMonsters[1], ClassType.Farm));
+            Core.EnsureAccept(10362);
+            Core.EquipClass(ClassType.Farm);
+            Core.HuntMonster("mountmaleno", "Soul Raven", "Soul Feather", 6);
+            Core.HuntMonster("mountmaleno", "Maleno Match", "Burnt Letters", 9);
+            Core.EnsureComplete(10362);
         }
-
 
         // 10363 | Journey Through the Dark Night
         Story.MapItemQuest(10363, "mountmaleno", new[] { 14808, 14809 });
 
-
         // 10364 | Lunar Caustic
-        Story.MapItemQuest(10364, "mountmaleno", 14810);
-        Story.KillQuest(10364, "mountmaleno", UseableMonsters[2]);
-
+        if (!Story.QuestProgression(10364))
+        {
+            Core.EnsureAccept(10364);
+            Core.GetMapItem(14810, 1, "mountmaleno");
+            Core.HuntMonster("mountmaleno", "Maleno Elemental", "Maleno Steel", 6);
+            Core.EnsureComplete(10364);
+        }
 
         // 10365 | Like Water and Lithium
-        Story.MapItemQuest(10365, "mountmaleno", 14811);
-        Story.KillQuest(10365, "mountmaleno", UseableMonsters[3]);
-
+        if (!Story.QuestProgression(10365))
+        {
+            Core.EnsureAccept(10365);
+            Core.GetMapItem(14811, 1, "mountmaleno");
+            Core.HuntMonster("mountmaleno", "Draconian Bandit", "Putrefied Scale", 15);
+            Core.EnsureComplete(10365);
+        }
 
         // 10366 | The Shadows Lengthen in…
         Story.MapItemQuest(10366, "mountmaleno", 14812);
 
-
         // 10367 | Blithe Hospitality
         if (!Story.QuestProgression(10367))
         {
-            Core.HuntMonsterQuest(10367,
-                ("mountmaleno", UseableMonsters[3], ClassType.Farm),
-                ("mountmaleno", UseableMonsters[2], ClassType.Solo));
+            Core.EnsureAccept(10367);
+            Core.EquipClass(ClassType.Farm);
+            Core.HuntMonster("mountmaleno", "Draconian Bandit", "Fused Hoard Coins", 9);
+            Core.EquipClass(ClassType.Solo);
+            Core.HuntMonster("mountmaleno", "Maleno Elemental", "Black Lead", 3);
+            Core.EnsureComplete(10367);
         }
-
 
         // 10368 | Sal Volatile
         if (!Story.QuestProgression(10368))
         {
-            Core.HuntMonsterQuest(10368,
-                ("mountmaleno", UseableMonsters[4], ClassType.Solo));
+            Core.HuntMonsterQuest(10368, ("mountmaleno", UseableMonsters[4], ClassType.Solo));
         }
-
-
     }
 
     public void SanctuaryAiwass(bool seaVoice = false, bool coldThunder = false)
@@ -1028,78 +1295,547 @@ public class CoreAOR
         #region Useable Monsters
         string[] UseableMonsters = new[]
         {
-    "Albedo Elemental", // UseableMonsters[0],
-	"Defensive Turret", // UseableMonsters[1],
-	"Runehawk Husk", // UseableMonsters[2],
-	"Collapsed Husk", // UseableMonsters[3],
-	"Albedo Match", // UseableMonsters[4],
-	"Defense Droid", // UseableMonsters[5],
-	"Flame of Albedo", // UseableMonsters[6]
-};
+            "Albedo Elemental", // UseableMonsters[0],
+            "Defensive Turret", // UseableMonsters[1],
+            "Runehawk Husk", // UseableMonsters[2],
+            "Collapsed Husk", // UseableMonsters[3],
+            "Albedo Match", // UseableMonsters[4],
+            "Defense Droid", // UseableMonsters[5],
+            "Flame of Albedo", // UseableMonsters[6]
+        };
         #endregion Useable Monsters
 
         // 10413 | Discerning Threats
         if (!Story.QuestProgression(10413))
         {
-            Core.HuntMonsterQuest(10413,
-                ("forgealbedo", UseableMonsters[0], ClassType.Farm));
+            Core.HuntMonsterQuest(10413, ("forgealbedo", UseableMonsters[0], ClassType.Farm));
         }
-
 
         // 10414 | Model Students
         Story.MapItemQuest(10414, "forgealbedo", new[] { 14959, 14960, 14961 });
 
-
         // 10415 | System Delusion
-        Story.MapItemQuest(10415, "forgealbedo", 14962);
-        Story.KillQuest(10415, "forgealbedo", UseableMonsters[1]);
-
+        if (!Story.QuestProgression(10415))
+        {
+            Core.EnsureAccept(10415);
+            Core.GetMapItem(14962, 1, "forgealbedo");
+            Core.HuntMonster("forgealbedo", "Defensive Turret", "Turret Logic Module", 18);
+            Core.EnsureComplete(10415);
+        }
 
         // 10416 | The Leap that Never Landed
-        Story.MapItemQuest(10416, "forgealbedo", 14963, 4);
-        Story.KillQuest(10416, "forgealbedo", UseableMonsters[2]);
-
+        if (!Story.QuestProgression(10416))
+        {
+            Core.EnsureAccept(10416);
+            Core.GetMapItem(14963, 4, "forgealbedo");
+            Core.HuntMonster("forgealbedo", "Runehawk Husk", "Runehawk Student ID", 12);
+            Core.EnsureComplete(10416);
+        }
 
         // 10417 | Insistent Existence
-        Story.MapItemQuest(10417, "forgealbedo", 14964, 4);
-        Story.KillQuest(10417, "forgealbedo", UseableMonsters[3]);
-
+        if (!Story.QuestProgression(10417))
+        {
+            Core.EnsureAccept(10417);
+            Core.GetMapItem(14964, 4, "forgealbedo");
+            Core.HuntMonster("forgealbedo", "Collapsed Husk", "Husk's Stained ID", 3);
+            Core.EnsureComplete(10417);
+        }
 
         // 10418 | Failed Reflection
         if (!Story.QuestProgression(10418))
         {
-            Core.HuntMonsterQuest(10418,
-                ("forgealbedo", UseableMonsters[4], ClassType.Farm));
+            Core.HuntMonsterQuest(10418, ("forgealbedo", UseableMonsters[4], ClassType.Farm));
         }
-
 
         // 10419 | Technically Aware
         if (!Story.QuestProgression(10419))
         {
-            Core.HuntMonsterQuest(10419,
-                ("forgealbedo", UseableMonsters[5], ClassType.Solo));
+            Core.HuntMonsterQuest(10419, ("forgealbedo", UseableMonsters[5], ClassType.Solo));
         }
 
-
         // 10420 | Mental Barrier
-        Story.MapItemQuest(10420, "forgealbedo", 14965, 6);
-        Story.KillQuest(10420, "forgealbedo", UseableMonsters[1]);
-
+        if (!Story.QuestProgression(10420))
+        {
+            Core.EnsureAccept(10420);
+            Core.GetMapItem(14965, 6, "forgealbedo");
+            Core.HuntMonster("forgealbedo", "Defensive Turret", "Blastproof Shell", 12);
+            Core.EnsureComplete(10420);
+        }
 
         // 10421 | Lost Admin Privileges
         if (!Story.QuestProgression(10421))
         {
-            Core.HuntMonsterQuest(10421,
-                ("forgealbedo", UseableMonsters[1], ClassType.Farm),
-                ("forgealbedo", UseableMonsters[5], ClassType.Farm));
+            Core.EnsureAccept(10421);
+            Core.EquipClass(ClassType.Farm);
+            Core.HuntMonster("forgealbedo", "Defensive Turret", "Active Fuel Cell", 6);
+            Core.HuntMonster("forgealbedo", "Defense Droid", "Rapid Cooling Fluid", 9);
+            Core.EnsureComplete(10421);
         }
-
 
         // 10422 | Conscious Unconsciousness
         if (!Story.QuestProgression(10422))
         {
-            Core.HuntMonsterQuest(10422,
-                ("forgealbedo", UseableMonsters[6], ClassType.Solo));
+            Core.HuntMonsterQuest(10422, ("forgealbedo", UseableMonsters[6], ClassType.Solo));
+        }
+    }
+
+    public void FortLuma(bool seaVoice = false, bool coldThunder = false)
+    {
+        if (Core.isCompletedBefore(10618))
+            return;
+
+        ForgeAlbedo(seaVoice, coldThunder);
+        Story.PreLoad(this);
+
+        #region Useable Monsters
+        string[] UseableMonsters = new[]
+        {
+            "Citrinitas Elemental", // UseableMonsters[0],
+            "Luma Lifeform", // UseableMonsters[1],
+            "Lightguard Elite", // UseableMonsters[2],
+            "Rigaud &amp; Cassie", // UseableMonsters[3],
+            // use monstermapid for this'n [10]
+            "Citrinitas Match", // UseableMonsters[4],
+            "Luma Dragon Twins", // UseableMonsters[5],
+            "Flame of Citrinitas", // UseableMonsters[6]
+        };
+        #endregion Useable Monsters
+
+        // 10609 | Xanthosis
+        if (!Story.QuestProgression(10609))
+        {
+            Story.MapItemQuest(10609, "fortluma", 15542);
+            Core.HuntMonsterQuest(10609,
+                ("fortluma", UseableMonsters[0], ClassType.Solo));
+        }
+
+
+        // 10610 | Golden Lead
+        if (!Story.QuestProgression(10610))
+        {
+            Story.MapItemQuest(10610, "fortluma", 15543);
+            Core.HuntMonsterQuest(10610,
+                ("fortluma", UseableMonsters[1], ClassType.Farm));
+        }
+
+
+        // 10611 | Luminary Vision
+        if (!Story.QuestProgression(10611))
+        {
+            Story.MapItemQuest(10611, "fortluma", new[] { 15544, 15545 });
+        }
+
+
+        // 10612 | Premature Sunrise
+        if (!Story.QuestProgression(10612))
+        {
+            Core.HuntMonsterQuest(10612,
+                ("fortluma", UseableMonsters[2], ClassType.Farm));
+        }
+
+
+        // 10613 | Blinded by the Light
+        if (!Story.QuestProgression(10613))
+        {
+            Core.EnsureAccept(10613);
+            Core.HuntMonsterMapID("fortluma", 10, "Astero's Aurum");
+            Core.EnsureComplete(10613);
+        }
+
+
+        // 10614 | Wayward Wisewoman
+        if (!Story.QuestProgression(10614))
+        {
+            Core.EnsureAccept(10614);
+            Core.EquipClass(ClassType.Solo);
+            Core.HuntMonster("fortluma", UseableMonsters[2], "Elite Promotion Notice", 6);
+            Core.HuntMonster("fortluma", UseableMonsters[0], "Cloudy Citrine", 2);
+            Story.MapItemQuest(10614, "fortluma", 15546);
+            Bot.Wait.ForQuestComplete(10614);
+        }
+
+        Bot.Sleep(2500);
+        if (Bot.Player.Cell.Contains("Cut"))
+            Core.JumpWait();
+
+        // 10615 | Incognizance
+        if (!Story.QuestProgression(10615))
+        {
+            Core.EnsureAccept(10615);
+            Core.HuntMonster("fortluma", UseableMonsters[4], "Calcified Eyes", 18);
+            Story.MapItemQuest(10615, "fortluma", 15547);
+        }
+
+
+        // 10616 | Flowers of Luma
+        if (!Story.QuestProgression(10616))
+        {
+            Core.HuntMonsterQuest(10616,
+                ("fortluma", UseableMonsters[5], ClassType.Solo));
+        }
+
+
+        // 10617 | Quid Pro Quo
+        if (!Story.QuestProgression(10617))
+        {
+            Core.EnsureAccept(10617);
+            Core.KillMonster("fortluma", "r10", "Left", "*", "Dark Azoth", 6);
+            Story.MapItemQuest(10617, "fortluma", 15548);
+        }
+
+
+        // 10618 |Drowned King in Yellow
+        if (!Story.QuestProgression(10618))
+        {
+            Bot.Log("**Boss Gear Suggestion**\nSuggested Class and Enh for this boss if your stuck, swap your Solo class to: Dragon of time(or any decent HoT class)\n--With these enhancements--\n" + "Class: Healer\nHelm: Healer\nWeapon: Elysium/Healer\nCape: Absolution/Healer");
+            Core.HuntMonsterQuest(10618,
+                ("fortluma", UseableMonsters[6], ClassType.Solo));
+            Bot.Wait.ForQuestComplete(10618);
+            Bot.Sleep(2500);
+            Core.JumpWait();
+
+        }
+
+    }
+
+    public void WarWickForest(bool seaVoice = false, bool coldThunder = false)
+    {
+        if (Core.isCompletedBefore(10687))
+            return;
+        FortLuma(seaVoice, coldThunder);
+
+        Story.PreLoad(this);
+
+        #region Useable Monsters
+        string[] UseableMonsters = new[]
+        {
+            "Black Phoenix", // UseableMonsters[0],
+            "Rubedo Elemental", // UseableMonsters[1],
+            "Rubedo Match", // UseableMonsters[2],
+            "Charred Remnant", // UseableMonsters[3],
+            "Idea of a Champion", // UseableMonsters[4],
+            "Flame of Rubedo", // UseableMonsters[5]
+        };
+        #endregion Useable Monsters
+
+        // 10678 | A Phoenix's Repeated Demise
+        if (!Story.QuestProgression(10678))
+        {
+            Story.MapItemQuest(10678, "warwickforest", 15656);
+            Core.HuntMonsterQuest(10678,
+                ("warwickforest", UseableMonsters[0], ClassType.Solo));
+        }
+
+        // 10679 | Reopened Scar
+        if (!Story.QuestProgression(10679))
+        {
+            Story.MapItemQuest(10679, "warwickforest", 15657);
+            Core.HuntMonsterQuest(10679,
+                ("warwickforest", UseableMonsters[1], ClassType.Solo));
+        }
+
+        // 10680 | Pyroclast Breath
+        if (!Story.QuestProgression(10680))
+        {
+            Core.HuntMonsterQuest(10680,
+                ("warwickforest", UseableMonsters[3], ClassType.Solo));
+        }
+
+        // 10681 | Smoke Signals
+        if (!Story.QuestProgression(10681))
+        {
+            Story.MapItemQuest(10681, "warwickforest", 15658);
+            Core.HuntMonsterQuest(10681,
+                ("warwickforest", UseableMonsters[1], ClassType.Solo));
+        }
+
+        // 10682 | Reflection in Oil
+        if (!Story.QuestProgression(10682))
+        {
+            Core.EnsureAccept(10682);
+            Story.MapItemQuest(10682, "warwickforest", 15659);
+            Core.KillMonster("warwickforest", "r8", "Left", "*", "Smoldering Ashes", 6);
+            Core.EnsureComplete(10682);
+        }
+
+        // 10683 | Iosis of the Soul
+        if (!Story.QuestProgression(10683))
+        {
+            Story.MapItemQuest(10683, "warwickforest", 15660);
+            Core.HuntMonsterQuest(10683,
+                ("warwickforest", UseableMonsters[2], ClassType.Solo));
+        }
+
+        // 10684 | The Scorpion and the Fox
+        if (!Story.QuestProgression(10684))
+        {
+            Core.EnsureAccept(10684);
+            Story.MapItemQuest(10684, "warwickforest", 15661);
+            Core.KillMonster("warwickforest", "r2", "Left", "*", "Philosopher's Eye", 15);
+            Core.EnsureComplete(10684);
+
+        }
+
+        // 10685 | Dalitong Keli
+        if (!Story.QuestProgression(10685))
+        {
+            Story.MapItemQuest(10685, "warwickforest", 15662, 5);
+        }
+
+        // 10686 | The Ideal Champion
+        if (!Story.QuestProgression(10686))
+        {
+            Core.HuntMonsterQuest(10686,
+                ("warwickforest", UseableMonsters[4], ClassType.Solo));
+        }
+
+        // 10687 | Kolr
+        if (!Story.QuestProgression(10687))
+        {
+            Core.HuntMonsterQuest(10687,
+                ("warwickforest", UseableMonsters[5], ClassType.Solo));
+        }
+
+    }
+
+    public void MagnumOpus(bool seaVoice = false, bool coldThunder = false)
+    {
+        if (Core.isCompletedBefore(10705))
+            return;
+
+        WarWickForest(true, true);
+        Story.PreLoad(this);
+
+        // 10703 | The Black Mage
+        if (!Story.QuestProgression(10703))
+        {
+            Core.EnsureAccept(10703);
+            Core.GetMapItem(15703, 1, "magnumopus");
+            Core.EnsureComplete(10703);
+        }
+
+        // 10704 | Hic Iacet Revelatio
+        if (!Story.QuestProgression(10704))
+        {
+            Core.EnsureAccept(10704);
+            if (!string.IsNullOrEmpty(Core.BossClass))
+                Core.EquipClass(ClassType.Boss);
+            else
+            {
+                Bot.Log("BossClass is empty/unselected in CBO, we'll use the Solo class or if thats empty, the currently equipped class.");
+                Core.EquipClass(ClassType.Solo);
+            }
+            Bot.Events.ExtensionPacketReceived += FlameoftheBeyond;
+
+            while (!Bot.ShouldExit && !Bot.TempInv.Contains("Flame of the Beyond Defeated"))
+            {
+                if (Bot.Map.Name != "magnumopus")
+                    Core.Join("magnumopus");
+
+                if (Bot.Player.Cell != "r2")
+                    Core.Jump("r2", "bottom");
+
+                Bot.Combat.Attack("*");
+
+                Bot.Sleep(200);
+                if (Bot.TempInv.Contains("Flame of the Beyond Defeated"))
+                    break;
+            }
+
+            Bot.Events.ExtensionPacketReceived -= FlameoftheBeyond;
+            Core.EnsureComplete(10704);
+        }
+
+
+        async void FlameoftheBeyond(dynamic packet)
+        {
+            if (packet?["params"]?.type?.ToString() != "json")
+                return;
+            if (!Bot.Player.Alive)
+                return;
+            dynamic data = packet["params"].dataObj;
+            if (data?.cmd?.ToString() != "event")
+                return;
+            string? zoneSet = data?.args?.zoneSet?.ToString();
+            if (string.IsNullOrEmpty(zoneSet))
+                return;
+
+            float px = Bot.Player.X;
+            float py = Bot.Player.Y;
+
+            // Zone A active, walk right
+            if (string.Equals(zoneSet, "A", StringComparison.OrdinalIgnoreCase))
+            {
+                /* box of : 
+                x: 550, y: 339
+                x: 678, y: 465
+                */
+                if (px >= 550 && px <= 678 && py >= 339 && py <= 465)
+                    return;
+
+                int randX = Random.Shared.Next(550, 678);
+                int randY = Random.Shared.Next(339, 465);
+                _ = Task.Run(() => Bot.Player.WalkTo(randX, randY));
+                return;
+            }
+
+            // Zone B active, walk left
+            if (string.Equals(zoneSet, "B", StringComparison.OrdinalIgnoreCase))
+            {
+                /* box of : 
+                x: 426, y: 359
+                x: 211, y: 445
+                */
+                if (px >= 211 && px <= 426 && py >= 359 && py <= 445)
+                    return;
+
+                int randX = Random.Shared.Next(211, 426);
+                int randY = Random.Shared.Next(359, 445);
+                _ = Task.Run(() => Bot.Player.WalkTo(randX, randY));
+                return;
+            }
+        }
+
+    }
+
+    public void RubedoPeak(bool seaVoice = false, bool coldThunder = false)
+    {
+        if (Core.isCompletedBefore(10714))
+            return;
+
+        MagnumOpus(seaVoice, coldThunder);
+
+        Story.PreLoad(this);
+
+        // 10714 | Wave Goodbye
+        Story.KillQuest(10714, "rubedopeak", "Rubedo Match");
+    }
+
+    public void ForgeCitrinitas(bool seaVoice = false, bool coldThunder = false)
+    {
+        if (Core.isCompletedBefore(10736))
+            return;
+
+        RubedoPeak(seaVoice, coldThunder);
+        Story.PreLoad(this);
+
+        #region Useable Monsters
+        string[] UseableMonsters = new[]
+        {
+            "Citrinitas Elemental", // UseableMonsters[0],
+            "Defensive Turret", // UseableMonsters[1],
+            "Citrinitas Match", // UseableMonsters[2],
+            "Luma Lifeform", // UseableMonsters[3],
+            "Defense Droid", // UseableMonsters[4],
+            "Clematis", // UseableMonsters[5]
+        };
+        #endregion Useable Monsters
+
+        // 10725 | The Tarnished Ideal
+        if (!Story.QuestProgression(10725))
+        {
+            Core.HuntMonsterQuest(10725,
+                ("forgecitrinitas", UseableMonsters[0], ClassType.Farm));
+        }
+
+
+        // 10726 | Pointed Suggestions
+        if (!Story.QuestProgression(10726))
+        {
+            Story.MapItemQuest(10726, "forgecitrinitas", new[] { 15820, 15821 });
+        }
+
+
+        // 10727 | Bite the Bullet
+        if (!Story.QuestProgression(10727))
+        {
+            Core.HuntMonsterQuest(10727,
+                ("forgecitrinitas", UseableMonsters[1], ClassType.Farm));
+        }
+
+
+        // 10728 | Pain and Ecstasy
+        if (!Story.QuestProgression(10728))
+        {
+            Core.HuntMonsterQuest(10728,
+                ("forgecitrinitas", UseableMonsters[3], ClassType.Farm));
+        }
+
+
+        // 10729 | Reincubation
+        if (!Story.QuestProgression(10729))
+        {
+            Story.MapItemQuest(10729, "forgecitrinitas", 15822);
+        }
+
+
+        // 10730 | Server Reboot
+        if (!Story.QuestProgression(10730))
+        {
+            Core.HuntMonsterQuest(10730,
+                ("forgecitrinitas", UseableMonsters[4], ClassType.Farm));
+        }
+
+
+        // 10731 | Of Pyrite and Nickel
+        if (!Story.QuestProgression(10731))
+        {
+            Core.HuntMonsterQuest(10731,
+                ("forgecitrinitas", "Citrinitas Match", ClassType.Farm));
+        }
+
+
+        // 10732 | Skin Deep
+        if (!Story.QuestProgression(10732))
+        {
+            Core.HuntMonsterQuest(10732,
+                ("forgecitrinitas", UseableMonsters[3], ClassType.Farm));
+        }
+
+
+        // 10733 | Break Room
+        if (!Story.QuestProgression(10733))
+        {
+            Story.MapItemQuest(10733, "forgecitrinitas", new[] { 15823, 15824, 15825 });
+        }
+
+
+        // 10734 | Clematis' Aspirations
+        if (!Story.QuestProgression(10734))
+        {
+            Core.HuntMonsterQuest(10734,
+                ("forgecitrinitas", UseableMonsters[5], ClassType.Solo));
+        }
+
+
+        if (Core.IsMember)
+        {
+            // 10735 | Silica Spring
+            if (!Story.QuestProgression(10735))
+            {
+                Core.EnsureAccept(10735);
+                Core.EquipClass(ClassType.Solo);
+                Core.HuntMonster("forgecitrinitas", "Clematis", "Clematis' Blood Sample");
+                Core.EquipClass(ClassType.Farm);
+                Core.HuntMonster("forgecitrinitas", "Luma Lifeform", "Lifeform's Hope", 12);
+                Core.HuntMonster("forgecitrinitas", "Defense Droid", "Droid's Battery Acid", 9);
+                Core.EnsureComplete(10735);
+            }
+        }
+
+        else
+        {
+            // 10736 | Silica Spring (Legend)
+            if (!Story.QuestProgression(10736))
+            {
+                Core.EnsureAccept(10736);
+                Core.EquipClass(ClassType.Solo);
+                Core.HuntMonster("forgecitrinitas", "Clematis", "Clematis' Blood Sample");
+                Core.EquipClass(ClassType.Farm);
+                Core.HuntMonster("forgecitrinitas", "Luma Lifeform", "Lifeform's Hope", 12);
+                Core.HuntMonster("forgecitrinitas", "Defense Droid", "Droid's Battery Acid", 9);
+                Core.EnsureComplete(10736);
+            }
         }
 
 
@@ -1108,7 +1844,10 @@ public class CoreAOR
     // Mostly for `Skye's Lightning` for the Merge
     public void ColdThunderBoss(string? item = null, int quant = 1, bool isTemp = true)
     {
-        if (item != null && (isTemp ? Bot.TempInv.Contains(item, quant) : Core.CheckInventory(item, quant)))
+        if (
+            item != null
+            && (isTemp ? Bot.TempInv.Contains(item, quant) : Core.CheckInventory(item, quant))
+        )
         {
             Bot.Events.ExtensionPacketReceived -= Listener;
             Core.JumpWait();
@@ -1141,9 +1880,15 @@ public class CoreAOR
         Bot.Wait.ForActionCooldown(GameActions.EquipItem);
         Core.Sleep();
 
-        Core.Logger("About to attack Cold Thunder boss. It's very unstable; recommended to do it with more accounts.");
+        Core.Logger(
+            "About to attack Cold Thunder boss. It's very unstable; recommended to do it with more accounts."
+        );
 
-        while (!Bot.ShouldExit && item != null && (isTemp ? !Bot.TempInv.Contains(item, quant) : !Core.CheckInventory(item, quant)))
+        while (
+            !Bot.ShouldExit
+            && item != null
+            && (isTemp ? !Bot.TempInv.Contains(item, quant) : !Core.CheckInventory(item, quant))
+        )
         {
             if (Bot.Map.Name != "coldthunder")
                 Core.Join("coldthunder");
@@ -1154,7 +1899,9 @@ public class CoreAOR
             // Check if potion is needed and handle it
             if (needsPotion && !potionApplied)
             {
-                Core.Logger("Detected 'The skies rumble. Prepare yourself!' - applying Bananach's Last Will potion...");
+                Core.Logger(
+                    "Detected 'The skies rumble. Prepare yourself!' - applying Bananach's Last Will potion..."
+                );
 
                 // Keep trying to use potion until it's successfully applied
                 while (!Bot.ShouldExit && needsPotion && !potionApplied)
@@ -1166,7 +1913,7 @@ public class CoreAOR
 
                     // Check if Bananach's Last Will potion was applied
                     // You might need to adjust the aura name based on what this potion actually provides
-                    if (Bot.Self.HasActiveAura("Bananach's Last Will"))
+                    if (Bot.Self.Auras.Any(a => a != null && a.Name == "Bananach's Last Will"))
                     {
                         potionApplied = true;
                         needsPotion = false;
@@ -1185,7 +1932,10 @@ public class CoreAOR
                 Bot.Combat.Attack("*");
             }
 
-            if (item != null && (isTemp ? Bot.TempInv.Contains(item, quant) : Core.CheckInventory(item, quant)))
+            if (
+                item != null
+                && (isTemp ? Bot.TempInv.Contains(item, quant) : Core.CheckInventory(item, quant))
+            )
             {
                 Core.JumpWait();
                 break;
@@ -1200,7 +1950,7 @@ public class CoreAOR
         potionApplied = false;
 
         Core.JumpWait();
-        Adv.GearStore(true);
+        Adv.GearStore(true, EnhAfter: true);
 
         void Listener(dynamic packet)
         {
@@ -1219,11 +1969,16 @@ public class CoreAOR
                                 if (a is null)
                                     continue;
 
-                                if (a.msg is not null && (string)a.msg is "The skies rumble. Prepare yourself!")
+                                if (
+                                    a.msg is not null
+                                    && (string)a.msg is "The skies rumble. Prepare yourself!"
+                                )
                                 {
                                     needsPotion = true;
                                     potionApplied = false;
-                                    Core.Logger("Event detected: The skies rumble. Prepare yourself! - Potion needed.");
+                                    Core.Logger(
+                                        "Event detected: The skies rumble. Prepare yourself! - Potion needed."
+                                    );
                                 }
                             }
                         }
@@ -1233,114 +1988,109 @@ public class CoreAOR
         }
     }
 
-    public void KillThing(string? map = null, int mobMapID = 1, string? targetAuraName = null, int ItemUsed = 1, string? Class = null, string? item = null, int quant = 1, bool isTemp = false)
+    public void FightVoiceInTheSea(string item, int quant = 1, bool isTemp = false)
     {
+        if (!isTemp)
+            Core.Unbank(item);
+        if (Finished())
+            return;
+        if (!isTemp)
+            Core.AddDrop(item);
+
+        // Vainglory compounds the healing reduction from Voice in the Sea.
+        var cape = Bot.Inventory.Items.Find(i => i.Equipped
+            && i.Category == ItemCategory.Cape
+            && i.EnhancementPatternID == (int)CapeSpecial.Vainglory);
+        if (cape != null)
+            Adv.EnhanceItem(
+                cape.Name,
+                EnhancementType.Lucky,
+                CapeSpecial.None,
+                HelmSpecial.None,
+                WeaponSpecial.None,
+                logging: false,
+                bypassDisableAutoEnhance: true
+            );
+
+        Core.Join("seavoice");
         Adv.BuyItem("seavoice", 2320, "Vigil", 1000, 12023);
-        // ItemCheckingAndBuying();
-
-        Core.Join(map);
-        Bot.Wait.ForMapLoad(map!);
-        Bot.Wait.ForTrue(() => Bot.Player.Loaded, 20);
-
-        Core.Logger($"map: {map}");
-        Core.Logger($"mobMapID: {mobMapID}");
-        Core.Logger($"targetAuraName: {targetAuraName}");
-        Core.Logger($"ItemUsed: {ItemUsed} [Vigil]");
-        Core.Logger($"Class: {Class}");
-        Core.Logger($"item: {item}");
-        Core.Logger($"quant: {quant}");
-        Core.Logger($"isTemp: {isTemp}");
-
-        Core.Equip(Class!);
-        if (Class == "Void Highlord")
-            Bot.Skills.StartAdvanced("Void HighLord", true, ClassUseMode.Def);
-        Core.Equip(ItemUsed);
-        Core.Logger($"{ItemUsed} [Vigil] Equiped? {Bot.Inventory.IsEquipped("Vigil")}");
-
-        Monster? mob = Bot.Monsters.MapMonsters.FirstOrDefault(m => m.MapID == mobMapID);
-
-        if (Bot.Player.Cell != mob!.Cell)
-            Core.Jump(mob.Cell);
-
-        #region  UltraSpeaker
-        // if (map == "ultraspeaker")
-        // {
-        //     Random random = new();
-        //     int xpos = random.Next(1, 30);
-        //     int ypos = random.Next(1, 30);
-        //     Bot.Player.WalkTo(x: xpos, y: ypos);
-        // }
-        #endregion
-        Bot.Player.SetSpawnPoint();
-
-        while (!Bot.ShouldExit && item != null && isTemp ? !Bot.TempInv.Contains(item!, quant) : !Core.CheckInventory(item!, quant))
+        Core.Equip("Vigil");
+        if (!Bot.Inventory.IsEquipped("Vigil"))
         {
-            //Check if/move to /in mob cell && Bot.Player.Alive)
-            if (Bot.Player.Cell != mob.Cell)
-                Core.Jump(mob.Cell);
+            Core.Logger("Vigil could not be equipped.");
+            return;
+        }
 
-            #region  UltraSpeaker
-            if (map == "ultraspeaker")
+        _voiceChargeDetected = false;
+        Bot.Flash.FlashCall += SeaVoiceFlashListener;
+        try
+        {
+            Core.Jump("r2", "Left");
+            Bot.Player.SetSpawnPoint();
+            while (!Bot.ShouldExit && !Finished())
             {
-                while (!Bot.ShouldExit && !Bot.Player.Alive)
-                    Core.Sleep();
-            }
-            #endregion
-            if (targetAuraName != null)
-            {
-                Aura? targetAura = Bot.Target.Auras.Concat(Bot.Self.Auras).FirstOrDefault(a => a.Name == targetAuraName);
-                AuraHandling(targetAuraName);
-            }
+                if (!Bot.Player.Alive)
+                {
+                    _voiceChargeDetected = false;
+                    Bot.Skills.Resume();
+                    Bot.Sleep(500);
+                    continue;
+                }
+                if (Bot.Player.Cell != "r2")
+                    Core.Jump("r2", "Left");
 
-            if (Bot.Player.Alive && !Bot.Self.HasActiveAura(targetAuraName!) && !Bot.Target.HasActiveAura(targetAuraName!))
-            {
-                Bot.Combat.Attack(mob);
+                if (_voiceChargeDetected)
+                {
+                    while (!Bot.ShouldExit && Bot.Player.Alive && Bot.Player.HasTarget && !Bot.Self.HasActiveAura("Vigil"))
+                    {
+                        if (Bot.Skills.CanUseSkill(5))
+                            Bot.Skills.UseSkill(5);
+                        Bot.Sleep(50);
+                    }
+                    _voiceChargeDetected = false;
+                    Bot.Skills.Resume();
+                    if (!Bot.ShouldExit && Bot.Self.HasActiveAura("Vigil"))
+                        Core.Logger("Vigil active. Class skills resumed.");
+                    continue;
+                }
+
+                var target = Bot.Player.Target;
+                if (target == null || target.MapID != 1 || target.HP <= 0)
+                    Bot.Combat.Attack(1);
                 Bot.Sleep(500);
             }
-
-            if (isTemp ? Bot.TempInv.Contains(item!, quant) : Core.CheckInventory(item, quant))
-            {
-                break;
-            }
+        }
+        finally
+        {
+            Bot.Flash.FlashCall -= SeaVoiceFlashListener;
+            _voiceChargeDetected = false;
+            Bot.Skills.Resume();
+            Core.JumpWait();
         }
 
-        void AuraHandling(string? targetAuraName)
+        bool Finished()
         {
-            foreach (Aura A in Bot.Target.Auras.Concat(Bot.Self.Auras))
-            {
-                if (Bot.Target.Auras.Concat(Bot.Self.Auras).FirstOrDefault(a => a.Name == targetAuraName) == null)
-                    continue;
-
-                switch (A.Name)
-                {
-                    case "Oxidize":
-                        while (!Bot.ShouldExit && !Bot.Self.HasActiveAura("Vigil"))
-                        {
-                            UsePotion();
-                            Core.Sleep();
-
-                            // Check if targetAura is not null before accessing its SecondsRemaining() method
-                            // Assuming `targetAura` is the aura you're referring to
-                            if (Bot.Self.HasActiveAura("Vigil"))
-                            {
-                                Core.Logger($"Vigil Active!");
-                                break;
-                            }
-                        }
-                        break;
-
-                    case null:
-                        break;
-                }
-            }
-        }
-
-        void UsePotion()
-        {
-            var skill = Bot.Flash.GetArrayObject<dynamic>("world.actions.active", 5);
-            if (skill == null) return;
-            Bot.Flash.CallGameFunction("world.testAction", JsonConvert.DeserializeObject<ExpandoObject>(JsonConvert.SerializeObject(skill))!);
+            if (isTemp)
+                return Bot.TempInv.Contains(item, quant);
+            return Bot.Inventory.Contains(item, quant);
         }
     }
 
+    private void SeaVoiceFlashListener(string name, object[] args)
+    {
+        try
+        {
+            if (name != "pext" || args.Length == 0 || _voiceChargeDetected)
+                return;
+            string rawPacket = args[0]?.ToString() ?? string.Empty;
+            if (rawPacket.IndexOf("You will not resist!", StringComparison.OrdinalIgnoreCase) < 0)
+                return;
+            Bot.Skills.Pause();
+            _voiceChargeDetected = true;
+            Core.Logger("Charge detected. Class skills paused for Vigil.");
+        }
+        catch
+        {
+        }
+    }
 }

@@ -1,7 +1,7 @@
 /*
 name: Caroling Merge
 description: This bot will farm the items belonging to the selected mode for the Caroling Merge [2197] in /caroltown
-tags: caroling, merge, caroltown, midwinter, cheermaker, cutie, antlered, beanie, snowflakes, snowy, nimbo, licorice, candy, cane, darkwood, carved, armaments, northlands, paladin, frozen, paladins, glacial, light, destiny, ascended, aurum, wings, noble, leo, scion, scions, requiem, heraldic, lion, companion, frostval, party, favor, gifts, holiday, hoodie, , morph, holly, twilly, twig, zorbak, elf, drago, j, maya, iona, greataxe, castillonnais, greataxes
+tags: caroling, merge, caroltown, midwinter, cheermaker, cutie, antlered, beanie, snowflakes, snowy, nimbo, licorice, candy, cane, darkwood, carved, armaments, northlands, paladin, frozen, paladins, glacial, light, destiny, ascended, aurum, wings, noble, leo, scion, scions, requiem, heraldic, lion, companion, frostval, party, favor, gifts, holiday, hoodie, , morph, holly, twilly, twig, zorbak, elf, drago, j, maya, iona, greataxe, castillonnais, greataxes, sweet, amp, savory, guest, trio
 */
 //cs_include Scripts/CoreBots.cs
 //cs_include Scripts/CoreFarms.cs
@@ -14,25 +14,38 @@ public class CarolingMerge
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
-private static CoreAdvanced sAdv { get => _sAdv ??= new CoreAdvanced(); set => _sAdv = value; }
-private static CoreAdvanced _sAdv;
-
+    private static CoreAdvanced sAdv
+    {
+        get => _sAdv ??= new CoreAdvanced();
+        set => _sAdv = value;
+    }
+    private static CoreAdvanced _sAdv;
 
     public bool DontPreconfigure = true;
     public List<IOption> Generic = sAdv.MergeOptions;
     public string[] MultiOptions = { "Generic", "Select" };
     public string OptionsStorage = sAdv.OptionsStorage;
+
     // [Can Change] This should only be changed by the author.
     //              If true, it will not stop the script if the default case triggers and the user chose to only get mats
     private bool dontStopMissingIng = false;
 
     public void ScriptMain(IScriptInterface Bot)
     {
-        Core.BankingBlackList.AddRange(new[] { "Red Ribbon", "Wrapping Paper", "Icy Fur", "Silver Tinsel", "Aurum Wings Blade", "Jingle Bells", "Brunswick Leo Scion", "Brunswick Leo's Requiem", "Brunswick Leo Scion Cane", "Spearmint Candy Cane", "100 Pound Gift", "Chill Hoodie Outfit", "Chill Hat + Hair", "Chill Hat + Locks", "Chill Hat Morph", "Chill Hat Visage" });
+        Core.BankingBlackList.AddRange(new[] { "Red Ribbon", "Wrapping Paper", "Icy Fur", "Silver Tinsel", "Aurum Wings Blade", "Jingle Bells", "Brunswick Leo Scion", "Brunswick Leo's Requiem", "Brunswick Leo Scion Cane", "Spearmint Candy Cane", "100 Pound Gift", "Chill Hoodie Outfit", "Chill Hat + Hair", "Chill Hat + Locks", "Chill Hat Morph", "Chill Hat Visage", "Fishy Cream Candy Cane Guest", "Moglinberry Candy Cane Guest", "Blue Cheese Candy Cane Guest" });
+
         Core.SetOptions();
 
         BuyAllMerge();
@@ -49,13 +62,15 @@ private static CoreAdvanced _sAdv;
         {
             ItemBase req = Adv.externalItem;
             int quant = Adv.externalQuant;
-            int currentQuant = req.Temp ? Bot.TempInv.GetQuantity(req.Name) : Bot.Inventory.GetQuantity(req.Name);
+            int currentQuant = req.Temp
+                ? Bot.TempInv.GetQuantity(req.Name)
+                : Bot.Inventory.GetQuantity(req.Name);
             if (req == null)
             {
                 Core.Logger("req is NULL");
                 return;
             }
-            #endregion Dont edit this part
+        #endregion Dont edit this part
 
             switch (req.Name)
             {
@@ -77,23 +92,7 @@ private static CoreAdvanced _sAdv;
                 case "Red Ribbon":
                 case "Silver Tinsel":
                     Core.EquipClass(ClassType.Solo);
-                    while (!Bot.ShouldExit && !Core.CheckInventory(req.Name, quant))
-                    {
-                        Core.Join("whitemap");
-                        Core.Join("caroling");
-
-                        for (int killCount = 0; killCount < 3 && !Bot.ShouldExit; killCount++)
-                        {
-                            Bot.Kill.Monster(1);
-
-                            Core.Logger($"Kill: {killCount + 1}/3, {(killCount < 2 ? "Swapping Map at 3" : "Swapping map to respawn mob")}");
-                            Bot.Wait.ForMonsterSpawn(1);
-                        }
-
-                        Core.Join("whitemap");
-                        Core.Join("caroling");
-                    }
-
+                    Core.HuntMonster("caroltown", "Frostval Tree", req.Name, req.Quantity, req.Temp);
                     break;
 
                 case "Jingle Bells":
@@ -111,9 +110,29 @@ private static CoreAdvanced _sAdv;
                     Core.HuntMonster("caroltown", "Krumpet", req.Name, quant, false);
                     break;
 
+                case "Fishy Cream Candy Cane Guest":
+                case "Blue Cheese Candy Cane Guest":
+                case "Moglinberry Candy Cane Guest":
+                    if (req.Upgrade && !Core.IsMember)
+                    {
+                        Core.Logger($"{req.Name} requires membership to farm, skipping.");
+                        return;
+                    }
+
+                    Core.FarmingLogger(req.Name, quant);
+                    Core.EquipClass(ClassType.Farm);
+                    Core.AddDrop(req.ID);
+                    Core.HuntMonster("caroltown", "Gift Delivery", req.Name, quant, req.Temp, false);
+                    break;
+
                 default:
                     bool shouldStop = !Adv.matsOnly || !dontStopMissingIng;
-                    Core.Logger($"The bot hasn't been taught how to get {req.Name}." + (shouldStop ? " Please report the issue." : " Skipping"), messageBox: shouldStop, stopBot: shouldStop);
+                    Core.Logger(
+                        $"The bot hasn't been taught how to get {req.Name}."
+                            + (shouldStop ? " Please report the issue." : " Skipping"),
+                        messageBox: shouldStop,
+                        stopBot: shouldStop
+                    );
                     break;
             }
         }
@@ -121,7 +140,7 @@ private static CoreAdvanced _sAdv;
 
     public List<IOption> Select = new()
     {
-         new Option<bool>("75005", "Midwinter Cheermaker", "Mode: [select] only\nShould the bot buy \"Midwinter Cheermaker\" ?", false),
+        new Option<bool>("75005", "Midwinter Cheermaker", "Mode: [select] only\nShould the bot buy \"Midwinter Cheermaker\" ?", false),
         new Option<bool>("75006", "Midwinter Cutie Hat", "Mode: [select] only\nShould the bot buy \"Midwinter Cutie Hat\" ?", false),
         new Option<bool>("75007", "Midwinter Cutie Hat and Locks", "Mode: [select] only\nShould the bot buy \"Midwinter Cutie Hat and Locks\" ?", false),
         new Option<bool>("75008", "Midwinter Antlered Hat", "Mode: [select] only\nShould the bot buy \"Midwinter Antlered Hat\" ?", false),
@@ -159,5 +178,6 @@ private static CoreAdvanced _sAdv;
         new Option<bool>("90593", "Holiday Elf Iona", "Mode: [select] only\nShould the bot buy \"Holiday Elf Iona\" ?", false),
         new Option<bool>("90461", "Greataxe of Castillonnais", "Mode: [select] only\nShould the bot buy \"Greataxe of Castillonnais\" ?", false),
         new Option<bool>("90462", "Greataxes of Castillonnais", "Mode: [select] only\nShould the bot buy \"Greataxes of Castillonnais\" ?", false),
-    };
+        new Option<bool>("98181", "Sweet &amp; Savory Guest Trio", "Mode: [select] only\nShould the bot buy \"Sweet &amp; Savory Guest Trio\" ?", false),
+   };
 }

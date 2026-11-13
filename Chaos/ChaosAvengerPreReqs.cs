@@ -17,17 +17,40 @@ public class ChaosAvengerClass
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
-    private static Core13LoC LOC { get => _LOC ??= new Core13LoC(); set => _LOC = value; }    private static Core13LoC _LOC;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
+    private static Core13LoC LOC
+    {
+        get => _LOC ??= new Core13LoC();
+        set => _LOC = value;
+    }
+    private static Core13LoC _LOC;
 
-    string[] CavItems = new[]{"Fragment of the Dragon",
-                                            "Fragment of the Queen",
-                                            "Fragments of the Lords B",
-                                            "Fragments of the Lords A",
-                                            "Fragment of Mount Doomskull",
-                                            "Parallel Chaos Amulet"};
+    string[] CavItems = new[]
+    {
+        "Fragment of the Dragon",
+        "Fragment of the Queen",
+        "Fragments of the Lords B",
+        "Fragments of the Lords A",
+        "Fragment of Mount Doomskull",
+        "Parallel Chaos Amulet",
+    };
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -43,7 +66,10 @@ public class ChaosAvengerClass
     public void GetClass(bool rankup = true)
     {
         //Progress Check
-        if (Core.CheckInventory("Empowered Chaos Avenger's GreatSword") || Core.CheckInventory("Chaos Avenger"))
+        if (
+            Core.CheckInventory("Empowered Chaos Avenger's GreatSword")
+            || Core.CheckInventory("Chaos Avenger")
+        )
         {
             if (rankup)
                 Adv.RankUpClass("Chaos Avenger");
@@ -84,7 +110,7 @@ public class ChaosAvengerClass
         else
         {
             Core.Logger("not enough insigs");
-            Bot.Stop();
+            Bot.StopSync();
         }
     }
 
@@ -172,9 +198,9 @@ public class ChaosAvengerClass
         Core.HuntMonster("swordhavenfalls", "Chaos Lord Alteon", "Chaos Lord Alteon", isTemp: false);
 
         //Xiang Chaos
-        Adv.GearStore();
+        Adv.GearStore(EnhAfter: true);
         Core.KillXiang("Xiang Chaos");
-        Adv.GearStore(true);
+        Adv.GearStore(true, EnhAfter: true);
 
         Core.BuyItem("championdrakath", 2055, "Fragments of the Lords B");
     }
@@ -187,7 +213,6 @@ public class ChaosAvengerClass
         Bot.Quests.UpdateQuest(8094);
         Core.EquipClass(ClassType.Solo);
         Core.HuntMonster("transformation", "Queen of Monsters", "Fragment of the Queen", 13, false);
-
     }
 
     public void CompleteandBuy()

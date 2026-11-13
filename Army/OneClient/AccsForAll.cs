@@ -17,27 +17,50 @@ public class ArmyFreeAcs
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreArmyLite Army { get => _Army ??= new CoreArmyLite(); set => _Army = value; }
+    private static CoreArmyLite Army
+    {
+        get => _Army ??= new CoreArmyLite();
+        set => _Army = value;
+    }
     private static CoreArmyLite _Army;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
-    private static FreeAcs ACs { get => _ACs ??= new FreeAcs(); set => _ACs = value; }
+    private static FreeAcs ACs
+    {
+        get => _ACs ??= new FreeAcs();
+        set => _ACs = value;
+    }
     private static FreeAcs _ACs;
 
     public void ScriptMain(IScriptInterface Bot)
     {
         Core.SetOptions();
 
-        Doit();
+        // Doit();
+        
+        Bot.Log("OneClient scripts area bit fucked, and i just cant fix the \"not logging into full server\" issue.. so they will be disabled -- please use the normal varients of the scripts.");
 
         Core.SetOptions(false);
     }
 
     private void Doit()
     {
-        Core.OneTimeMessage("Only for army", "This is intended for use with an army, not for solo players.");
+        Core.OneTimeMessage(
+            "Only for army",
+            "This is intended for use with an army, not for solo players."
+        );
+        Bot.Options.ReloginServer =
+                   (Bot.Options.ReloginServer ?? "Twilly") ?? new[] { "Twilly", "Twig" }[new Random().Next(2)];
 
         while (!Bot.ShouldExit && Army.doForAll())
         {

@@ -11,7 +11,11 @@ public class CoreHollowbornStory
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
@@ -40,32 +44,64 @@ public class CoreHollowbornStory
         Story.KillQuest(8289, "trygve", "Vindicator Recruit");
 
         //Berkana (8290)
-        Story.MapItemQuest(8290, "trygve", 9036);
-        Story.KillQuest(8290, "trygve", "Blood Eagle");
+        if (!Story.QuestProgression(8290))
+        {
+            Core.EnsureAccept(8290);
+            Core.GetMapItem(9036, 1, "trygve");
+            Core.HuntMonster("trygve", "Blood Eagle", "Blood Eagle Feather", 9);
+            Core.EnsureComplete(8290);
+        }
 
         //Algiz, Reversed (8291)
-        Story.MapItemQuest(8291, "trygve", 9037);
-        Story.KillQuest(8291, "trygve", "Vindicator Recruit");
+        if (!Story.QuestProgression(8291))
+        {
+            Core.EnsureAccept(8291);
+            Core.GetMapItem(9037, 1, "trygve");
+            Core.HuntMonster("trygve", "Vindicator Recruit", "Armor Chunk", 9);
+            Core.EnsureComplete(8291);
+        }
 
         //Gebo (8292)
-        Story.MapItemQuest(8292, "trygve", 9038);
-        Story.KillQuest(8292, "trygve", "Rune Boar");
+        if (!Story.QuestProgression(8292))
+        {
+            Core.EnsureAccept(8292);
+            Core.GetMapItem(9038, 1, "trygve");
+            Core.HuntMonster("trygve", "Rune Boar", "Patch of Boar Hide", 8);
+            Core.EnsureComplete(8292);
+        }
 
         //Eihwaz (8293)
-        Story.MapItemQuest(8293, "trygve", 9039, 3);
-        Story.KillQuest(8293, "trygve", "Vindicator Recruit");
+        if (!Story.QuestProgression(8293))
+        {
+            Core.EnsureAccept(8293);
+            Core.GetMapItem(9039, 3, "trygve");
+            Core.HuntMonster("trygve", "Vindicator Recruit", "Soldiers Pacified", 9);
+            Core.EnsureComplete(8293);
+        }
 
         //Hagalaz (8294)
         Story.MapItemQuest(8294, "trygve", 9040, 8);
 
         //Mannaz (8295)
-        Story.KillQuest(8295, "trygve", new[] { "Blood Eagle", "Rune Boar" });
+        if (!Story.QuestProgression(8295))
+        {
+            Core.EnsureAccept(8295);
+            Core.HuntMonster("trygve", "Blood Eagle", "Eagle Talon", 9);
+            Core.HuntMonster("trygve", "Rune Boar", "Boar Bone", 9);
+            Core.EnsureComplete(8295);
+        }
 
         //Thurisaz (8296)
         Story.KillQuest(8296, "trygve", "Vindicator Recruit");
 
         //Othala (8297)
-        Story.KillQuest(8297, "trygve", new[] { "Vindicator Recruit", "Blood Eagle" });
+        if (!Story.QuestProgression(8297))
+        {
+            Core.EnsureAccept(8297);
+            Core.HuntMonster("trygve", "Blood Eagle", "Creature Bones", 7);
+            Core.HuntMonster("trygve", "Vindicator Recruit", "Vindicator Defeated", 7);
+            Core.EnsureComplete(8297);
+        }
 
         //Isa, Reversed (8298)
         Story.KillQuest(8298, "trygve", "Gramiel");
@@ -122,13 +158,12 @@ public class CoreHollowbornStory
         Story.KillQuest(9487, "hbchallenge", "Sentient Hollow");
         // Stake Your Life 9488
         Story.KillQuest(9488, "hbchallenge", "Hollowborn Vampire");
-        // Hollow Howl 9489     
+        // Hollow Howl 9489
         Story.KillQuest(9489, "hbchallenge", "Hollowborn Lycan");
     }
 
     public void Shadowrealm()
     {
-
         if (Core.isCompletedBefore(9793))
             return;
 
@@ -199,104 +234,84 @@ public class CoreHollowbornStory
         #region Useable Monsters
         string[] UseableMonsters = new[]
         {
-    "Dawn Vindicator Soldier ", // UseableMonsters[0],
-	"Vindicator Beast", // UseableMonsters[1],
-	"Vindicator Draconian", // UseableMonsters[2],
-	"Vindicator Assassin", // UseableMonsters[3],
-	"Assassin Shade", // UseableMonsters[4],
-	"Vindicator BeastTamer", // UseableMonsters[5],
-	"Vindicator Hound", // UseableMonsters[6],
-	"Vindicator Crystal", // UseableMonsters[7],
-	"Vindicator Priest", // UseableMonsters[8]
-};
+            "Dawn Vindicator Soldier ", // UseableMonsters[0],
+            "Vindicator Beast", // UseableMonsters[1],
+            "Vindicator Draconian", // UseableMonsters[2],
+            "Vindicator Assassin", // UseableMonsters[3],
+            "Assassin Shade", // UseableMonsters[4],
+            "Vindicator BeastTamer", // UseableMonsters[5],
+            "Vindicator Hound", // UseableMonsters[6],
+            "Vindicator Crystal", // UseableMonsters[7],
+            "Vindicator Priest", // UseableMonsters[8]
+        };
         #endregion Useable Monsters
 
         // 9855 | 24 Hour Graveyard Shift
         if (!Story.QuestProgression(9855))
         {
-            Core.HuntMonsterQuest(9855,
-        ("neotower", UseableMonsters[0], ClassType.Solo));
+            Core.HuntMonsterQuest(9855, ("neotower", UseableMonsters[0], ClassType.Solo));
         }
-
 
         // 9856 | On Unwanted Wings
         if (!Story.QuestProgression(9856))
         {
-            Core.HuntMonsterQuest(9856,
-("neotower", UseableMonsters[1], ClassType.Solo)
-);
+            Core.HuntMonsterQuest(9856, ("neotower", UseableMonsters[1], ClassType.Solo));
         }
-
 
         // 9857 | Noble Dragonkin
         if (!Story.QuestProgression(9857))
         {
-            Core.HuntMonsterQuest(9857,
-("neotower", UseableMonsters[2], ClassType.Solo)
-);
+            Core.HuntMonsterQuest(9857, ("neotower", UseableMonsters[2], ClassType.Solo));
         }
 
-
         // 9858 | A Dire Horcdeal
-        Story.MapItemQuest(9858, "neotower", 13581);
-        Story.KillQuest(9858, "neotower", UseableMonsters[2]);
-
+        if (!Story.QuestProgression(9858))
+        {
+            Core.EnsureAccept(9858);
+            Core.GetMapItem(13581, 1, "neotower");
+            Core.HuntMonster("neotower", "Vindicator Draconian", "Tower Key", 1);
+            Core.EnsureComplete(9858);
+        }
 
         // 9859 | Outclassin' the Assassin
         if (!Story.QuestProgression(9859))
         {
-            Core.HuntMonsterQuest(9859,
-("neotower", UseableMonsters[3], ClassType.Solo)
-);
+            Core.HuntMonsterQuest(9859, ("neotower", UseableMonsters[3], ClassType.Solo));
         }
-
 
         // 9860 | Mean Dog Walker
         if (!Story.QuestProgression(9860))
         {
-            Core.HuntMonsterQuest(9860,
-("neotower", UseableMonsters[5], ClassType.Solo)
-);
+            Core.HuntMonsterQuest(9860, ("neotower", UseableMonsters[5], ClassType.Solo));
         }
-
 
         // 9861 | Safe Keeping
         if (!Story.QuestProgression(9861))
         {
-            Core.HuntMonsterQuest(9861,
-("neotower", UseableMonsters[1], ClassType.Solo)
-);
+            Core.HuntMonsterQuest(9861, ("neotower", UseableMonsters[1], ClassType.Solo));
         }
-
 
         // 9862 | Seeds to be Reaped
         if (!Story.QuestProgression(9862))
         {
-            Core.HuntMonsterQuest(9862,
-("neotower", UseableMonsters[0], ClassType.Solo)
-);
+            Core.HuntMonsterQuest(9862, ("neotower", UseableMonsters[0], ClassType.Solo));
         }
-
 
         // 9863 | Ceremonies and Rituals
         if (!Story.QuestProgression(9863))
         {
-            Core.HuntMonsterQuest(9863,
-("neotower", UseableMonsters[0], ClassType.Solo),
-        ("neotower", UseableMonsters[1], ClassType.Solo)
-);
+            Core.EnsureAccept(9863);
+            Core.EquipClass(ClassType.Solo);
+            Core.HuntMonster("neotower", "Dawn Vindicator Soldier ", "Soldier's Grace", 8);
+            Core.HuntMonster("neotower", "Vindicator Beast", "Beast's Grace", 8);
+            Core.EnsureComplete(9863);
         }
-
 
         // 9864 | Selective Acknowledgement
         if (!Story.QuestProgression(9864))
         {
-            Core.HuntMonsterQuest(9864,
-("neotower", UseableMonsters[8], ClassType.Solo)
-);
+            Core.HuntMonsterQuest(9864, ("neotower", UseableMonsters[8], ClassType.Solo));
         }
-
-
     }
 
     public void DawnSanctum()
@@ -311,92 +326,87 @@ public class CoreHollowbornStory
         #region Useable Monsters
         string[] UseableMonsters = new[]
         {
-    "Vindicator Soldier", // UseableMonsters[0],
-	"Hollowborn Soldier", // UseableMonsters[1],
-	"Vindicator Recruit", // UseableMonsters[2],
-	"Vindicator Hound", // UseableMonsters[3],
-	"Hollowborn Hound", // UseableMonsters[4],
-	"Vindicator Draconian", // UseableMonsters[5],
-	"Hollowborn Draconian", // UseableMonsters[6],
-	"Grandmaster Gramiel", // UseableMonsters[7],
-	"Celestial Gramiel", // UseableMonsters[8]
-};
+            "Vindicator Soldier", // UseableMonsters[0],
+            "Hollowborn Soldier", // UseableMonsters[1],
+            "Vindicator Recruit", // UseableMonsters[2],
+            "Vindicator Hound", // UseableMonsters[3],
+            "Hollowborn Hound", // UseableMonsters[4],
+            "Vindicator Draconian", // UseableMonsters[5],
+            "Hollowborn Draconian", // UseableMonsters[6],
+            "Grandmaster Gramiel", // UseableMonsters[7],
+            "Celestial Gramiel", // UseableMonsters[8]
+        };
         #endregion Useable Monsters
 
         // 9977 | Wunjo, Reversed - Realized
         if (!Story.QuestProgression(9977))
         {
-            Core.HuntMonsterQuest(9977,
-                ("dawnsanctum", UseableMonsters[0], ClassType.Farm));
+            Core.HuntMonsterQuest(9977, ("dawnsanctum", UseableMonsters[0], ClassType.Farm));
         }
-
 
         // 9978 | Berkana - Realized
         if (!Story.QuestProgression(9978))
         {
-            Core.HuntMonsterQuest(9978,
-                ("dawnsanctum", UseableMonsters[1], ClassType.Farm));
+            Core.HuntMonsterQuest(9978, ("dawnsanctum", UseableMonsters[1], ClassType.Farm));
         }
 
-
         // 9979 | Algiz, Reversed - Realized
-        Story.MapItemQuest(9979, "dawnsanctum", 13853);
-        Story.KillQuest(9979, "dawnsanctum", UseableMonsters[2]);
+        if (!Story.QuestProgression(9979))
+        {
+            Core.EnsureAccept(9979);
+            Core.GetMapItem(13853, 1, "dawnsanctum");
+            Core.HuntMonster("dawnsanctum", "Vindicator Recruit", "Recruit's Brand", 5);
+            Core.EnsureComplete(9979);
+        }
 
         // 9980 | Gebo - Realized
         if (!Story.QuestProgression(9980))
         {
-            Core.HuntMonsterQuest(9980,
-                ("dawnsanctum", UseableMonsters[3], ClassType.Farm));
+            Core.HuntMonsterQuest(9980, ("dawnsanctum", UseableMonsters[3], ClassType.Farm));
         }
 
-
         // 9981 | Eihwaz - Realized
-        Story.MapItemQuest(9981, "dawnsanctum", 13854);
-        Story.KillQuest(9981, "dawnsanctum", UseableMonsters[4]);
-
+        if (!Story.QuestProgression(9981))
+        {
+            Core.EnsureAccept(9981);
+            Core.GetMapItem(13854, 1, "dawnsanctum");
+            Core.HuntMonster("dawnsanctum", "Hollowborn Hound", "Hollowborn Collar", 6);
+            Core.EnsureComplete(9981);
+        }
 
         // 9982 | Hagalaz - Realized
         if (!Story.QuestProgression(9982))
         {
-            Core.HuntMonsterQuest(9982,
-                ("dawnsanctum", UseableMonsters[5], ClassType.Farm));
+            Core.HuntMonsterQuest(9982, ("dawnsanctum", UseableMonsters[5], ClassType.Farm));
         }
-
 
         // 9983 | Mannaz - Realized
         if (!Story.QuestProgression(9983))
         {
-            Core.HuntMonsterQuest(9983,
-                ("dawnsanctum", UseableMonsters[6], ClassType.Farm));
+            Core.HuntMonsterQuest(9983, ("dawnsanctum", UseableMonsters[6], ClassType.Farm));
         }
-
 
         // 9984 | Thurisaz - Realized
         if (!Story.QuestProgression(9984))
         {
-            Core.HuntMonsterQuest(9984,
-                ("dawnsanctum", UseableMonsters[5], ClassType.Farm),
-                ("dawnsanctum", UseableMonsters[6], ClassType.Farm));
+            Core.EnsureAccept(9984);
+            Core.EquipClass(ClassType.Farm);
+            Core.HuntMonster("dawnsanctum", "Vindicator Draconian", "Vindicator Talon", 6);
+            Core.HuntMonster("dawnsanctum", "Hollowborn Draconian", "Hollowborn Talon", 6);
+            Core.EnsureComplete(9984);
         }
-
 
         // 9985 | Othala - Realized
         if (!Story.QuestProgression(9985))
         {
-            Core.HuntMonsterQuest(9985,
-                ("dawnsanctum", UseableMonsters[7], ClassType.Solo));
+            Core.HuntMonsterQuest(9985, ("dawnsanctum", UseableMonsters[7], ClassType.Solo));
         }
-
 
         // 9986 | Isa, Reversed - Realized
         if (!Story.QuestProgression(9986))
         {
-            Core.HuntMonsterQuest(9986,
-                ("dawnsanctum", UseableMonsters[8], ClassType.Solo));
+            Core.HuntMonsterQuest(9986, ("dawnsanctum", UseableMonsters[8], ClassType.Solo));
         }
-
-
     }
 
     // I'll put it here in case it turns out its needed

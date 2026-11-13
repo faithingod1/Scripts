@@ -11,7 +11,12 @@ public class Lightguard
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -40,7 +45,13 @@ public class Lightguard
         Story.KillQuest(2032, "doomwood", "Doomwood Treeant");
 
         //Supplies Party 2033
-        Story.KillQuest(2033, "doomwood", new[] { "Doomwood Bonemuncher", "Doomwood Ectomancer" });
+        if (!Story.QuestProgression(2033))
+        {
+            Core.EnsureAccept(2033);
+            Core.HuntMonster("doomwood", "Doomwood Bonemuncher", "Michem's Pack", 1);
+            Core.HuntMonster("doomwood", "Doomwood Bonemuncher", "Lightguard Supply Crate", 10);
+            Core.EnsureComplete(2033);
+        }
 
         //Copious Notes 2034
         Story.KillQuest(2034, "doomwood", "Doomwood Bonemuncher");
@@ -50,6 +61,5 @@ public class Lightguard
 
         //Defend Lightguard Keep! 2036
         Story.KillQuest(2036, "lightguard", "Mysterious Spirit");
-
     }
 }

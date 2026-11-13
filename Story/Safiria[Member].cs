@@ -13,8 +13,18 @@ public class Safiria
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -37,8 +47,16 @@ public class Safiria
         }
 
         Story.PreLoad(this);
-        Core.AddDrop(new[] { "Djinn's Magic Trace", "Chronomancer's Magic Trace", "Darkblood's Magic Trace", "Dragon's Magic Trace", "Safiria's Blood Sample" });
-
+        Core.AddDrop(
+            new[]
+            {
+                "Djinn's Magic Trace",
+                "Chronomancer's Magic Trace",
+                "Darkblood's Magic Trace",
+                "Dragon's Magic Trace",
+                "Safiria's Blood Sample",
+            }
+        );
 
         //The Stolen Ritual 1939
         Story.KillQuest(1939, "Safiria", "Chaos Lycan");

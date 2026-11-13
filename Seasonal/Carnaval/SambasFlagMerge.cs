@@ -1,7 +1,7 @@
 /*
-name: SambasFlagMerge
-description: Farms the requirements & buys the items from Sambaflag merge
-tags: sambaflag, merge
+name: Sambas Flag Merge
+description: This bot will farm the items belonging to the selected mode for the Sambas Flag Merge [2237] in /sambaflag
+tags: sambas, flag, merge, sambaflag, sambista, dorival, moglin, jorge, zeca, encanto, encantado, cavaquinho, pandeiro, tantan, dança, das, sombras, dançarina, circlet, diadem, de, ouro, escuro
 */
 //cs_include Scripts/CoreBots.cs
 //cs_include Scripts/CoreFarms.cs
@@ -16,26 +16,44 @@ public class SambasFlagMerge
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
-    private static SambasFlag SF { get => _SF ??= new SambasFlag(); set => _SF = value; }    private static SambasFlag _SF;
-private static CoreAdvanced sAdv { get => _sAdv ??= new CoreAdvanced(); set => _sAdv = value; }
-private static CoreAdvanced _sAdv;
-
+    private static SambasFlag SF
+    {
+        get => _SF ??= new SambasFlag();
+        set => _SF = value;
+    }
+    private static SambasFlag _SF;
+    private static CoreAdvanced sAdv
+    {
+        get => _sAdv ??= new CoreAdvanced();
+        set => _sAdv = value;
+    }
+    private static CoreAdvanced _sAdv;
 
     public bool DontPreconfigure = true;
     public List<IOption> Generic = sAdv.MergeOptions;
     public string[] MultiOptions = { "Generic", "Select" };
     public string OptionsStorage = sAdv.OptionsStorage;
+
     // [Can Change] This should only be changed by the author.
     //              If true, it will not stop the script if the default case triggers and the user chose to only get mats
     private bool dontStopMissingIng = false;
 
     public void ScriptMain(IScriptInterface Bot)
     {
-        Core.BankingBlackList.AddRange(new[] { "Costume Piece", "Ceremonial Standard", "Cavaquinho", "Pandeiro", "Tantan" });
+        Core.BankingBlackList.AddRange(new[] { "Costume Piece", "Ceremonial Standard", "Cavaquinho", "Pandeiro", "Tantan", "Dança das Sombras Hair", "Dança das Sombras Locks" });
+
         Core.SetOptions();
 
         BuyAllMerge();
@@ -86,7 +104,7 @@ private static CoreAdvanced _sAdv;
                     }
                     Core.CancelRegisteredQuests();
                     break;
-                    
+
                 case "Costume Piece":
                     Core.FarmingLogger(req.Name, quant);
                     Core.RegisterQuests(9110);
@@ -110,6 +128,19 @@ private static CoreAdvanced _sAdv;
                     Bot.Wait.ForPickup(req.Name);
                     break;
 
+                case "Dança das Sombras Hair":
+                case "Dança das Sombras Locks":
+                    if (req.Upgrade && !Core.IsMember)
+                    {
+                        Core.Logger($"{req.Name} requires membership to farm, skipping.");
+                        return;
+                    }
+
+                    Core.FarmingLogger(req.Name, quant);
+                    Core.EquipClass(ClassType.Solo);
+                    Core.AddDrop(req.ID);
+                    Core.HuntMonster("sambaflag", "Flag Bearer", req.Name, quant, req.Temp, false);
+                    break;
             }
         }
     }
@@ -122,9 +153,17 @@ private static CoreAdvanced _sAdv;
         new Option<bool>("76372", "Jorge The Moglin", "Mode: [select] only\nShould the bot buy \"Jorge The Moglin\" ?", false),
         new Option<bool>("76373", "Zeca The Moglin", "Mode: [select] only\nShould the bot buy \"Zeca The Moglin\" ?", false),
         new Option<bool>("76375", "Encanto Sambista Armor", "Mode: [select] only\nShould the bot buy \"Encanto Sambista Armor\" ?", false),
-        new Option<bool>("76376", "Encanto Sambista Hat", "Mode: [select] only\nShould the bot buy \"Encanto Sambista Hat\" ?", false),
-        new Option<bool>("76377", "Encanto Cavaquinho", "Mode: [select] only\nShould the bot buy \"Encanto Cavaquinho\" ?", false),
-        new Option<bool>("76378", "Encanto Pandeiro", "Mode: [select] only\nShould the bot buy \"Encanto Pandeiro\" ?", false),
-        new Option<bool>("76379", "Encanto Tantan", "Mode: [select] only\nShould the bot buy \"Encanto Tantan\" ?", false),
-    };
+        new Option<bool>("76376", "Encantado Sambista Hat", "Mode: [select] only\nShould the bot buy \"Encantado Sambista Hat\" ?", false),
+        new Option<bool>("76377", "Encantado Cavaquinho", "Mode: [select] only\nShould the bot buy \"Encantado Cavaquinho\" ?", false),
+        new Option<bool>("76378", "Encantado Pandeiro", "Mode: [select] only\nShould the bot buy \"Encantado Pandeiro\" ?", false),
+        new Option<bool>("76379", "Encantado Tantan", "Mode: [select] only\nShould the bot buy \"Encantado Tantan\" ?", false),
+        new Option<bool>("99284", "Dança das Sombras", "Mode: [select] only\nShould the bot buy \"Dança das Sombras\" ?", false),
+        new Option<bool>("99287", "Dança das Sombras Mask", "Mode: [select] only\nShould the bot buy \"Dança das Sombras Mask\" ?", false),
+        new Option<bool>("99288", "Dançarina das Sombras Mask", "Mode: [select] only\nShould the bot buy \"Dançarina das Sombras Mask\" ?", false),
+        new Option<bool>("99289", "Dança das Sombras Circlet", "Mode: [select] only\nShould the bot buy \"Dança das Sombras Circlet\" ?", false),
+        new Option<bool>("99290", "Dança das Sombras Diadem", "Mode: [select] only\nShould the bot buy \"Dança das Sombras Diadem\" ?", false),
+        new Option<bool>("99291", "Dança das Sombras Visage", "Mode: [select] only\nShould the bot buy \"Dança das Sombras Visage\" ?", false),
+        new Option<bool>("99389", "Tantan de Ouro Encantado", "Mode: [select] only\nShould the bot buy \"Tantan de Ouro Encantado\" ?", false),
+        new Option<bool>("99463", "Tantan Escuro", "Mode: [select] only\nShould the bot buy \"Tantan Escuro\" ?", false),
+   };
 }

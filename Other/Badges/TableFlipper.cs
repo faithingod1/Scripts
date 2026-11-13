@@ -12,7 +12,12 @@ public class TableFlipper
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static Borgars Borgars { get => _Borgars ??= new Borgars(); set => _Borgars = value; }    private static Borgars _Borgars;
+    private static Borgars Borgars
+    {
+        get => _Borgars ??= new Borgars();
+        set => _Borgars = value;
+    }
+    private static Borgars _Borgars;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -35,5 +40,5 @@ public class TableFlipper
         Borgars.StoryLine();
     }
 
-    private string badge = "Table Flipper";
+    private readonly string badge = "Table Flipper";
 }

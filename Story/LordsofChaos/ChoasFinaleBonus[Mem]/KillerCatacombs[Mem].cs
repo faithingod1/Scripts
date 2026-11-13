@@ -11,7 +11,12 @@ public class KillerCatacombs
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -37,59 +42,86 @@ public class KillerCatacombs
 
         // The Coward
         Story.KillQuest(3660, "killercatacombs", "Tomb Robber ");
-    
+
         // Welcome Party
         Story.KillQuest(3661, "killercatacombs", "Tomb Robber ");
-     
+
         // Scout Ahead
         Story.KillQuest(3662, "killercatacombs", "Ravenous Maw");
-      
+
         // Dinner Party
         Story.KillQuest(3663, "killercatacombs", "Ravenous Maw");
-      
+
         // Illumination Preparation
         Story.MapItemQuest(3664, "killercatacombs", 2762, 8);
-      
+
         // Bones Picked Clean
         Story.KillQuest(3665, "killercatacombs", "Sundered Darkblood ");
-      
+
         // Biased Window
         Story.MapItemQuest(3666, "killercatacombs", 2761, 3);
         Story.KillQuest(3666, "killercatacombs", "Sundered Darkblood ");
-      
+
         // Room For Seconds
         Story.KillQuest(3667, "killercatacombs", "Starved Maw ");
-       
+
         // Magic Doorstop
         Story.KillQuest(3668, "killercatacombs", "Sundered Darkblood ");
-      
+
         // Silverware Cipher
         Story.KillQuest(3669, "killercatacombs", "Ravenous Maw");
-       
+
         // Dinner Bell
-        Story.KillQuest(3670, "killercatacombs", new[] { "Starved Maw ", "Ravenous Maw" });
-       
+        if (!Story.QuestProgression(3670))
+        {
+            Core.EnsureAccept(3670);
+            Core.HuntMonster("killercatacombs", "Starved Maw ", "Starved Maw Defeated", 10);
+            Core.HuntMonster("killercatacombs", "Ravenous Maw", "Ravenous Maw Defeated", 10);
+            Core.EnsureComplete(3670);
+        }
+
         // Faceless Challengers
         Story.KillQuest(3671, "killercatacombs", "Living Armor ");
-       
+
         // Doorway
         Story.KillQuest(3672, "killercatacombs", "Living Armor ");
-       
+
         // Eternal Hunger
-        Story.KillQuest(3673, "killercatacombs", new[] { "Starved Maw ", "Ravenous Maw", "Living Armor " });
-       
+        if (!Story.QuestProgression(3673))
+        {
+            Core.EnsureAccept(3673);
+            Core.HuntMonster("killercatacombs", "Starved Maw ", "Starved Maw Defeated", 10);
+            Core.HuntMonster("killercatacombs", "Ravenous Maw", "Ravenous Maw Defeated", 10);
+            Core.HuntMonster("killercatacombs", "Living Armor ", "Living Armor Defeated", 10);
+            Core.EnsureComplete(3673);
+        }
+
         // You Weren't Invited
         Story.KillQuest(3674, "killercatacombs", "Living Armor ");
-       
+
         // Teeth and Plates
-        Story.KillQuest(3675, "killercatacombs", new[] { "Starved Maw ", "Ravenous Maw", "Living Armor " });
-        
+        if (!Story.QuestProgression(3675))
+        {
+            Core.EnsureAccept(3675);
+            Core.HuntMonster("killercatacombs", "Ravenous Maw", "Ravenous Maw Defeated", 15);
+            Core.HuntMonster("killercatacombs", "Starved Maw ", "Starved Maw Defeated", 15);
+            Core.HuntMonster("killercatacombs", "Living Armor ", "Living Armor Defeated", 15);
+            Core.EnsureComplete(3675);
+        }
+
         // The Moment of Silence
         Story.MapItemQuest(3676, "killercatacombs", 2763, 10);
         Story.KillQuest(3676, "killercatacombs", "Living Armor");
 
         // Eternal Servitude
-        Story.KillQuest(3677, "killercatacombs", new[] { "Living Armor ", "Sundered Darkblood ", "Unstable Spirit Orb " });
+        if (!Story.QuestProgression(3677))
+        {
+            Core.EnsureAccept(3677);
+            Core.HuntMonster("killercatacombs", "Unstable Spirit Orb ", "Unstable Spirit Ousted", 10);
+            Core.HuntMonster("killercatacombs", "Living Armor ", "Living Armor Defeated", 20);
+            Core.HuntMonster("killercatacombs", "Sundered Darkblood ", "Sundered Darkblood Defeated", 10);
+            Core.EnsureComplete(3677);
+        }
 
         // A Reanimated Dragon
         if (!Story.QuestProgression(3678))

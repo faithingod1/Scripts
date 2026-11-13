@@ -22,26 +22,53 @@ public class StarsincMerge
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
-private static CoreAdvanced sAdv { get => _sAdv ??= new CoreAdvanced(); set => _sAdv = value; }
-private static CoreAdvanced _sAdv;
+    private static CoreAdvanced sAdv
+    {
+        get => _sAdv ??= new CoreAdvanced();
+        set => _sAdv = value;
+    }
+    private static CoreAdvanced _sAdv;
 
-    private static StarSinc Star { get => _Star ??= new StarSinc(); set => _Star = value; }    private static StarSinc _Star;
+    private static StarSinc Star
+    {
+        get => _Star ??= new StarSinc();
+        set => _Star = value;
+    }
+    private static StarSinc _Star;
 
     public bool DontPreconfigure = true;
     public List<IOption> Generic = sAdv.MergeOptions;
     public string[] MultiOptions = { "Generic", "Select" };
     public string OptionsStorage = sAdv.OptionsStorage;
+
     // [Can Change] This should only be changed by the author.
     //              If true, it will not stop the script if the default case triggers and the user chose to only get mats
     private bool dontStopMissingIng = false;
 
     public void ScriptMain(IScriptInterface Bot)
     {
-        Core.BankingBlackList.AddRange(new[] { "Star Scrap", "Brimstone Scrap", "Star Fragment", "Taker and Giver Stone", "Prime's Respect" });
+        Core.BankingBlackList.AddRange(
+            new[]
+            {
+                "Star Scrap",
+                "Brimstone Scrap",
+                "Star Fragment",
+                "Taker and Giver Stone",
+                "Prime's Respect",
+            }
+        );
         Core.SetOptions();
 
         BuyAllMerge();
@@ -60,7 +87,9 @@ private static CoreAdvanced _sAdv;
         {
             ItemBase req = Adv.externalItem;
             int quant = Adv.externalQuant;
-            int currentQuant = req.Temp ? Bot.TempInv.GetQuantity(req.Name) : Bot.Inventory.GetQuantity(req.Name);
+            int currentQuant = req.Temp
+                ? Bot.TempInv.GetQuantity(req.Name)
+                : Bot.Inventory.GetQuantity(req.Name);
             if (req == null)
             {
                 Core.Logger("req is NULL");
@@ -71,9 +100,14 @@ private static CoreAdvanced _sAdv;
             {
                 default:
                     bool shouldStop = !Adv.matsOnly || !dontStopMissingIng;
-                    Core.Logger($"The bot hasn't been taught how to get {req.Name}." + (shouldStop ? " Please report the issue." : " Skipping"), messageBox: shouldStop, stopBot: shouldStop);
+                    Core.Logger(
+                        $"The bot hasn't been taught how to get {req.Name}."
+                            + (shouldStop ? " Please report the issue." : " Skipping"),
+                        messageBox: shouldStop,
+                        stopBot: shouldStop
+                    );
                     break;
-                #endregion
+        #endregion
 
                 case "Star Scrap Metal":
                     Core.FarmingLogger(req.Name, quant);
@@ -131,24 +165,83 @@ private static CoreAdvanced _sAdv;
                     }
                     Core.CancelRegisteredQuests();
                     break;
-
             }
         }
     }
 
     public List<IOption> Select = new()
     {
-        new Option<bool>("30563", "Final's Base Armor", "Mode: [select] only\nShould the bot buy \"Final's Base Armor\" ?", false),
-        new Option<bool>("30565", "Final's Skull Helm", "Mode: [select] only\nShould the bot buy \"Final's Skull Helm\" ?", false),
-        new Option<bool>("30564", "Final's Armor", "Mode: [select] only\nShould the bot buy \"Final's Armor\" ?", false),
-        new Option<bool>("30566", "Final's Horned Skull", "Mode: [select] only\nShould the bot buy \"Final's Horned Skull\" ?", false),
-        new Option<bool>("30466", "Final's Blade", "Mode: [select] only\nShould the bot buy \"Final's Blade\" ?", false),
-        new Option<bool>("30637", "Galactic Blade of Stars", "Mode: [select] only\nShould the bot buy \"Galactic Blade of Stars\" ?", false),
-        new Option<bool>("30649", "Prime's Exo Wings", "Mode: [select] only\nShould the bot buy \"Prime's Exo Wings\" ?", false),
-        new Option<bool>("30470", "Prime's Legendary Wings", "Mode: [select] only\nShould the bot buy \"Prime's Legendary Wings\" ?", false),
-        new Option<bool>("30656", "Prime Dominus", "Mode: [select] only\nShould the bot buy \"Prime Dominus\" ?", false),
-        new Option<bool>("30657", "Legendary Prime Dominus", "Mode: [select] only\nShould the bot buy \"Legendary Prime Dominus\" ?", false),
-        new Option<bool>("30658", "Legendary Prime Dominus Visor", "Mode: [select] only\nShould the bot buy \"Legendary Prime Dominus Visor\" ?", false),
-        new Option<bool>("30659", "Prime Dominus Visor", "Mode: [select] only\nShould the bot buy \"Prime Dominus Visor\" ?", false),
+        new Option<bool>(
+            "30563",
+            "Final's Base Armor",
+            "Mode: [select] only\nShould the bot buy \"Final's Base Armor\" ?",
+            false
+        ),
+        new Option<bool>(
+            "30565",
+            "Final's Skull Helm",
+            "Mode: [select] only\nShould the bot buy \"Final's Skull Helm\" ?",
+            false
+        ),
+        new Option<bool>(
+            "30564",
+            "Final's Armor",
+            "Mode: [select] only\nShould the bot buy \"Final's Armor\" ?",
+            false
+        ),
+        new Option<bool>(
+            "30566",
+            "Final's Horned Skull",
+            "Mode: [select] only\nShould the bot buy \"Final's Horned Skull\" ?",
+            false
+        ),
+        new Option<bool>(
+            "30466",
+            "Final's Blade",
+            "Mode: [select] only\nShould the bot buy \"Final's Blade\" ?",
+            false
+        ),
+        new Option<bool>(
+            "30637",
+            "Galactic Blade of Stars",
+            "Mode: [select] only\nShould the bot buy \"Galactic Blade of Stars\" ?",
+            false
+        ),
+        new Option<bool>(
+            "30649",
+            "Prime's Exo Wings",
+            "Mode: [select] only\nShould the bot buy \"Prime's Exo Wings\" ?",
+            false
+        ),
+        new Option<bool>(
+            "30470",
+            "Prime's Legendary Wings",
+            "Mode: [select] only\nShould the bot buy \"Prime's Legendary Wings\" ?",
+            false
+        ),
+        new Option<bool>(
+            "30656",
+            "Prime Dominus",
+            "Mode: [select] only\nShould the bot buy \"Prime Dominus\" ?",
+            false
+        ),
+        new Option<bool>(
+            "30657",
+            "Legendary Prime Dominus",
+            "Mode: [select] only\nShould the bot buy \"Legendary Prime Dominus\" ?",
+            false
+        ),
+        new Option<bool>(
+            "30658",
+            "Legendary Prime Dominus Visor",
+            "Mode: [select] only\nShould the bot buy \"Legendary Prime Dominus Visor\" ?",
+            false
+        ),
+        new Option<bool>(
+            "30659",
+            "Prime Dominus Visor",
+            "Mode: [select] only\nShould the bot buy \"Prime Dominus Visor\" ?",
+            false
+        ),
     };
 }

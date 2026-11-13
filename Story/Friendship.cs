@@ -11,7 +11,11 @@ public class Friendship
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface Bot)
@@ -45,7 +49,7 @@ public class Friendship
             Bot.Events.ExtensionPacketReceived += friendshipPacketReader;
             Core.JumpWait();
 
-            while (!Bot.TempInv.Contains("Friendship Formed"))
+            while (!Bot.ShouldExit && !Bot.TempInv.Contains("Friendship Formed"))
             {
                 SendWaitedPacket($"%xt%zm%friendshipInfo%{Bot.Map.RoomID}%Maya%");
                 SendWaitedPacket($"%xt%zm%friendshipTalk%{Bot.Map.RoomID}%");
@@ -57,8 +61,18 @@ public class Friendship
         }
 
         // Darkness Distress (9103)
-        Story.MapItemQuest(9103, "greyguard", 11205);
-        Story.KillQuest(9103, "greyguard", new[] { "Gloombloom", "Carcass Creeper", "Fearweaver", "Darkbark", "Twilighteeth", "Maulignant", });
+        if (!Story.QuestProgression(9103))
+        {
+            Core.EnsureAccept(9103);
+            Core.GetMapItem(11205, 1, "greyguard");
+            Core.HuntMonster("greyguard", "Gloombloom", "Gloomy Monster", 1);
+            Core.HuntMonster("greyguard", "Carcass Creeper", "Shadowy Monster", 1);
+            Core.HuntMonster("greyguard", "Fearweaver", "Dim Monster", 1);
+            Core.HuntMonster("greyguard", "Darkbark", "Dark Monster", 1);
+            Core.HuntMonster("greyguard", "Twilighteeth", "Darker Monster", 1);
+            Core.HuntMonster("greyguard", "Maulignant", "Darkest Monster", 1);
+            Core.EnsureComplete(9103);
+        }
 
         // Your New FF (9104)
         if (!Story.QuestProgression(9104))

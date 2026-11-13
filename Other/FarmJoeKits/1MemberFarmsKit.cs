@@ -22,6 +22,7 @@ tags: member, kit, expire, legend
 //cs_include Scripts/Dailies/MineCrafting.cs
 //cs_include Scripts/Enhancement/UnlockForgeEnhancements.cs
 //cs_include Scripts/Nation/AssistingCragAndBamboozle[Mem].cs
+//cs_include Scripts/Nation/AFDL/EnoughDOOMforanArchfiend.cs
 //cs_include Scripts/Nation/CoreNation.cs
 //cs_include Scripts/Nation/VHL/CoreVHL.cs
 //cs_include Scripts/Other/Classes/DragonShinobi.cs
@@ -164,6 +165,28 @@ tags: member, kit, expire, legend
 //cs_include Scripts/Other/Classes/Dragonslayer.cs
 //cs_include Scripts/Other/Classes/FrostSpiritReaver.cs
 //cs_include Scripts/Seasonal/Frostvale/NorthlandsMonk.cs
+//cs_include Scripts/Story/Lynaria/CoreLynaria.cs
+//cs_include Scripts/Other/MergeShops/BocklinGroveMerge.cs
+//cs_include Scripts/Other/MergeShops/BocklinTreasuryMerge.cs
+//cs_include Scripts/Other/Classes/KingsEcho.cs
+//cs_include Scripts/Other/MergeShops/BocklinArmoryMerge.cs
+//cs_include Scripts/Legion/MergeShops/UndeadLegionMerge.cs
+
+//cs_include Scripts/Hollowborn/Materials/HollowSoul.cs 
+//cs_include Scripts/Legion/Revenant/CoreLR.cs
+//cs_include Scripts/Legion/InfiniteLegionDarkCaster.cs
+//cs_include Scripts/Story/Legion/SeraphicWar.cs
+//cs_include Scripts/Legion/LegionExcercise/LegionExercise3.cs
+//cs_include Scripts/Legion/LegionExcercise/LegionExercise4.cs 
+//cs_include Scripts/Other/MergeShops/YulgarsDualWieldMerge.cs
+
+
+//cs_include Scripts/Other/WeaponReflection.cs
+//cs_include Scripts/Hollowborn/HollowbornOblivionBlade.cs 
+//cs_include Scripts/Other/MergeShops/SpiritHunterMerge[Mem].cs
+//cs_include Scripts/Story/Bludrut.cs
+
+
 #endregion
 using Skua.Core.Interfaces;
 
@@ -171,50 +194,153 @@ public class MemberFarm
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreDailies Daily { get => _Daily ??= new CoreDailies(); set => _Daily = value; }
+
+    private static CoreDailies Daily
+    {
+        get => _Daily ??= new CoreDailies();
+        set => _Daily = value;
+    }
     private static CoreDailies _Daily;
-    private static CoreNation Nation { get => _Nation ??= new CoreNation(); set => _Nation = value; }
+
+    private static CoreNation Nation
+    {
+        get => _Nation ??= new CoreNation();
+        set => _Nation = value;
+    }
     private static CoreNation _Nation;
-    private static CoreSDKA SDKA { get => _SDKA ??= new CoreSDKA(); set => _SDKA = value; }
+    private static CoreSDKA SDKA
+    {
+        get => _SDKA ??= new CoreSDKA();
+        set => _SDKA = value;
+    }
     private static CoreSDKA _SDKA;
-    private static TrobbolierPet Trobbolier { get => _Trobbolier ??= new TrobbolierPet(); set => _Trobbolier = value; }
+    private static TrobbolierPet Trobbolier
+    {
+        get => _Trobbolier ??= new TrobbolierPet();
+        set => _Trobbolier = value;
+    }
     private static TrobbolierPet _Trobbolier;
-    private static CoinCollectorSet CoinCollector { get => _CoinCollector ??= new CoinCollectorSet(); set => _CoinCollector = value; }
+    private static CoinCollectorSet CoinCollector
+    {
+        get => _CoinCollector ??= new CoinCollectorSet();
+        set => _CoinCollector = value;
+    }
     private static CoinCollectorSet _CoinCollector;
-    private static TheLostKnightAndBackupBlade LostKnight { get => _LostKnight ??= new TheLostKnightAndBackupBlade(); set => _LostKnight = value; }
+    private static TheLostKnightAndBackupBlade LostKnight
+    {
+        get => _LostKnight ??= new TheLostKnightAndBackupBlade();
+        set => _LostKnight = value;
+    }
     private static TheLostKnightAndBackupBlade _LostKnight;
-    private static SpellRaiser SpellRaiser { get => _SpellRaiser ??= new SpellRaiser(); set => _SpellRaiser = value; }
+    private static SpellRaiser SpellRaiser
+    {
+        get => _SpellRaiser ??= new SpellRaiser();
+        set => _SpellRaiser = value;
+    }
     private static SpellRaiser _SpellRaiser;
-    private static ArchfiendDragonEgg ArchfiendDragonPet { get => _ArchfiendDragonPet ??= new ArchfiendDragonEgg(); set => _ArchfiendDragonPet = value; }
+    private static ArchfiendDragonEgg ArchfiendDragonPet
+    {
+        get => _ArchfiendDragonPet ??= new ArchfiendDragonEgg();
+        set => _ArchfiendDragonPet = value;
+    }
     private static ArchfiendDragonEgg _ArchfiendDragonPet;
-    private static DragonBladeofNulgath DBoN { get => _DBoN ??= new DragonBladeofNulgath(); set => _DBoN = value; }
+    private static DragonBladeofNulgath DBoN
+    {
+        get => _DBoN ??= new DragonBladeofNulgath();
+        set => _DBoN = value;
+    }
     private static DragonBladeofNulgath _DBoN;
-    private static BonecastleTowerMerge BonecastleTowerMerge { get => _BonecastleTowerMerge ??= new BonecastleTowerMerge(); set => _BonecastleTowerMerge = value; }
+    private static BonecastleTowerMerge BonecastleTowerMerge
+    {
+        get => _BonecastleTowerMerge ??= new BonecastleTowerMerge();
+        set => _BonecastleTowerMerge = value;
+    }
     private static BonecastleTowerMerge _BonecastleTowerMerge;
-    private static LegendaryElementalWarrior LegendaryElementalWarrior { get => _LegendaryElementalWarrior ??= new LegendaryElementalWarrior(); set => _LegendaryElementalWarrior = value; }
+    private static LegendaryElementalWarrior LegendaryElementalWarrior
+    {
+        get => _LegendaryElementalWarrior ??= new LegendaryElementalWarrior();
+        set => _LegendaryElementalWarrior = value;
+    }
     private static LegendaryElementalWarrior _LegendaryElementalWarrior;
-    private static ChronoAssassin ChronoAssassin { get => _ChronoAssassin ??= new ChronoAssassin(); set => _ChronoAssassin = value; }
+    private static ChronoAssassin ChronoAssassin
+    {
+        get => _ChronoAssassin ??= new ChronoAssassin();
+        set => _ChronoAssassin = value;
+    }
     private static ChronoAssassin _ChronoAssassin;
-    private static TachyonMerge Tachyon { get => _Tachyon ??= new TachyonMerge(); set => _Tachyon = value; }
+    private static TachyonMerge Tachyon
+    {
+        get => _Tachyon ??= new TachyonMerge();
+        set => _Tachyon = value;
+    }
     private static TachyonMerge _Tachyon;
-    private static CoreQOM QOM { get => _QOM ??= new CoreQOM(); set => _QOM = value; }
+    private static CoreQOM QOM
+    {
+        get => _QOM ??= new CoreQOM();
+        set => _QOM = value;
+    }
     private static CoreQOM _QOM;
-    private static DragonFableOrigins DFO { get => _DFO ??= new DragonFableOrigins(); set => _DFO = value; }
+    private static DragonFableOrigins DFO
+    {
+        get => _DFO ??= new DragonFableOrigins();
+        set => _DFO = value;
+    }
     private static DragonFableOrigins _DFO;
-    private static CruxShip Crux { get => _Crux ??= new CruxShip(); set => _Crux = value; }
+    private static CruxShip Crux
+    {
+        get => _Crux ??= new CruxShip();
+        set => _Crux = value;
+    }
     private static CruxShip _Crux;
-    private static TendurrrTheAssistantQuests Tendurr { get => _Tendurr ??= new TendurrrTheAssistantQuests(); set => _Tendurr = value; }
+    private static TendurrrTheAssistantQuests Tendurr
+    {
+        get => _Tendurr ??= new TendurrrTheAssistantQuests();
+        set => _Tendurr = value;
+    }
     private static TendurrrTheAssistantQuests _Tendurr;
-    private static TarosPrismaticManslayers TarosItems { get => _TarosItems ??= new TarosPrismaticManslayers(); set => _TarosItems = value; }
+    private static TarosPrismaticManslayers TarosItems
+    {
+        get => _TarosItems ??= new TarosPrismaticManslayers();
+        set => _TarosItems = value;
+    }
     private static TarosPrismaticManslayers _TarosItems;
-    private static EvolvedShadowOrb ShadowOrb { get => _ShadowOrb ??= new EvolvedShadowOrb(); set => _ShadowOrb = value; }
+    private static EvolvedShadowOrb ShadowOrb
+    {
+        get => _ShadowOrb ??= new EvolvedShadowOrb();
+        set => _ShadowOrb = value;
+    }
     private static EvolvedShadowOrb _ShadowOrb;
-    public static BonecastleTowerMerge BCM { get => _BCM ??= new BonecastleTowerMerge(); set => BCM = value; }
+    public static BonecastleTowerMerge BCM
+    {
+        get => _BCM ??= new BonecastleTowerMerge();
+        set => BCM = value;
+    }
     private static BonecastleTowerMerge _BCM;
+    private static UndeadLegionMerge ULM
+    {
+        get => _ULM ??= new UndeadLegionMerge();
+        set => _ULM = value;
+    }
+    private static UndeadLegionMerge _ULM;
+
+    private static YulgarsDualWieldMerge YDWM
+    {
+        get => _YDWM ??= new YulgarsDualWieldMerge();
+        set => _YDWM = value;
+    }
+    private static YulgarsDualWieldMerge _YDWM;
 
     public void ScriptMain(IScriptInterface Bot)
     {
@@ -244,14 +370,29 @@ public class MemberFarm
         Core.ToBank(SDKA.SDKAItems);
 
         DragonBlade();
-        Core.ToBank("DragonBlade of Nulgath", "Legion DragonBlade of Nulgath", "Ebony DragonBlade of Nulgath", "Dual DragonBlades of Nulgath");
+        Core.ToBank(
+            "DragonBlade of Nulgath",
+            "Legion DragonBlade of Nulgath",
+            "Ebony DragonBlade of Nulgath",
+            "Dual DragonBlades of Nulgath"
+        );
 
         LegendaryElementalWarrior.GetLEW();
         Core.ToBank("Legendary Elemental Warrior");
 
+        // Dark / Legendary Hero
+        Adv.BuyItem(Bot.Map?.Name ?? "battleon", 679, "Legendary Hero", shopItemID: 11597);
+        Adv.BuyItem(Bot.Map?.Name ?? "battleon", 679, "Dark Legendary Hero", shopItemID: 11668);
+        Adv.RankUpClass(17178); // Legendary Hero
+        Adv.RankUpClass(18706); // Dark Legendary Hero
+
         //Nation Item
         // TarosItems.TemptationTest();
-        Core.ToBank("Taro's Prismatic Manslayer", "Taro's Dual Prismatic Manslayers", "Taro's BattleBlade");
+        Core.ToBank(
+            "Taro's Prismatic Manslayer",
+            "Taro's Dual Prismatic Manslayers",
+            "Taro's BattleBlade"
+        );
 
         ArchfiendDragonPet.GetAFDE();
         Core.ToBank("ArchFiend Baby Dragon Pet");
@@ -261,7 +402,6 @@ public class MemberFarm
 
         Tendurr.TendurrItems();
         Core.ToBank(Tendurr.Rewards);
-
 
         Core.ToBank(Nation.bagDrops);
 
@@ -291,24 +431,48 @@ public class MemberFarm
 
         //Reputations
         Farm.BeastMasterREP();
-        Farm.SkyguardREP();
+        Core.Logger("only able to buy the class if portal owned or seasonal map \"northpointe\" is available");
+        if (Core.isSeasonalMapActive("northpointe"))
+        {
+            // Beast Master
+            Adv.BuyItem("northpointe", 976, "BeastMaster", shopItemID: 16031);
+            Adv.RankUpClass("BeastMaster");
+
+            // SkyGuard Grenadier
+            Farm.SkyguardREP();
+            Adv.BuyItem("skyguard", 259, "SkyGuard Grenadier", shopItemID: 7517);
+            Adv.RankUpClass("SkyGuard Grenadier");
+        }
 
         //Deadfly.BuyAllMerge();
         //GonnaGetcha.BuyAllMerge();
         //Oddities.BuyAllMerge();
     }
 
-
     public void DragonBlade()
     {
-        if (!Core.CheckInventory("DragonBlade of Nulgath", toInv: false) &&
-            Core.CheckInventory(new[] { "Ebony DragonBlade of Nulgath", "Legion DragonBlade of Nulgath", "Dual DragonBlades of Nulgath" }, 1, true, false))
+        if (
+            !Core.CheckInventory("DragonBlade of Nulgath", toInv: false)
+            && Core.CheckInventory(
+                new[]
+                {
+                    "Ebony DragonBlade of Nulgath",
+                    "Legion DragonBlade of Nulgath",
+                    "Dual DragonBlades of Nulgath",
+                },
+                1,
+                true,
+                false
+            )
+        )
         {
-            Core.Logger("You already have DBoN but it's not in your inventory/bank, please check your buyback menu");
+            Core.Logger(
+                "You already have DBoN but it's not in your inventory/bank, please check your buyback menu"
+            );
             return;
         }
 
-        DBoN.GetDragonBlade();
+        DBoN.GetDragonBlade(true);
     }
 
     public void CruxVIPWeapon()
@@ -323,19 +487,15 @@ public class MemberFarm
 
         Core.AddDrop("Darkwave Khopesh");
         Core.EquipClass(ClassType.Solo);
-        Core.FarmingLogger("Darkwave Khopesh", 1);
+        Core.FarmingLogger("Darkwave Khopesh");
 
         Core.RegisterQuests(4618);
-        while (!Bot.ShouldExit && (!Core.CheckInventory("Darkwave Khopesh")))
-        {
-            Core.HuntMonster("cruxship", "Apephryx", "Khopesh Shard", 1, isTemp: false);
-            Bot.Wait.ForPickup("Darkwave Khopesh");
-        }
+        Core.KillMonster("cruxship", "r13", "Bottom", "Apephryx", "Khopesh Shard", isTemp: false);
+        Bot.Wait.ForPickup("Khopesh Shard");
         Core.CancelRegisteredQuests();
 
         Core.ToBank("Darkwave Khopesh");
     }
-
 
     public void FireWar()
     {
@@ -366,7 +526,6 @@ public class MemberFarm
         Core.ToBank("Ignited Guardian's Accoutrements");
     }
 
-
     public void DeepForestItems()
     {
         QOM.TheBook();
@@ -387,7 +546,6 @@ public class MemberFarm
         }
         Core.ToBank("Polished Dragon Sword of Chaos");
     }
-
 
     public void DualWield()
     {
@@ -527,7 +685,13 @@ public class MemberFarm
             if (!Core.CheckInventory("Mighty Sword Of The Dragons"))
             {
                 Core.EquipClass(ClassType.Solo);
-                Core.AddDrop("Zellare's Death Scale", "Moganth's Death Scale", "Udaroth's Death Scale", "Cellot's Death Scale", "Mighty Sword Of The Dragons");
+                Core.AddDrop(
+                    "Zellare's Death Scale",
+                    "Moganth's Death Scale",
+                    "Udaroth's Death Scale",
+                    "Cellot's Death Scale",
+                    "Mighty Sword Of The Dragons"
+                );
                 Core.RegisterQuests(3343);
                 Bot.Quests.UpdateQuest(1416);
                 while (!Bot.ShouldExit && !Core.CheckInventory("Mighty Sword Of The Dragons"))
@@ -542,24 +706,19 @@ public class MemberFarm
         }
         Core.ToBank("Dual Mighty Sword Of The Dragons");
 
-        //Frostbite
-        if (!Core.CheckInventory("Dual Frostbite", toInv: false))
-        {
-            if (!Core.CheckInventory("Frostbite"))
-            {
-                Adv.BuyItem("blindingsnow", 236, "Frosted Falchion");
-                Adv.BuyItem("underworld", 238, "Frostbite");
-            }
-            Adv.BuyItem("nostalgiaquest", 1311, "Dual Frostbite");
-        }
-        Core.ToBank("Dual Frostbite");
+        //Frostbite & Dual variant
+        ULM.BuyAllMerge("Frostbite");
+        YDWM.BuyAllMerge("Dual Frostbite");
+        Core.ToBank("Frostbite", "Dual Frostbite");
 
         //DragonBlade of Nulgath
         if (!Core.CheckInventory("Dual DragonBlades of Nulgath", toInv: false))
         {
             if (!Core.CheckInventory("DragonBlade of Nulgath"))
             {
-                Core.Logger("You don't have DBoN on your inventory/bank, please check your buyback menu");
+                Core.Logger(
+                    "You don't have DBoN on your inventory/bank, please check your buyback menu"
+                );
                 return;
             }
             Adv.BuyItem("nostalgiaquest", 1311, "Dual DragonBlades of Nulgath");
@@ -578,10 +737,10 @@ public class MemberFarm
         }
 
         if (!Core.CheckInventory("Guardian Patent"))
-
             if (Bot.Flash.GetGameObject<int>("world.myAvatar.objData.intAQ") > 0)
                 Adv.BuyItem("museum", 53, "Guardian Patent");
-            else Core.Logger("Active Aq Guardian Acc Required for this Item.");
+            else
+                Core.Logger("Active Aq Guardian Acc Required for this Item.");
         Core.Sleep(1500);
         if (!Core.CheckInventory("Guardian Patent"))
         {
@@ -595,23 +754,129 @@ public class MemberFarm
 
     public void HuntingMonster()
     {
-        GetItems("rotfinger", "rotfinger", "Horned Meat Horror Helm", "Macabre Horror Hammer", "Macabre Meat Horror", "Macabre Meat Ripper", "Macabre Meat Slicer", "Rotfinger's ArmBlades", "Rotfinger's Bow", "Rotfinger's Scythe", "Rotfinger's Staff", "Scream of Agony");
-        GetItems("bonebreak", "Killek BoneBreaker", "Axe of Boneshearing", "Dark BonePiercer Spikes", "Killek BoneBreaker");
+        GetItems(
+            "rotfinger",
+            "rotfinger",
+            "Horned Meat Horror Helm",
+            "Macabre Horror Hammer",
+            "Macabre Meat Horror",
+            "Macabre Meat Ripper",
+            "Macabre Meat Slicer",
+            "Rotfinger's ArmBlades",
+            "Rotfinger's Bow",
+            "Rotfinger's Scythe",
+            "Rotfinger's Staff",
+            "Scream of Agony"
+        );
+        GetItems(
+            "bonebreak",
+            "Killek BoneBreaker",
+            "Axe of Boneshearing",
+            "Dark BonePiercer Spikes",
+            "Killek BoneBreaker"
+        );
         GetItems("bonebreak", "Unbroken Minion", "Berserker Minion Mace");
         GetItems("bonebreak", "Undead Berserker", "Berserker Minion Skull Mace");
-        GetItems("bonebreak", "Bonebreaker", "Undead Berserker Guard", "Undead Berserker Guard Helm");
-        GetItems("deadfly", "Deadfly", "BlackSkulls Knuckle", "Deadfly Morph", "Deadfly's Armor", "Dual BlackSkulls Knuckles");
-        GetItems("oddities", "Cursed Spirit", "Cursed Spirit Hunter", "Reaver of Wrath", "Scary Machete", "Scary Machetes", "Spirit Scythe of Wrath", "Spooky Spirit Hunter", "Spooky Spirit Hunter Hat", "Spooky Spirit Hunter Hat + Locks", "Spooky Spirit Hunter Hood", "Unlucky Farmer", "Unlucky Farmer's Hood", "Unlucky Portal Cape");
-        GetItems("wormhole", "Trobbolegion", "Blue Trobbolier Morph", "Gold Trobbolier Morph", "Mutated Pink Trobbolier Morph", "Silver Trobbolier Morph");
-        GetItems("gonnagetcha", "Shrade Cultist", "Cultist Knife", "Dual Cultist Knife", "Missing Keys Plaque");
+        GetItems(
+            "bonebreak",
+            "Bonebreaker",
+            "Undead Berserker Guard",
+            "Undead Berserker Guard Helm"
+        );
+        GetItems(
+            "deadfly",
+            "Deadfly",
+            "BlackSkulls Knuckle",
+            "Deadfly Morph",
+            "Deadfly's Armor",
+            "Dual BlackSkulls Knuckles"
+        );
+        GetItems(
+            "oddities",
+            "Cursed Spirit",
+            "Cursed Spirit Hunter",
+            "Reaver of Wrath",
+            "Scary Machete",
+            "Scary Machetes",
+            "Spirit Scythe of Wrath",
+            "Spooky Spirit Hunter",
+            "Spooky Spirit Hunter Hat",
+            "Spooky Spirit Hunter Hat + Locks",
+            "Spooky Spirit Hunter Hood",
+            "Unlucky Farmer",
+            "Unlucky Farmer's Hood",
+            "Unlucky Portal Cape"
+        );
+        GetItems(
+            "wormhole",
+            "Trobbolegion",
+            "Blue Trobbolier Morph",
+            "Gold Trobbolier Morph",
+            "Mutated Pink Trobbolier Morph",
+            "Silver Trobbolier Morph"
+        );
+        GetItems(
+            "gonnagetcha",
+            "Shrade Cultist",
+            "Cultist Knife",
+            "Dual Cultist Knife",
+            "Missing Keys Plaque"
+        );
         GetItems("gonnagetcha", "Murkonian", "GonnaGetcha Trident");
-        GetItems("gonnagetcha", "Shrade", "DeathHunter Hair", "DeathHunter Hood", "DeathHunter Locks", "Fanged Cultist Mask", "Feral Cultist Mask", "Malevolent Cultist Mask", "Shadow Cultist Armor");
-        GetItems("splatterwardage", "Shrade", "Celtic Hunter Blade", "Underworld Shrade", "Underworld Shrade Axe", "Underworld Shrade Helm", "Underworld Shrade Minion", "Well-wet Hair");
-        GetItems("greymoor", "Shrade", "Necrotic Caster", "Necrotic Caster Cross Back", "Necrotic Caster Grave Spade", "Necrotic Caster Hair", "Necrotic Caster Locks", "Necrotic Caster Locks Morph", "Necrotic Caster Mask", "Necrotic Caster Mask Morph", "Necrotic Caster Masked Locks", "Necrotic Caster Scroll");
+        GetItems(
+            "gonnagetcha",
+            "Shrade",
+            "DeathHunter Hair",
+            "DeathHunter Hood",
+            "DeathHunter Locks",
+            "Fanged Cultist Mask",
+            "Feral Cultist Mask",
+            "Malevolent Cultist Mask",
+            "Shadow Cultist Armor"
+        );
+        GetItems(
+            "splatterwardage",
+            "Shrade",
+            "Celtic Hunter Blade",
+            "Underworld Shrade",
+            "Underworld Shrade Axe",
+            "Underworld Shrade Helm",
+            "Underworld Shrade Minion",
+            "Well-wet Hair"
+        );
+        GetItems(
+            "greymoor",
+            "Shrade",
+            "Necrotic Caster",
+            "Necrotic Caster Cross Back",
+            "Necrotic Caster Grave Spade",
+            "Necrotic Caster Hair",
+            "Necrotic Caster Locks",
+            "Necrotic Caster Locks Morph",
+            "Necrotic Caster Mask",
+            "Necrotic Caster Mask Morph",
+            "Necrotic Caster Masked Locks",
+            "Necrotic Caster Scroll"
+        );
         // Non Soloable appearntly (33k hits)vv
         // GetItems("greymoor", "Ultra Shrade", "Shrade Armor", "Shrade Helm");
-        GetItems("battledoom", "13th Doom Lord", "Doom Lord Vaal and Vayle", "Dual Skull Half-Axes", "Skulled Half-Axe", "SkullBorne Dagger", "Vaal's Doom Visage", "Vayle's Doom Hood", "Weeping Axe of DOOM");
-        GetItems("crownsreachfxiii", "Shub-Hathrys", "Tentacled Tophat and Beard", "Tentacled Tophat and Locks");
+        GetItems(
+            "battledoom",
+            "13th Doom Lord",
+            "Doom Lord Vaal and Vayle",
+            "Dual Skull Half-Axes",
+            "Skulled Half-Axe",
+            "SkullBorne Dagger",
+            "Vaal's Doom Visage",
+            "Vayle's Doom Hood",
+            "Weeping Axe of DOOM"
+        );
+        GetItems(
+            "crownsreachfxiii",
+            "Shub-Hathrys",
+            "Tentacled Tophat and Beard",
+            "Tentacled Tophat and Locks"
+        );
     }
 
     private void GetItems(string map, string monster, params string[] items)
@@ -619,7 +884,7 @@ public class MemberFarm
         if (Core.CheckInventory(items, toInv: false))
             return;
 
-        Bot.Drops.Add(items);
+        Core.AddDrop(items);
         foreach (string item in items)
         {
             Core.HuntMonster(map, monster, item, 1, false, log: false);
@@ -632,12 +897,9 @@ public class MemberFarm
         if (Core.CheckInventory(TachyonShop, toInv: false))
             return;
 
-        Bot.Drops.Add(TachyonShop);
-        foreach (string TachyonItem in TachyonShop)
-        {
-            Tachyon.BuyAllMerge(TachyonItem);
-            Core.ToBank(TachyonItem);
-        }
+        Core.AddDrop(TachyonShop);
+        Tachyon.BuyAllMerge(buyMode: mergeOptionsEnum.acOnly);
+        Core.ToBank(TachyonShop);
     }
 
     public void BoneTowerMerge()
@@ -645,11 +907,11 @@ public class MemberFarm
         if (Core.CheckInventory(BoneTowerShop, toInv: false))
             return;
 
-        // Required for quest:         
+        // Required for quest:
         BonecastleTowerMerge.BuyAllMerge("Silver DeathKnight Lord");
         BonecastleTowerMerge.BuyAllMerge("Golden DeathKnight Lord");
 
-        Bot.Drops.Add(BoneTowerShop);
+        Core.AddDrop(BoneTowerShop);
         foreach (string BoneTowerItem in BoneTowerShop)
         {
             BonecastleTowerMerge.BuyAllMerge(BoneTowerItem);
@@ -676,6 +938,6 @@ public class MemberFarm
         "Golden DeathKnight Lord",
         "Golden DeathKnight's Blade",
         "Golden DeathKnight Helm",
-        "DeathKnight Lord Cape"
+        "DeathKnight Lord Cape",
     };
 }

@@ -6,8 +6,8 @@ tags: hollow soul, shadowrealm, hollowborn
 //cs_include Scripts/CoreBots.cs
 
 using Skua.Core.Interfaces;
-using Skua.Core.Models.Quests;
 using Skua.Core.Models.Items;
+using Skua.Core.Models.Quests;
 
 public class HollowSoul
 {
@@ -27,14 +27,14 @@ public class HollowSoul
 
     public void ScriptMain(IScriptInterface bot)
     {
+        Core.BankingBlackList.Add("Hollow Soul");
         Core.SetOptions();
-
         GetYaSoulsHeeeere();
 
         Core.SetOptions(false);
     }
 
-    public void GetYaSoulsHeeeere(int? quant = null)
+    public void GetYaSoulsHeeeere(int? quant = 6000)
     {
         int HSQuant = quant ?? GetMax(10299, "Hollow Soul");
         if (Core.CheckInventory("Hollow Soul", HSQuant))

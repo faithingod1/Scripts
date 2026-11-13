@@ -12,8 +12,19 @@ public class CoreFrostvale
 {
     public CoreBots Core => CoreBots.Instance;
     public IScriptInterface Bot => IScriptInterface.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static GlaceraStory GlaceraStory { get => _GlaceraStory ??= new GlaceraStory(); set => _GlaceraStory = value; }    private static GlaceraStory _GlaceraStory;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static GlaceraStory GlaceraStory
+    {
+        get => _GlaceraStory ??= new GlaceraStory();
+        set => _GlaceraStory = value;
+    }
+    private static GlaceraStory _GlaceraStory;
+
     public void ScriptMain(IScriptInterface Bot)
     {
         Core.RunCore();
@@ -23,7 +34,9 @@ public class CoreFrostvale
     {
         if (!Core.isSeasonalMapActive("frostvale"))
         {
-            Core.Logger($"it is Currently {DateTime.Now:MMMM}, The Maps Will Be out In December, as per the Design Notes.");
+            Core.Logger(
+                $"it is Currently {DateTime.Now:MMMM}, The Maps Will Be out In December, as per the Design Notes."
+            );
             return;
         }
 
@@ -55,6 +68,8 @@ public class CoreFrostvale
         Otziwar();
         HolidayHotel();
         HolidayHorror();
+        FrostvalGala();
+        UnsungNecropolis();
     }
 
     public void IceCave()
@@ -115,7 +130,7 @@ public class CoreFrostvale
         Story.MapItemQuest(461, "battleontown", 87);
         Story.KillQuest(461, "icecave", "Frozen Moglin");
 
-        // Spirit Abducted 
+        // Spirit Abducted
         Story.ChainQuest(905);
     }
 
@@ -232,25 +247,33 @@ public class CoreFrostvale
         Story.MapItemQuest(2526, "frostdeep", 1587, AutoCompleteQuest: false);
 
         // Heart of Ice
-        Story.KillQuest(2527, "frostdeep", new[] { "Polar Golem", "Polar Elemental" });
+        Story.KillQuest(2527, "frostdeep", new[] { "Polar Elemental", "Polar Golem" });
 
         // Absolute Zero Success
-        Story.KillQuest(2528, "frostdeep", new[] { "Temple Prowler", "Polar Elemental", "Polar Golem" });
+        Story.KillQuest(2528, "frostdeep", new[] { "Polar Golem", "Temple Prowler", "Polar Elemental" });
 
         // Dirty Secret
         Story.KillQuest(2529, "frostdeep", new[] { "Temple Prowler", "Polar Mole" });
 
         // Frozen Venom
-        Story.KillQuest(2530, "frostdeep", new[] { "Polarwyrm Rider", "Polar Spider" });
+        Story.KillQuest(2530, "frostdeep", new[] { "Polar Spider", "Polarwyrm Rider" });
 
         // Rune-ing His Plan
         Story.KillQuest(2531, "frostdeep", "Ancient Golem");
 
         // Deadly Beauty
-        Story.KillQuest(2532, "frostdeep", new[] { "Polar Elemental", "Polar Golem", "Polar Golem" });
+        Story.KillQuest(
+            2532,
+            "frostdeep",
+            new[] { "Polar Golem", "Polar Elemental", "Polar Golem" }
+        );
 
         // Cold-Hearted Trophies
-        Story.KillQuest(2533, "frostdeep", new[] { "Polar Mole", "Temple Prowler", "Temple Prowler" });
+        Story.KillQuest(
+            2533,
+            "frostdeep",
+            new[] { "Polar Mole", "Temple Prowler", "Temple Prowler" }
+        );
 
         // Warmth in the Cold
         Story.KillQuest(2534, "frostdeep", new[] { "Temple Spider", "Temple Maggot" });
@@ -258,7 +281,7 @@ public class CoreFrostvale
         // Icy Prizes
         Story.KillQuest(2535, "frostdeep", new[] { "Temple Prowler", "Temple Maggot" });
 
-        // Fading Magic - may bug out as its 2 items from 1 mob if the delay doesnt work idfk, doesnt work as a string[] as it gets the sand drop 
+        // Fading Magic - may bug out as its 2 items from 1 mob if the delay doesnt work idfk, doesnt work as a string[] as it gets the sand drop
         if (!Story.QuestProgression(2536))
         {
             Core.EnsureAccept(2536);
@@ -283,7 +306,11 @@ public class CoreFrostvale
         Story.KillQuest(2541, "frostdeep", new[] { "Ancient Golem", "Ancient Golem" });
 
         // Can You Feel the Chill Tonight?
-        Story.KillQuest(2542, "frostdeep", new[] { "Temple Prowler", "Polar Elemental", "Polar Elemental" });
+        Story.KillQuest(
+            2542,
+            "frostdeep",
+            new[] { "Temple Prowler", "Polar Elemental", "Polar Elemental" }
+        );
 
         // Shrouded in Ice
         Story.KillQuest(2543, "frostdeep", new[] { "Ancient Maggot", "Ancient Maggot" });
@@ -295,7 +322,11 @@ public class CoreFrostvale
         Story.KillQuest(2545, "frostdeep", new[] { "Ancient Mole", "Ancient Mole" });
 
         // Older and Colder
-        Story.KillQuest(2546, "frostdeep", new[] { "Ancient Mole", "Ancient Prowler", "Ancient Maggot" });
+        Story.KillQuest(
+            2546,
+            "frostdeep",
+            new[] { "Ancient Prowler", "Ancient Maggot", "Ancient Mole" }
+        );
 
         // The Sword Of Hope
         Story.KillQuest(2547, "frostdeep", new[] { "Ancient Terror", "Ancient Terror" });
@@ -320,10 +351,18 @@ public class CoreFrostvale
         Story.KillQuest(2578, "icerise", "Polar Golem");
 
         // Uncovering Pages Of The Past
-        Story.KillQuest(2579, "icerise", new[] { "Polar Golem", "Polar Elemental", "Arctic DireWolf" });
+        Story.KillQuest(
+            2579,
+            "icerise",
+            new[] { "Polar Golem", "Arctic DireWolf", "Polar Elemental" }
+        );
 
         // We Know Where To Look
-        Story.KillQuest(2580, "icerise", new[] { "Polar Golem", "Polar Elemental", "Arctic DireWolf" });
+        Story.KillQuest(
+            2580,
+            "icerise",
+            new[] { "Arctic DireWolf", "Polar Elemental", "Polar Golem" }
+        );
 
         // A Terrible Hiding Place
         Story.KillQuest(2581, "icerise", "Arctic DireWolf");
@@ -351,8 +390,13 @@ public class CoreFrostvale
         Story.KillQuest(6123, "coldwindvalley", "Hail Elemental");
 
         // Arm the Mob
-        Story.MapItemQuest(6124, "coldwindvalley", 5551, 5);
-        Story.KillQuest(6124, "farm", "Scarecrow");
+        if (!Story.QuestProgression(6124))
+        {
+            Core.EnsureAccept(6124);
+            Core.GetMapItem(5551, 5, "coldwindvalley");
+            Core.HuntMonster("farm", "Scarecrow", "Pitchforks", 5);
+            Core.EnsureComplete(6124);
+        }
 
         // Gather Bait
         Story.KillQuest(6125, "coldwindvalley", "Arctic Wolf");
@@ -380,8 +424,13 @@ public class CoreFrostvale
         Story.KillQuest(6131, "coldwindvalley", "Arctusk");
 
         // Holly and Ice
-        Story.MapItemQuest(6132, "coldwindvalley", 5557, 8);
-        Story.KillQuest(6132, "coldwindvalley", "Snow Golem");
+        if (!Story.QuestProgression(6132))
+        {
+            Core.EnsureAccept(6132);
+            Core.GetMapItem(5557, 8, "coldwindvalley");
+            Core.HuntMonster("coldwindvalley", "Snow Golem", "Elemental Ice", 5);
+            Core.EnsureComplete(6132);
+        }
     }
 
     public void Battlefield(bool ReturnEarly = false)
@@ -395,7 +444,8 @@ public class CoreFrostvale
 
         // Mana for the Magi 2570
         Story.KillQuest(2570, "newbie", "Slime", GetReward: false);
-        if(ReturnEarly) return;
+        if (ReturnEarly)
+            return;
 
         // Gathering Spell Components 2571
         Story.KillQuest(2571, "hydra", "Fire Imp", GetReward: false);
@@ -426,7 +476,11 @@ public class CoreFrostvale
         Story.PreLoad(this);
 
         // Feed the Greed 3217
-        Story.KillQuest(3217, "darkwinter", new[] { "Blighted Moglin", "White Stalker", "Blighted Moglin" });
+        Story.KillQuest(
+            3217,
+            "darkwinter",
+            new[] { "Blighted Moglin", "White Stalker", "Blighted Moglin" }
+        );
         // if (!Story.QuestProgression(3217))
         // {
         //     Core.EnsureAccept(3217);
@@ -539,7 +593,11 @@ public class CoreFrostvale
 
     public void Icerisepast()
     {
-        if (!Core.IsMember || Core.isCompletedBefore(3904) || !Core.isSeasonalMapActive("Icerisepast"))
+        if (
+            !Core.IsMember
+            || Core.isCompletedBefore(3904)
+            || !Core.isSeasonalMapActive("Icerisepast")
+        )
             return;
         if (!Core.isCompletedBefore(7854))
             Howardshill();
@@ -567,7 +625,12 @@ public class CoreFrostvale
         }
 
         // Fire from the Hole 3904
-        Story.KillQuest(3904, "icerisepast", "Ice Drumlinster");
+        if (!Story.QuestProgression(3904))
+        {
+            Core.EnsureAccept(3904);
+            Core.HuntMonster("icerisepast", "Ice Drumlinster", "Ice Drumlinster Defeated");
+            Core.EnsureComplete(3904);
+        }
     }
 
     public void Winterhorror()
@@ -593,7 +656,7 @@ public class CoreFrostvale
         Story.KillQuest(7858, "winterhorror", "Arthur and Elise");
 
         // He's Ragin' 7859
-        Story.KillQuest(7859, "winterhorror", $"Howard’s Rage");
+        Story.KillQuest(7859, "winterhorror", "Howard's Rage");
     }
 
     public void Gifthulu()
@@ -618,22 +681,39 @@ public class CoreFrostvale
         Story.PreLoad(this);
 
         // Plans for Frostval
-        Story.MapItemQuest(4705, "cryostorm", 4069);
-        Story.MapItemQuest(4705, "cryostorm", 4070);
-        Story.KillQuest(4705, "cryostorm", "Glacial Elemental");
+        if (!Story.QuestProgression(4705))
+        {
+            Core.EnsureAccept(4705);
+            Core.GetMapItem(4069, 1, "cryostorm");
+            Core.GetMapItem(4070, 1, "cryostorm");
+            Core.HuntMonster("cryostorm", "Glacial Elemental", "Snowglobe Shard", 10);
+            Core.EnsureComplete(4705);
+        }
 
         // Find the Missing Presents
         Story.MapItemQuest(4706, "cryostorm", 4067, 8);
 
         // More Gifts
-        Story.KillQuest(4707, "cryostorm", new[] { "Glacial Wolf", "Cryo Mammoth", "Glacial Elemental" });
+        if (!Story.QuestProgression(4707))
+        {
+            Core.EnsureAccept(4707);
+            Core.HuntMonster("cryostorm", "Glacial Wolf", "Cloth Found", 7);
+            Core.HuntMonster("cryostorm", "Cryo Mammoth", "Fur Found", 3);
+            Core.HuntMonster("cryostorm", "Glacial Elemental", "Glacial Frostvale Bells", 5);
+            Core.EnsureComplete(4707);
+        }
 
         // Warmth for the Small
         Story.KillQuest(4708, "cryostorm", "Glacial Wolf");
 
         // Cut Down the Tree
-        Story.MapItemQuest(4709, "cryostorm", 4068);
-        Story.KillQuest(4709, "cryostorm", "Glacial Wolf");
+        if (!Story.QuestProgression(4709))
+        {
+            Core.EnsureAccept(4709);
+            Core.GetMapItem(4068, 1, "cryostorm");
+            Core.HuntMonster("cryostorm", "Glacial Wolf", "Glacial Wolf Defeated", 6);
+            Core.EnsureComplete(4709);
+        }
 
         // Decorate the Tree
         if (!Story.QuestProgression(4710))
@@ -678,8 +758,13 @@ public class CoreFrostvale
         Story.KillQuest(5588, "icewindpass", "Glacial Elemental");
 
         // Splattered Mana
-        Story.MapItemQuest(5589, "icewindpass", 5075, 5);
-        Story.KillQuest(5589, "icewindpass", "Glacial Elemental");
+        if (!Story.QuestProgression(5589))
+        {
+            Core.EnsureAccept(5589);
+            Core.GetMapItem(5075, 5, "icewindpass");
+            Core.HuntMonster("icewindpass", "Glacial Elemental", "Iced Mana", 9);
+            Core.EnsureComplete(5589);
+        }
 
         // Dispell the Spell
         Story.KillQuest(5590, "icewindpass", "Living Snow");
@@ -697,10 +782,22 @@ public class CoreFrostvale
         Story.KillQuest(5594, "icewindpass", "Frostspawn Horror");
 
         // Keep the Frostspawn Away!
-        Story.KillQuest(5595, "icewindpass", new[] { "Frostspawn Troll", "Frost Invader" });
+        if (!Story.QuestProgression(5595))
+        {
+            Core.EnsureAccept(5595);
+            Core.HuntMonster("icewindpass", "Frost Invader", "Frost Invader Slain", 5);
+            Core.HuntMonster("icewindpass", "Frostspawn Troll", "Frostspawn Troll Slain", 5);
+            Core.EnsureComplete(5595);
+        }
 
-        // Take a Break from Fighting 
-        Story.KillQuest(5596, "icewindpass", new[] { "Polar Golem", "Glacial Elemental" });
+        // Take a Break from Fighting
+        if (!Story.QuestProgression(5596))
+        {
+            Core.EnsureAccept(5596);
+            Core.HuntMonster("icewindpass", "Polar Golem", "Living Snow", 3);
+            Core.HuntMonster("icewindpass", "Glacial Elemental", "Elemental Icicles", 3);
+            Core.EnsureComplete(5596);
+        }
     }
 
     public void Icepike()
@@ -724,15 +821,25 @@ public class CoreFrostvale
         Story.KillQuest(5601, "icewindwar", "Soricomorpha");
 
         // Take a Look Around
-        Story.MapItemQuest(5606, "icepike", 5085, 2);
-        Story.KillQuest(5606, "icepike", "Living Ice");
+        if (!Story.QuestProgression(5606))
+        {
+            Core.EnsureAccept(5606);
+            Core.GetMapItem(5085, 2, "icepike");
+            Core.HuntMonster("icepike", "Living Ice", "Ice Monsters Slain", 8);
+            Core.EnsureComplete(5606);
+        }
 
         // The Stars Have Foretold
         Story.MapItemQuest(5607, "icepike", new[] { 5086, 5087 });
 
         // Continue this Path
-        Story.MapItemQuest(5608, "icepike", 5088, 5);
-        Story.KillQuest(5608, "icepike", "Ice Lord");
+        if (!Story.QuestProgression(5608))
+        {
+            Core.EnsureAccept(5608);
+            Core.GetMapItem(5088, 5, "icepike");
+            Core.HuntMonster("icepike", "Ice Lord", "Frozen Crystals", 5);
+            Core.EnsureComplete(5608);
+        }
 
         // Cross the Ice Bridge
         Story.MapItemQuest(5609, "icepike", 5089);
@@ -771,7 +878,7 @@ public class CoreFrostvale
         // Memory #1 - Yeti or Not - 6636
         Story.KillQuest(6636, "frostvalpast", "Ice Master Yeti");
 
-        // Activate the Spacetimebobulator - 6637   
+        // Activate the Spacetimebobulator - 6637
         Story.MapItemQuest(6637, "frostvalpast", 6165);
 
         // Memory #2 - Who Started the Fire - 6638
@@ -793,7 +900,11 @@ public class CoreFrostvale
         Story.KillQuest(6643, "frostvalpresent", "Time Wraith");
 
         // Memory #3 - Echoes - 6644
-        Story.KillQuest(6644, "frostvalpresent", new[] { "Echo of Cysero", "Echo of Lim", "Echo of Sora", "Echo of Warlic" });
+        Story.KillQuest(
+            6644,
+            "frostvalpresent",
+            new[] { "Echo of Cysero", "Echo of Lim", "Echo of Sora", "Echo of Warlic" }
+        );
 
         // Activate the Spacetimebobulator - 6645
         Story.MapItemQuest(6645, "frostvalpresent", 6165);
@@ -912,15 +1023,26 @@ public class CoreFrostvale
         Story.PreLoad(this);
 
         // 8423 Scout the Area,
-        Story.MapItemQuest(8423, "deerhunt", 9372);
-        Story.KillQuest(8423, "deerhunt", "Deer?");
+        if (!Story.QuestProgression(8423))
+        {
+            Core.EnsureAccept(8423);
+            Core.GetMapItem(9372, 1, "deerhunt");
+            Core.HuntMonster("deerhunt", "Deer?", "Animals Defeated", 8);
+            Core.EnsureComplete(8423);
+        }
 
         // 8424 Deer?
         Story.KillQuest(8424, "deerhunt", "Deer?");
 
         // 8425 Comparing Claws
-        Story.MapItemQuest(8425, "deerhunt", 9373, 4);
-        Story.KillQuest(8425, "deerhunt", new[] { "Scared Wolf", "Frightened Owl" });
+        if (!Story.QuestProgression(8425))
+        {
+            Core.EnsureAccept(8425);
+            Core.GetMapItem(9373, 4, "deerhunt");
+            Core.HuntMonster("deerhunt", "Frightened Owl", "Owl Talon Sample", 8);
+            Core.HuntMonster("deerhunt", "Scared Wolf", "Wolf Claw Sample", 8);
+            Core.EnsureComplete(8425);
+        }
 
         // 8426 Lair Investigated
         Story.MapItemQuest(8426, "deerhunt", new[] { 9374, 9375 });
@@ -935,14 +1057,20 @@ public class CoreFrostvale
         Story.MapItemQuest(8429, "deerhunt", 9376, 6);
 
         // 8430  Final Blessing
-        Story.KillQuest(8430, "deerhunt", new[] { "Deer?", "Scared Wolf", "Frightened Owl" });
+        if (!Story.QuestProgression(8430))
+        {
+            Core.EnsureAccept(8430);
+            Core.HuntMonster("deerhunt", "Scared Wolf", "Wolf Pelt Offering", 5);
+            Core.HuntMonster("deerhunt", "Frightened Owl", "Owl Feather Offering", 5);
+            Core.HuntMonster("deerhunt", "Deer?", "Deer Hide Offering", 5);
+            Core.EnsureComplete(8430);
+        }
 
         // 8431 The Zweinichthirsch
         Story.KillQuest(8431, "deerhunt", "Zweinichthirsch");
 
-        // 8432 Cries Investigated 
+        // 8432 Cries Investigated
         Story.MapItemQuest(8432, "deerhunt", 9377);
-
     }
 
     public void BowJangles()
@@ -982,7 +1110,14 @@ public class CoreFrostvale
         }
 
         //Both Sides are Guilty (7825)
-        Story.KillQuest(7825, "judgement", new[] { "Aeacus", "Minos", "Rhadamanthys" });
+        if (!Story.QuestProgression(7825))
+        {
+            Core.EnsureAccept(7825);
+            Core.HuntMonster("judgement", "Minos", "Minos Defeated", 1);
+            Core.HuntMonster("judgement", "Rhadamanthys", "Rhadamanthys Beaten", 1);
+            Core.HuntMonster("judgement", "Aeacus", "Aeacus Slain", 1);
+            Core.EnsureComplete(7825);
+        }
 
         //Bait and Switch (7826)
         Story.KillQuest(7826, "doomvault", "Princess Angler");
@@ -1048,7 +1183,6 @@ public class CoreFrostvale
         if (!Core.isCompletedBefore(9506))
             GlaceTomb();
 
-
         // Hold the Door 9509
         Story.MapItemQuest(9509, "fimbultomb", new[] { 12490, 12491 });
         Story.KillQuest(9509, "fimbultomb", "Draugr");
@@ -1058,7 +1192,7 @@ public class CoreFrostvale
         Story.KillQuest(9510, "fimbultomb", "Sullied Auberon");
 
         // Caving Hazards 9511
-        Story.KillQuest(9511, "fimbultomb", new[] { "Sullied Auberon", "Draugr" });
+        Story.KillQuest(9511, "fimbultomb", new[] { "Draugr", "Sullied Auberon" });
 
         // Poetic Ettin 9512
         Story.MapItemQuest(9512, "fimbultomb", 12493);
@@ -1186,8 +1320,7 @@ public class CoreFrostvale
         // Circling Crows 8450
         Story.KillQuest(8450, "otziwar", "Sluagh Mellori");
 
-
-        // Powder Snow 8451         
+        // Powder Snow 8451
         Story.KillQuest(8451, "otziwar", "Huntress Valais");
     }
 
@@ -1203,72 +1336,61 @@ public class CoreFrostvale
         #region Useable Monsters
         string[] UseableMonsters = new[]
         {
-    "Hydrochloric Acid", // UseableMonsters[0],
-	"Lost Giftbox", // UseableMonsters[1],
-	"Cold Apparition", // UseableMonsters[2],
-	"Hotel Guest", // UseableMonsters[3],
-	"Memory Leech", // UseableMonsters[4]
-};
+            "Hydrochloric Acid", // UseableMonsters[0],
+            "Lost Giftbox", // UseableMonsters[1],
+            "Cold Apparition", // UseableMonsters[2],
+            "Hotel Guest", // UseableMonsters[3],
+            "Memory Leech", // UseableMonsters[4]
+        };
         #endregion Useable Monsters
 
         // 9993 | Mouth of a Home
         if (!Story.QuestProgression(9993))
         {
-            Core.HuntMonsterQuest(9993,
-                ("holidayhotel", UseableMonsters[0], ClassType.Farm));
+            Core.HuntMonsterQuest(9993, ("holidayhotel", UseableMonsters[0], ClassType.Farm));
         }
-
 
         // 9994 | Windpipe Hallway
         Story.MapItemQuest(
-            9994, new[]
-        {
+            9994,
+            new[]
+            {
                 (13977, 5, "holidayhotel"),
                 (13967, 1, "holidayhotel"),
-                (13968, 1, "holidayhotel")
+                (13968, 1, "holidayhotel"),
             }
         );
 
         // 9995 | Foreign Body Aspiration
         if (!Story.QuestProgression(9995))
         {
-            Core.HuntMonsterQuest(9995,
-                ("holidayhotel", UseableMonsters[1], ClassType.Farm));
+            Core.HuntMonsterQuest(9995, ("holidayhotel", UseableMonsters[1], ClassType.Farm));
         }
-
 
         // 9996 | Left Arm Vein
         Story.MapItemQuest(9996, "holidayhotel", new[] { 13969, 13970 });
         Story.KillQuest(9996, "holidayhotel", UseableMonsters[2]);
 
-
         // 9997 | Left Arm Artery
         Story.MapItemQuest(9997, "holidayhotel", new[] { 13971, 13972 });
         Story.KillQuest(9997, "holidayhotel", UseableMonsters[2]);
 
-
         // 9998 | Right Arm Vein
         Story.MapItemQuest(9998, "holidayhotel", new[] { 13973, 13974, 13975 });
-
 
         // 10001 | Right Arm Artery
         if (!Story.QuestProgression(10001))
         {
-            Core.HuntMonsterQuest(10001,
-                ("holidayhotel", UseableMonsters[3], ClassType.Farm));
+            Core.HuntMonsterQuest(10001, ("holidayhotel", UseableMonsters[3], ClassType.Farm));
         }
-
 
         // 10002 | Cryophobia
         Story.MapItemQuest(10002, "holidayhotel", 13976);
 
-
-
         // 10003 | Maceration
         if (!Story.QuestProgression(10003))
         {
-            Core.HuntMonsterQuest(10003,
-                ("holidayhotel", UseableMonsters[4], ClassType.Solo));
+            Core.HuntMonsterQuest(10003, ("holidayhotel", UseableMonsters[4], ClassType.Solo));
         }
     }
 
@@ -1284,58 +1406,55 @@ public class CoreFrostvale
         #region Useable Monsters
         string[] UseableMonsters = new[]
         {
-    "Trey Simulacrum", // UseableMonsters[0],
-	"Hydrochloric Acid", // UseableMonsters[1],
-	"Alteon Simulacrum", // UseableMonsters[2],
-	"Lynaria Simulacrum", // UseableMonsters[3],
-	"Brittany Simulacrum", // UseableMonsters[4],
-	"Brentan Simulacrum", // UseableMonsters[5],
-	"La Simulacrum", // UseableMonsters[6],
-	"Re Simulacrum", // UseableMonsters[7],
-	"Cold Apparition", // UseableMonsters[8],
-	"Hotel Guest", // UseableMonsters[9],
-	"Yaga", // UseableMonsters[10],
-	"Mockingbird", // UseableMonsters[11],
-	"Cold Grudge", // UseableMonsters[12]
-};
+            "Trey Simulacrum", // UseableMonsters[0],
+            "Hydrochloric Acid", // UseableMonsters[1],
+            "Alteon Simulacrum", // UseableMonsters[2],
+            "Lynaria Simulacrum", // UseableMonsters[3],
+            "Brittany Simulacrum", // UseableMonsters[4],
+            "Brentan Simulacrum", // UseableMonsters[5],
+            "La Simulacrum", // UseableMonsters[6],
+            "Re Simulacrum", // UseableMonsters[7],
+            "Cold Apparition", // UseableMonsters[8],
+            "Hotel Guest", // UseableMonsters[9],
+            "Yaga", // UseableMonsters[10],
+            "Mockingbird", // UseableMonsters[11],
+            "Cold Grudge", // UseableMonsters[12]
+        };
         #endregion Useable Monsters
 
         // 10005 | Chilblain
         if (!Story.QuestProgression(10005))
         {
-            Core.HuntMonsterQuest(10005,
-                ("holidayhorror", UseableMonsters[8], ClassType.Farm));
+            Core.HuntMonsterQuest(10005, ("holidayhorror", UseableMonsters[8], ClassType.Farm));
         }
-
 
         // 10006 | Fool's Gold
         Story.MapItemQuest(10006, "holidayhorror", 13994);
         Story.KillQuest(10006, "holidayhorror", UseableMonsters[0]);
 
-
-
         // 10007 | Acid Reflux
         Story.MapItemQuest(10007, "holidayhorror", 13995, 4);
         Story.KillQuest(10007, "holidayhorror", UseableMonsters[1]);
 
-
         // 10008 | Sour Notes
         if (!Story.QuestProgression(10008))
         {
-            Core.HuntMonsterQuest(10008,
+            Core.HuntMonsterQuest(
+                10008,
                 ("holidayhorror", UseableMonsters[2], ClassType.Solo),
-                ("holidayhorror", UseableMonsters[3], ClassType.Solo));
+                ("holidayhorror", UseableMonsters[3], ClassType.Solo)
+            );
         }
-
 
         // 10009 | Phantom Pain
         if (!Story.QuestProgression(10009))
         {
-            Core.HuntMonsterQuest(10009,
+            Core.HuntMonsterQuest(
+                10009,
                 ("holidayhorror", UseableMonsters[4], ClassType.Solo),
-                ("holidayhorror", UseableMonsters[5], ClassType.Solo));
+                ("holidayhorror", UseableMonsters[5], ClassType.Solo)
+            );
         }
-
 
         // 10010 | Kleptothermy
         if (!Story.QuestProgression(10010))
@@ -1347,39 +1466,220 @@ public class CoreFrostvale
         }
 
         // 10011 | Fie Fie
-        Story.MapItemQuest(10011, new[] {
-            (13997, 1, "holidayhorror"),
-            (13998, 5, "holidayhorror") });
-
-
+        Story.MapItemQuest(
+            10011,
+            new[] { (13997, 1, "holidayhorror"), (13998, 5, "holidayhorror") }
+        );
 
         // 10012 | Here of Free Will?
         Story.MapItemQuest(10012, "holidayhorror", 14000);
         Story.KillQuest(10012, "holidayhorror", UseableMonsters[9]);
 
-
         // 10013 | Arrived by Compulsion?
         Story.MapItemQuest(10013, "holidayhorror", 13999);
         Story.KillQuest(10013, "holidayhorror", UseableMonsters[10]);
-
 
         // 10014 | Empty Nest
         if (!Story.QuestProgression(10014))
         {
             Core.CutSceneFixer("holidayhorror", "r12", "Cut3");
-            Core.HuntMonsterQuest(10014,
-                ("holidayhorror", UseableMonsters[11], ClassType.Solo));
+            Core.HuntMonsterQuest(10014, ("holidayhorror", UseableMonsters[11], ClassType.Solo));
         }
-
     }
 
+    public void FrostvalGala()
+    {
+        if (Core.isCompletedBefore(10523) || !Core.isSeasonalMapActive("frostvalgala"))
+            return;
 
+        Story.PreLoad(this);
 
-        // if (!Core.isCompletedBefore(10003))
-        //     HolidayHorror();
-    // --------------------------------------------------------------------------------------------------------------------------
+        #region Useable Monsters
+        string[] UseableMonsters = new[]
+        {
+            "Vaughn Knight", // UseableMonsters[0],
+            "Granville Knight", // UseableMonsters[1],
+            "Noelle Knight", // UseableMonsters[2],
+            "Unsung Knight", // UseableMonsters[3],
+            "Unsung Beast", // UseableMonsters[4],
+            "Unsung Queen", // UseableMonsters[5]
+        };
+        #endregion Useable Monsters
 
-    // The rest of the Frostval quests are not necessary for Frostval Barbarian. Can skip and farm Frozen Orb directly using jump.
+        // 10514 | Miraculous Reunion
+        if (!Story.QuestProgression(10514))
+        {
+            Story.MapItemQuest(10514, "frostvalgala", new[] { 15286, 15287 });
+            Core.HuntMonsterQuest(10514, ("frostvalgala", UseableMonsters[0], ClassType.Farm));
+        }
 
-    // --------------------------------------------------------------------------------------------------------------------------
+        // 10515 | Emergency Management
+        if (!Story.QuestProgression(10515))
+        {
+            Core.EnsureAccept(10515);
+            Story.MapItemQuest(10515, "frostvalgala", 15288, AutoCompleteQuest: false);
+            Core.HuntMonster("frostvalgala", UseableMonsters[1], "Granville Crest", 6);
+            Core.EnsureComplete(10515);
+        }
+
+        // 10516 | Noble Character
+        if (!Story.QuestProgression(10516))
+        {
+            Story.MapItemQuest(10516, "frostvalgala", 15289);
+            Core.HuntMonsterQuest(10516, ("frostvalgala", UseableMonsters[2], ClassType.Farm));
+        }
+
+        // 10517 | Breaking Bread
+        if (!Story.QuestProgression(10517))
+        {
+            Story.MapItemQuest(
+                10517,
+                new[]
+                {
+                    (15290, 5, "frostvalgala"),
+                    (15291, 1, "frostvalgala"),
+                    (15292, 1, "frostvalgala"),
+                }
+            );
+        }
+
+        // 10518 | The Poacher and the Stag
+        if (!Story.QuestProgression(10518))
+        {
+            Core.HuntMonsterQuest(
+                10518,
+                ("frostvalgala", UseableMonsters[0], ClassType.Farm),
+                ("frostvalgala", UseableMonsters[1], ClassType.Farm)
+            );
+        }
+
+        // 10519 | Knights Unsung
+        if (!Story.QuestProgression(10519))
+        {
+            Core.HuntMonsterQuest(10519, ("frostvalgala", UseableMonsters[3], ClassType.Farm));
+        }
+
+        // 10520 | Silver Spoon Fed
+        if (!Story.QuestProgression(10520))
+        {
+            Story.MapItemQuest(10520, "frostvalgala", 15293, 5);
+        }
+
+        // 10521 | Like-Minded Enemies
+        if (!Story.QuestProgression(10521))
+        {
+            Story.MapItemQuest(10521, "frostvalgala", 15294);
+            Core.HuntMonsterQuest(10521, ("frostvalgala", UseableMonsters[4], ClassType.Farm));
+        }
+
+        // 10522 | Heroic Entrance
+        if (!Story.QuestProgression(10522))
+        {
+            Core.HuntMonsterQuest(
+                10522,
+                ("frostvalgala", UseableMonsters[4], ClassType.Farm),
+                ("frostvalgala", UseableMonsters[3], ClassType.Farm)
+            );
+        }
+
+        // 10523 | I'm With You in the Dark
+        if (!Story.QuestProgression(10523))
+        {
+            Core.HuntMonsterQuest(10523, ("frostvalgala", UseableMonsters[5], ClassType.Solo));
+        }
+    }
+
+    public void UnsungNecropolis()
+    {
+        if (Core.isCompletedBefore(10535) || !Core.isSeasonalMapActive("unsungnecropolis"))
+            return;
+
+        FrostvalGala();
+
+        Story.PreLoad(this);
+
+        #region Useable Monsters
+        string[] UseableMonsters = new[]
+        {
+            "Unsung Beast", // UseableMonsters[0],
+            "Unsung Knight", // UseableMonsters[1],
+            "Bone Dragonling", // UseableMonsters[2],
+            "Doom Figment", // UseableMonsters[3],
+            "Dracolich Blain", // UseableMonsters[4],
+            "Unsung Mage", // UseableMonsters[5],
+            "Dracolich Sole", // UseableMonsters[6],
+            "Unsung Warrior", // UseableMonsters[7],
+            "The Unsung", // UseableMonsters[8]
+        };
+        #endregion Useable Monsters
+
+        // 10526 | Fade in from Black
+        if (!Story.QuestProgression(10526))
+        {
+            Core.HuntMonsterQuest(10526, ("unsungnecropolis", UseableMonsters[0], ClassType.Farm));
+        }
+
+        // 10527 | Hyping Up
+        if (!Story.QuestProgression(10527))
+        {
+            Core.HuntMonsterQuest(10527, ("unsungnecropolis", UseableMonsters[1], ClassType.Farm));
+        }
+
+        // 10528 | Little Buddies
+        if (!Story.QuestProgression(10528))
+        {
+            Core.EnsureAccept(10528);
+            Core.HuntMonster("unsungnecropolis", UseableMonsters[2], "Dragonling ID Tag", 3);
+            Core.GetMapItem(15311, 1, "unsungnecropolis");
+            Core.EnsureComplete(10528);
+        }
+
+        // 10529 | Selective Memory
+        if (!Story.QuestProgression(10529))
+        {
+            Story.MapItemQuest(10529, "unsungnecropolis", 15312);
+            Core.HuntMonsterQuest(10529, ("unsungnecropolis", UseableMonsters[3], ClassType.Farm));
+        }
+
+        // 10530 | Old Painless
+        if (!Story.QuestProgression(10530))
+        {
+            Core.HuntMonsterQuest(10530, ("unsungnecropolis", UseableMonsters[4], ClassType.Solo));
+        }
+
+        // 10531 | Peeved and Peckish
+        if (!Story.QuestProgression(10531))
+        {
+            Story.MapItemQuest(10531, "unsungnecropolis", 15313);
+            Core.HuntMonsterQuest(10531, ("unsungnecropolis", UseableMonsters[5], ClassType.Farm));
+        }
+
+        // 10532 | Machetes at Dawn
+        if (!Story.QuestProgression(10532))
+        {
+            Core.HuntMonsterQuest(10532, ("unsungnecropolis", UseableMonsters[6], ClassType.Solo));
+        }
+
+        // 10533 | Lowlife Poachers
+        if (!Story.QuestProgression(10533))
+        {
+            Story.MapItemQuest(
+                10533,
+                new[] { (15314, 6, "unsungnecropolis"), (15315, 1, "unsungnecropolis") }
+            );
+        }
+
+        // 10534 | Serene Meditation
+        if (!Story.QuestProgression(10534))
+        {
+            Story.MapItemQuest(10534, "unsungnecropolis", 15316);
+            Core.HuntMonsterQuest(10534, ("unsungnecropolis", UseableMonsters[7], ClassType.Farm));
+        }
+
+        // 10535 | The Right to Choose
+        if (!Story.QuestProgression(10535))
+        {
+            Core.HuntMonsterQuest(10535, ("unsungnecropolis", UseableMonsters[8], ClassType.Solo));
+        }
+    }
 }

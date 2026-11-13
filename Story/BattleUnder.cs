@@ -11,7 +11,12 @@ public class BattleUnder
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -40,7 +45,7 @@ public class BattleUnder
 
         Core.EquipClass(ClassType.Farm);
         Story.KillQuest(374, "battleundera", "Skeletal Warrior");
-        if(!Story.QuestProgression(375))
+        if (!Story.QuestProgression(375))
         {
             Core.EnsureAccept(375);
             Core.HuntMonster("battleundera", "Skeletal Warrior", "Skeletal Claymore", 6);
@@ -103,7 +108,7 @@ public class BattleUnder
         Core.AddDrop("Battle Pickaxe");
         BattleUnderC();
 
-        //Note; Mobs on the map are randomly spawned / room 
+        //Note; Mobs on the map are randomly spawned / room
         //with 3 or 4 spawns sets that can be made/room.. thus breaking hunt(and killquest)
 
         if (!Story.QuestProgression(2211))
@@ -145,8 +150,13 @@ public class BattleUnder
 
         Story.PreLoad(this);
 
-        Story.MapItemQuest(5927, "battleundere", 5362);
-        Story.KillQuest(5927, "battleundere", "Lava Guard");
+        if (!Story.QuestProgression(5927))
+        {
+            Core.EnsureAccept(5927);
+            Core.GetMapItem(5362, 1, "battleundere");
+            Core.HuntMonster("battleundere", "Lava Guard", "Cavern Info", 1);
+            Core.EnsureComplete(5927);
+        }
         Story.KillQuest(5928, "battleundere", "Hot Mama");
     }
 

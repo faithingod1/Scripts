@@ -16,16 +16,24 @@ tags: exalted, soul, cleaver, legion, class, esc, dage, undead legion merge
 //cs_include Scripts/Legion/LegionExcercise/LegionExercise4.cs
 //cs_include Scripts/Nation/CoreNation.cs
 //cs_include Scripts/Nation/Various/DragonBlade[mem].cs
-//cs_include Scripts/Legion/Various/UndeadLegionMerge.cs
+//cs_include Scripts/Legion/MergeShops/UndeadLegionMerge.cs
 using Skua.Core.Interfaces;
 
 public class ExaltedSoulCleaver
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static UndeadLegionMerge ULM { get => _ULM ??= new UndeadLegionMerge(); set => _ULM = value; }
+    private static UndeadLegionMerge ULM
+    {
+        get => _ULM ??= new UndeadLegionMerge();
+        set => _ULM = value;
+    }
     private static UndeadLegionMerge _ULM;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
 
     public void ScriptMain(IScriptInterface Bot)
@@ -48,6 +56,5 @@ public class ExaltedSoulCleaver
 
         if (rankUpClass)
             Adv.RankUpClass("Exalted Soul Cleaver");
-
     }
 }

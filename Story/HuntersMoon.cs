@@ -11,7 +11,12 @@ public class HuntersMoon
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -57,8 +62,13 @@ public class HuntersMoon
         Story.KillQuest(6706, "huntersmoon", "Eclipsed One");
 
         // Find the Skull! 6707
-        Story.KillQuest(6707, "huntersmoon", "Marchiosas Acolyte");
-
+        if (!Story.QuestProgression(6707))
+        {
+            Core.EnsureComplete(6707);
+            Core.KillMonster("huntersmoon", "r6", "Left", "Marchosias Acolyte", "Skull of Voland");
+            Core.EnsureComplete(6707);
+        }
+        
         // Tree of Wisdom 6708
         Story.MapItemQuest(6708, "huntersmoon", 6193);
 

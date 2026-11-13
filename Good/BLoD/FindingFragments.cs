@@ -10,29 +10,52 @@ tags: finding fragments, blinding light fragments, spirit, orb, loyal, bright, b
 //cs_include Scripts/Story/BattleUnder.cs
 //cs_include Scripts/CoreStory.cs
 using Skua.Core.Interfaces;
-using Skua.Core.Options;
 using Skua.Core.Models.Items;
+using Skua.Core.Options;
 
 public class FindingFragments_Any
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreBLOD BLOD { get => _BLOD ??= new CoreBLOD(); set => _BLOD = value; }
+    private static CoreBLOD BLOD
+    {
+        get => _BLOD ??= new CoreBLOD();
+        set => _BLOD = value;
+    }
     private static CoreBLOD _BLOD;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
 
-    public string OptionStorage = "Finding_FragmentsV2";
+    public string OptionStorage = "FindingFragmentsV2";
     public bool DontPreconfigure = true;
     public List<IOption> Options = new()
     {
-        CoreBots.Instance.SkipOptions,
-        new Option<WeaponOfDestiny>("questID", "Weapon Type", "Select which quest variant you want to do", WeaponOfDestiny.Blade)
+        new Option<WeaponOfDestiny>(
+            "questID",
+            "Weapon Type",
+            "Select which quest variant you want to do",
+            WeaponOfDestiny.Blade
+        ),
+        CoreBots.Instance.SkipOptions
     };
 
     public void ScriptMain(IScriptInterface Bot)
     {
-        Core.BankingBlackList.AddRange(new[] { "Blinding Light Fragments", "Spirit Orb", "Loyal Spirit Orb", "Bright Aura", "Brilliant Aura", "Blinding Aura" });
+        Core.BankingBlackList.AddRange(
+            new[]
+            {
+                "Blinding Light Fragments",
+                "Spirit Orb",
+                "Loyal Spirit Orb",
+                "Bright Aura",
+                "Brilliant Aura",
+                "Blinding Aura",
+            }
+        );
         Core.SetOptions();
 
         FindingFragments(Bot.Config!.Get<WeaponOfDestiny>("questID"));

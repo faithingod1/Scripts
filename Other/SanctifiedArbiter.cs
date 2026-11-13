@@ -12,7 +12,12 @@ public class SanctifiedArbiter
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -32,7 +37,6 @@ public class SanctifiedArbiter
 
         if (Core.CheckInventory(Rewards))
             return;
-
 
         for (int i = 0; i < Rewards.Length; i++)
         {

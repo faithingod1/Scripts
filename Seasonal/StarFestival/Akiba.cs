@@ -11,7 +11,11 @@ public class Akiba
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface Bot)
@@ -44,8 +48,13 @@ public class Akiba
         }
 
         // Tanabata Tree of Wishes (6433)
-        Story.MapItemQuest(6433, "bamboo", 5946, 7);
-        Story.KillQuest(6433, "bamboo", "Bamboo Wisp");
+        if (!Story.QuestProgression(6433))
+        {
+            Core.EnsureAccept(6433);
+            Core.GetMapItem(5946, 7, "bamboo");
+            Core.HuntMonster("bamboo", "Bamboo Wisp", "Wisp Light", 5);
+            Core.EnsureComplete(6433);
+        }
 
         // Write a Wish Upon a Star (6434)
         Story.KillQuest(6434, "yokaigrave", "Ninja Nopperabo");
@@ -67,7 +76,7 @@ public class Akiba
         if (!Story.QuestProgression(6438))
         {
             Core.EnsureAccept(6438);
-            Core.KillMonster("wanders", "r5", "Left", "Kalestri Worshiper", "The Third Wish");
+            Core.KillMonster("wanders", "r2", "Left", "Kalestri Worshiper", "The Third Wish");
             Core.EnsureComplete(6438);
         }
 

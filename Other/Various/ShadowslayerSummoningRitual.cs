@@ -19,12 +19,42 @@ public class ShadowslayerSummoningRitual
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreDailies Daily { get => _Daily ??= new CoreDailies(); set => _Daily = value; }    private static CoreDailies _Daily;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
-    private static ShadowSlayerK ShadowStory { get => _ShadowStory ??= new ShadowSlayerK(); set => _ShadowStory = value; }    private static ShadowSlayerK _ShadowStory;
-    private static Core7DD DD { get => _DD ??= new Core7DD(); set => _DD = value; }    private static Core7DD _DD;
-    private static BuyScrolls Scroll { get => _Scroll ??= new BuyScrolls(); set => _Scroll = value; }    private static BuyScrolls _Scroll;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreDailies Daily
+    {
+        get => _Daily ??= new CoreDailies();
+        set => _Daily = value;
+    }
+    private static CoreDailies _Daily;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
+    private static ShadowSlayerK ShadowStory
+    {
+        get => _ShadowStory ??= new ShadowSlayerK();
+        set => _ShadowStory = value;
+    }
+    private static ShadowSlayerK _ShadowStory;
+    private static Core7DD DD
+    {
+        get => _DD ??= new Core7DD();
+        set => _DD = value;
+    }
+    private static Core7DD _DD;
+    private static BuyScrolls Scroll
+    {
+        get => _Scroll ??= new BuyScrolls();
+        set => _Scroll = value;
+    }
+    private static BuyScrolls _Scroll;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -62,18 +92,27 @@ public class ShadowslayerSummoningRitual
         foreach (string item in Rewards)
         {
             // Check if we need to move to Quest 2 or if the item is already in the inventory
-            if ((!MovetoQuest2 && Core.CheckInventory(item, toInv: false))
-                || (MovetoQuest2 && Core.CheckInventory("Sparkly Shadowslayer Relic")))
+            if (
+                (!MovetoQuest2 && Core.CheckInventory(item, toInv: false))
+                || (MovetoQuest2 && Core.CheckInventory("Sparkly Shadowslayer Relic"))
+            )
             {
                 continue;
             }
 
             // Loop to acquire the item or relic
-            while (!Bot.ShouldExit
-                && ((!MovetoQuest2 && !Core.CheckInventory(item, toInv: false))
-                    || (MovetoQuest2 && !Core.CheckInventory("Sparkly Shadowslayer Relic"))))
+            while (
+                !Bot.ShouldExit
+                && (
+                    (!MovetoQuest2 && !Core.CheckInventory(item, toInv: false))
+                    || (MovetoQuest2 && !Core.CheckInventory("Sparkly Shadowslayer Relic"))
+                )
+            )
             {
-                Core.Logger($"Getting {item}. Rewards Left: {Rewards.Length - count} more item" + ((Rewards.Length - count) > 1 ? "s" : ""));
+                Core.Logger(
+                    $"Getting {item}. Rewards Left: {Rewards.Length - count} more item"
+                        + ((Rewards.Length - count) > 1 ? "s" : "")
+                );
                 Core.EnsureAccept(8835);
 
                 Scroll.BuyScroll(Scrolls.SpiritRend, 30);
@@ -134,6 +173,7 @@ public class ShadowslayerSummoningRitual
                 Core.EquipClass(ClassType.Farm);
                 Core.HuntMonster("doomwood", "Doomwood Ectomancer", "Dried Wasabi Powder", 4);
                 Core.GetMapItem(428, 1, "lightguard");
+                Core.Join("lightguard");
 
                 Core.EnsureComplete(1075);
                 Bot.Wait.ForPickup("Holy Wasabi");

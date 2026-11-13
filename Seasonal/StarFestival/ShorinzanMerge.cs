@@ -14,25 +14,46 @@ public class ShorinzanMerge
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
-private static CoreAdvanced sAdv { get => _sAdv ??= new CoreAdvanced(); set => _sAdv = value; }
-private static CoreAdvanced _sAdv;
-
+    private static CoreAdvanced sAdv
+    {
+        get => _sAdv ??= new CoreAdvanced();
+        set => _sAdv = value;
+    }
+    private static CoreAdvanced _sAdv;
 
     public bool DontPreconfigure = true;
     public List<IOption> Generic = sAdv.MergeOptions;
     public string[] MultiOptions = { "Generic", "Select" };
     public string OptionsStorage = sAdv.OptionsStorage;
+
     // [Can Change] This should only be changed by the author.
     //              If true, it will not stop the script if the default case triggers and the user chose to only get mats
     private bool dontStopMissingIng = false;
 
     public void ScriptMain(IScriptInterface Bot)
     {
-        Core.BankingBlackList.AddRange(new[] { "Deepest Desire", "Hidden Hope", "Simple Wish", "Fallen Star Shard", "Hashihime's Heart" });
+        Core.BankingBlackList.AddRange(
+            new[]
+            {
+                "Deepest Desire",
+                "Hidden Hope",
+                "Simple Wish",
+                "Fallen Star Shard",
+                "Hashihime's Heart",
+            }
+        );
         Core.SetOptions();
 
         BuyAllMerge();
@@ -52,7 +73,9 @@ private static CoreAdvanced _sAdv;
         {
             ItemBase req = Adv.externalItem;
             int quant = Adv.externalQuant;
-            int currentQuant = req.Temp ? Bot.TempInv.GetQuantity(req.Name) : Bot.Inventory.GetQuantity(req.Name);
+            int currentQuant = req.Temp
+                ? Bot.TempInv.GetQuantity(req.Name)
+                : Bot.Inventory.GetQuantity(req.Name);
             if (req == null)
             {
                 Core.Logger("req is NULL");
@@ -63,9 +86,14 @@ private static CoreAdvanced _sAdv;
             {
                 default:
                     bool shouldStop = !Adv.matsOnly || !dontStopMissingIng;
-                    Core.Logger($"The bot hasn't been taught how to get {req.Name}." + (shouldStop ? " Please report the issue." : " Skipping"), messageBox: shouldStop, stopBot: shouldStop);
+                    Core.Logger(
+                        $"The bot hasn't been taught how to get {req.Name}."
+                            + (shouldStop ? " Please report the issue." : " Skipping"),
+                        messageBox: shouldStop,
+                        stopBot: shouldStop
+                    );
                     break;
-                #endregion
+        #endregion
 
                 case "Deepest Desire":
                     Core.FarmingLogger(req.Name, quant);
@@ -77,7 +105,7 @@ private static CoreAdvanced _sAdv;
                         Core.KillMonster("tercessuinotlim", "m2", "Left", "*", "Makai Essence Collected", 20);
                         Core.HuntMonster("necrodungeon", "SlimeSkull", "Necropolis Soul Collected", 15);
                         Core.EquipClass(ClassType.Solo);
-                        Core.HuntMonster("necrodungeon", "5 Headed Dracolich", "Dracolich Soul Collected", 15);
+                        Core.KillMonster("necrodungeon", "r22", "Down", "*", "Dracolich Soul Collected", 15);
                         Core.HuntMonster("necrodungeon", "Doom Overlord", "Doom Power Catalyst", 2);
                         Bot.Wait.ForPickup(req.Name);
                     }
@@ -124,36 +152,98 @@ private static CoreAdvanced _sAdv;
 
                 case "Fallen Star Shard":
                     Core.EquipClass(ClassType.Solo);
-                    //Adv.BestGear(RacialGearBoost.Elemental);
                     Core.HuntMonster("starfest", "Fallen Star", req.Name, quant, isTemp: false);
                     Bot.Wait.ForPickup(req.Name);
                     break;
 
                 case "Hashihime's Heart":
                     Core.EquipClass(ClassType.Solo);
-                    //Adv.BestGear(RacialGearBoost.Chaos);
                     Core.HuntMonster("yokaistarriver", "Uji No Hashihime", req.Name, quant, isTemp: false);
                     Bot.Wait.ForPickup(req.Name);
                     break;
-
             }
         }
     }
 
     public List<IOption> Select = new()
     {
-        new Option<bool>("71290", "Starry Samurai", "Mode: [select] only\nShould the bot buy \"Starry Samurai\" ?", false),
-        new Option<bool>("71291", "Starry Samurai's Mask", "Mode: [select] only\nShould the bot buy \"Starry Samurai's Mask\" ?", false),
-        new Option<bool>("71292", "Starry Samurai's BackSwords", "Mode: [select] only\nShould the bot buy \"Starry Samurai's BackSwords\" ?", false),
-        new Option<bool>("71293", "Starry Samurai's Sword", "Mode: [select] only\nShould the bot buy \"Starry Samurai's Sword\" ?", false),
-        new Option<bool>("71294", "Starry Samurai's Swords", "Mode: [select] only\nShould the bot buy \"Starry Samurai's Swords\" ?", false),
-        new Option<bool>("69473", "Aurelian Sword", "Mode: [select] only\nShould the bot buy \"Aurelian Sword\" ?", false),
-        new Option<bool>("69474", "Aurelian Swords", "Mode: [select] only\nShould the bot buy \"Aurelian Swords\" ?", false),
-        new Option<bool>("69479", "Aurous Staff of Hope", "Mode: [select] only\nShould the bot buy \"Aurous Staff of Hope\" ?", false),
-        new Option<bool>("78064", "Fallen Star's Dark Heart", "Mode: [select] only\nShould the bot buy \"Fallen Star's Dark Heart\" ?", false),
-        new Option<bool>("78065", "Fallen Star's Dark Hearts", "Mode: [select] only\nShould the bot buy \"Fallen Star's Dark Hearts\" ?", false),
-        new Option<bool>("78074", "Blackhole Sun's Heart", "Mode: [select] only\nShould the bot buy \"Blackhole Sun's Heart\" ?", false),
-        new Option<bool>("78075", "Blackhole Sun's Hearts", "Mode: [select] only\nShould the bot buy \"Blackhole Sun's Hearts\" ?", false),
-        new Option<bool>("78801", "Blackhole Sun's Heart", "Mode: [select] only\nShould the bot buy \"Blackhole Sun's Heart\" ?", false),
+        new Option<bool>(
+            "71290",
+            "Starry Samurai",
+            "Mode: [select] only\nShould the bot buy \"Starry Samurai\" ?",
+            false
+        ),
+        new Option<bool>(
+            "71291",
+            "Starry Samurai's Mask",
+            "Mode: [select] only\nShould the bot buy \"Starry Samurai's Mask\" ?",
+            false
+        ),
+        new Option<bool>(
+            "71292",
+            "Starry Samurai's BackSwords",
+            "Mode: [select] only\nShould the bot buy \"Starry Samurai's BackSwords\" ?",
+            false
+        ),
+        new Option<bool>(
+            "71293",
+            "Starry Samurai's Sword",
+            "Mode: [select] only\nShould the bot buy \"Starry Samurai's Sword\" ?",
+            false
+        ),
+        new Option<bool>(
+            "71294",
+            "Starry Samurai's Swords",
+            "Mode: [select] only\nShould the bot buy \"Starry Samurai's Swords\" ?",
+            false
+        ),
+        new Option<bool>(
+            "69473",
+            "Aurelian Sword",
+            "Mode: [select] only\nShould the bot buy \"Aurelian Sword\" ?",
+            false
+        ),
+        new Option<bool>(
+            "69474",
+            "Aurelian Swords",
+            "Mode: [select] only\nShould the bot buy \"Aurelian Swords\" ?",
+            false
+        ),
+        new Option<bool>(
+            "69479",
+            "Aurous Staff of Hope",
+            "Mode: [select] only\nShould the bot buy \"Aurous Staff of Hope\" ?",
+            false
+        ),
+        new Option<bool>(
+            "78064",
+            "Fallen Star's Dark Heart",
+            "Mode: [select] only\nShould the bot buy \"Fallen Star's Dark Heart\" ?",
+            false
+        ),
+        new Option<bool>(
+            "78065",
+            "Fallen Star's Dark Hearts",
+            "Mode: [select] only\nShould the bot buy \"Fallen Star's Dark Hearts\" ?",
+            false
+        ),
+        new Option<bool>(
+            "78074",
+            "Blackhole Sun's Heart",
+            "Mode: [select] only\nShould the bot buy \"Blackhole Sun's Heart\" ?",
+            false
+        ),
+        new Option<bool>(
+            "78075",
+            "Blackhole Sun's Hearts",
+            "Mode: [select] only\nShould the bot buy \"Blackhole Sun's Hearts\" ?",
+            false
+        ),
+        new Option<bool>(
+            "78801",
+            "Blackhole Sun's Heart",
+            "Mode: [select] only\nShould the bot buy \"Blackhole Sun's Heart\" ?",
+            false
+        ),
     };
 }

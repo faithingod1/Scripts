@@ -16,9 +16,24 @@ public class ShadowflameWarMedal
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreSoW SoW { get => _SoW ??= new CoreSoW(); set => _SoW = value; }    private static CoreSoW _SoW;
-    private static CoreSoC SoC { get => _SoC ??= new CoreSoC(); set => _SoC = value; }    private static CoreSoC _SoC;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreSoW SoW
+    {
+        get => _SoW ??= new CoreSoW();
+        set => _SoW = value;
+    }
+    private static CoreSoW _SoW;
+    private static CoreSoC SoC
+    {
+        get => _SoC ??= new CoreSoC();
+        set => _SoC = value;
+    }
+    private static CoreSoC _SoC;
 
     public void ScriptMain(IScriptInterface bot)
     {

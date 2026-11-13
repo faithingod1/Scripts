@@ -13,6 +13,9 @@ tags: lothian, treasury, merge, queeniona, dark, thunder, master, long, lightnin
 //cs_include Scripts/Other/MergeShops/LoughshineLootMerge.cs
 //cs_include Scripts/Other/MergeShops/LiaTaraHillLootMerge.cs
 //cs_include Scripts/Other/MergeShops/ColdThunderMerge.cs
+//cs_include Scripts/Ultrasv3/DependenciesMerge/QueenIona.cs
+//cs_include Scripts/Ultrasv3/Entwined Eclipse/CoreEngine.cs
+//cs_include Scripts/Ultrasv3/Entwined Eclipse/CoreUltra.cs
 using Skua.Core.Interfaces;
 using Skua.Core.Models.Items;
 using Skua.Core.Options;
@@ -21,35 +24,91 @@ public class LothianTreasuryMerge
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
-private static CoreAdvanced sAdv { get => _sAdv ??= new CoreAdvanced(); set => _sAdv = value; }
-private static CoreAdvanced _sAdv;
+    private static CoreAdvanced sAdv
+    {
+        get => _sAdv ??= new CoreAdvanced();
+        set => _sAdv = value;
+    }
+    private static CoreAdvanced _sAdv;
 
-    private static CoreAOR AOR { get => _AOR ??= new CoreAOR(); set => _AOR = value; }
+    private static CoreAOR AOR
+    {
+        get => _AOR ??= new CoreAOR();
+        set => _AOR = value;
+    }
     private static CoreAOR _AOR;
-    private static FelixsGildedGearMerge FGGM { get => _FGGM ??= new FelixsGildedGearMerge(); set => _FGGM = value; }
+    private static FelixsGildedGearMerge FGGM
+    {
+        get => _FGGM ??= new FelixsGildedGearMerge();
+        set => _FGGM = value;
+    }
     private static FelixsGildedGearMerge _FGGM;
-    private static LoughshineLootMerge LLM { get => _LLM ??= new LoughshineLootMerge(); set => _LLM = value; }
+    private static LoughshineLootMerge LLM
+    {
+        get => _LLM ??= new LoughshineLootMerge();
+        set => _LLM = value;
+    }
     private static LoughshineLootMerge _LLM;
-    private static LiaTaraHillLootMerge LTHLM { get => _LTHLM ??= new LiaTaraHillLootMerge(); set => _LTHLM = value; }
+    private static LiaTaraHillLootMerge LTHLM
+    {
+        get => _LTHLM ??= new LiaTaraHillLootMerge();
+        set => _LTHLM = value;
+    }
     private static LiaTaraHillLootMerge _LTHLM;
-    private static ColdThunderMerge CTM { get => _CTM ??= new ColdThunderMerge(); set => _CTM = value; }
+
+    private static ColdThunderMerge CTM
+    {
+        get => _CTM ??= new ColdThunderMerge();
+        set => _CTM = value;
+    }
     private static ColdThunderMerge _CTM;
+
+    private static QueenIona QI
+    {
+        get => _QI ??= new QueenIona();
+        set => _QI = value;
+    }
+    private static QueenIona _QI;
+
 
     public bool DontPreconfigure = true;
     public List<IOption> Generic = sAdv.MergeOptions;
     public string[] MultiOptions = { "Generic", "Select" };
     public string OptionsStorage = sAdv.OptionsStorage;
+
     // [Can Change] This should only be changed by the author.
     //              If true, it will not stop the script if the default case triggers and the user chose to only get mats
     private bool dontStopMissingIng = false;
 
     public void ScriptMain(IScriptInterface Bot)
     {
-        Core.BankingBlackList.AddRange(new[] { "Lothian's Lightning", "Skye's Lightning", "Dark Thunder Master Locks", "Dark Lightning Gloria", "Skye Nobility Sash", "Priestess Eire's Cletiné", "Skye Warden of the East", "Skye Warden of the West", "Skye Warden of the South", "Queen Iona's Royal Attire" });
+        Core.BankingBlackList.AddRange(
+            new[]
+            {
+                "Lothian's Lightning",
+                "Skye's Lightning",
+                "Dark Thunder Master Locks",
+                "Dark Lightning Gloria",
+                "Skye Nobility Sash",
+                "Priestess Eire's Cletiné",
+                "Skye Warden of the East",
+                "Skye Warden of the West",
+                "Skye Warden of the South",
+                "Queen Iona's Royal Attire",
+            }
+        );
         Core.SetOptions();
 
         BuyAllMerge();
@@ -67,7 +126,9 @@ private static CoreAdvanced _sAdv;
         {
             ItemBase req = Adv.externalItem;
             int quant = Adv.externalQuant;
-            int currentQuant = req.Temp ? Bot.TempInv.GetQuantity(req.Name) : Bot.Inventory.GetQuantity(req.Name);
+            int currentQuant = req.Temp
+                ? Bot.TempInv.GetQuantity(req.Name)
+                : Bot.Inventory.GetQuantity(req.Name);
             if (req == null)
             {
                 Core.Logger("req is NULL");
@@ -78,19 +139,30 @@ private static CoreAdvanced _sAdv;
             {
                 default:
                     bool shouldStop = !Adv.matsOnly || !dontStopMissingIng;
-                    Core.Logger($"The bot hasn't been taught how to get {req.Name}." + (shouldStop ? " Please report the issue." : " Skipping"), messageBox: shouldStop, stopBot: shouldStop);
+                    Core.Logger(
+                        $"The bot hasn't been taught how to get {req.Name}."
+                            + (shouldStop ? " Please report the issue." : " Skipping"),
+                        messageBox: shouldStop,
+                        stopBot: shouldStop
+                    );
                     break;
-                #endregion
+        #endregion
 
                 case "Lothian's Lightning":
                 case "Dark Thunder Master Locks":
                 case "Dark Lightning Gloria":
                 case "Skye Nobility Sash":
                     Core.FarmingLogger(req.Name, quant);
-                    Core.Logger($"{req.Name} requires an ultra boss, you need to farm it manually.");
+                    QI.Fight(req.Name, req.Quantity, true);
                     break;
 
                 case "Skye's Lightning":
+                    Core.FarmingLogger(req.Name, quant);
+                    Core.RegisterQuests(9834);
+                    AOR.ColdThunderBoss(req.Name, quant, false);
+                    Bot.Wait.ForPickup(req.Name);
+                    break;
+
                 case "Priestess Eire's Cletiné":
                     Core.FarmingLogger(req.Name, quant);
                     AOR.ColdThunderBoss(req.Name, quant, false);
@@ -115,20 +187,59 @@ private static CoreAdvanced _sAdv;
                     Core.FarmingLogger(req.Name, quant);
                     CTM.BuyAllMerge(req.Name);
                     break;
-
             }
         }
     }
 
     public List<IOption> Select = new()
     {
-        new Option<bool>("86834", "Dark Thunder Master", "Mode: [select] only\nShould the bot buy \"Dark Thunder Master\" ?", false),
-        new Option<bool>("86837", "Dark Thunder Master Long Locks", "Mode: [select] only\nShould the bot buy \"Dark Thunder Master Long Locks\" ?", false),
-        new Option<bool>("86841", "Dark Lightning Gloria and Scarf", "Mode: [select] only\nShould the bot buy \"Dark Lightning Gloria and Scarf\" ?", false),
-        new Option<bool>("87926", "Crownslayer Bananach", "Mode: [select] only\nShould the bot buy \"Crownslayer Bananach\" ?", false),
-        new Option<bool>("86844", "Galvanic Tyrant", "Mode: [select] only\nShould the bot buy \"Galvanic Tyrant\" ?", false),
-        new Option<bool>("86845", "Galvanic Tyrants", "Mode: [select] only\nShould the bot buy \"Galvanic Tyrants\" ?", false),
-        new Option<bool>("87950", "StormKing's Storm Bolt", "Mode: [select] only\nShould the bot buy \"StormKing's Storm Bolt\" ?", false),
-        new Option<bool>("87713", "Sovereign of Storms", "Mode: [select] only\nShould the bot buy \"Sovereign of Storms\" ?", false),
+        new Option<bool>(
+            "86834",
+            "Dark Thunder Master",
+            "Mode: [select] only\nShould the bot buy \"Dark Thunder Master\" ?",
+            false
+        ),
+        new Option<bool>(
+            "86837",
+            "Dark Thunder Master Long Locks",
+            "Mode: [select] only\nShould the bot buy \"Dark Thunder Master Long Locks\" ?",
+            false
+        ),
+        new Option<bool>(
+            "86841",
+            "Dark Lightning Gloria and Scarf",
+            "Mode: [select] only\nShould the bot buy \"Dark Lightning Gloria and Scarf\" ?",
+            false
+        ),
+        new Option<bool>(
+            "87926",
+            "Crownslayer Bananach",
+            "Mode: [select] only\nShould the bot buy \"Crownslayer Bananach\" ?",
+            false
+        ),
+        new Option<bool>(
+            "86844",
+            "Galvanic Tyrant",
+            "Mode: [select] only\nShould the bot buy \"Galvanic Tyrant\" ?",
+            false
+        ),
+        new Option<bool>(
+            "86845",
+            "Galvanic Tyrants",
+            "Mode: [select] only\nShould the bot buy \"Galvanic Tyrants\" ?",
+            false
+        ),
+        new Option<bool>(
+            "87950",
+            "StormKing's Storm Bolt",
+            "Mode: [select] only\nShould the bot buy \"StormKing's Storm Bolt\" ?",
+            false
+        ),
+        new Option<bool>(
+            "87713",
+            "Sovereign of Storms",
+            "Mode: [select] only\nShould the bot buy \"Sovereign of Storms\" ?",
+            false
+        ),
     };
 }

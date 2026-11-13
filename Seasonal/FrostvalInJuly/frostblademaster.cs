@@ -11,7 +11,11 @@ public class FrostBladeMaster
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface Bot)
@@ -25,16 +29,21 @@ public class FrostBladeMaster
     public void SagaName()
     {
         if (Core.isCompletedBefore(6992) || !Core.isSeasonalMapActive("akibalight"))
-        {            
+        {
             Core.Logger("You've already completed this storyline");
-            
+
             return;
         }
         Story.PreLoad(this);
 
         //Decorations - Paper Lanterns 6982
-        Story.KillQuest(6982, "junkyard", "Tsukumo-Gami");
-
+        if (!Story.QuestProgression(6982))
+        {
+            Core.EnsureAccept(6982);
+            Core.KillMonster("junkyard", "r2", "Left", "Tsukumo-Gami", "Festival Lantern", 11);
+            Core.EnsureComplete(6982);
+        }
+        
         //Decorations - Light Them Up 6983
         Story.KillQuest(6983, "greenshell", "Tsurubebi");
 
@@ -49,7 +58,13 @@ public class FrostBladeMaster
         Story.KillQuest(6986, "yokaigrave", "Skello Kitty");
 
         //Mitsu Bishis Gift 6987
-        Story.KillQuest(6987, "bamboo", new[] {"Tanuki", "Tanuki"});
+        if (!Story.QuestProgression(6987))
+        {
+            Core.EnsureAccept(6987);
+            Core.HuntMonster("bamboo", "Tanuki", "Bamboo Carafe", 1);
+            Core.HuntMonster("bamboo", "Tanuki", "Bamboo Cup", 4);
+            Core.EnsureComplete(6987);
+        }
 
         //Kunoichis Gift 6988
         Story.KillQuest(6988, "pirates", "Fishwing");

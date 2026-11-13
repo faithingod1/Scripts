@@ -15,7 +15,7 @@ public class BlackFridayAlphaHunterRogue
 
     public List<IOption> Options = new()
     {
-        new Option<bool>("toBank", "Bank Items", "Bank Items after you're done?", true)
+        new Option<bool>("toBank", "Bank Items", "Bank Items after you're done?", true),
     };
 
     public void ScriptMain(IScriptInterface bot)
@@ -39,7 +39,12 @@ public class BlackFridayAlphaHunterRogue
         var AllRewards2 = Core.EnsureLoad(6105).Rewards;
         var AllRewards3 = Core.EnsureLoad(6106).Rewards;
         var AllRewards4 = Core.EnsureLoad(6107).Rewards;
-        var AllRewardsArray = AllRewards1.Concat(AllRewards2).Concat(AllRewards3).Concat(AllRewards4).Select(x => x.ID).ToArray();
+        var AllRewardsArray = AllRewards1
+            .Concat(AllRewards2)
+            .Concat(AllRewards3)
+            .Concat(AllRewards4)
+            .Select(x => x.ID)
+            .ToArray();
         if (Core.CheckInventory(AllRewardsArray, toInv: false))
             return;
 
@@ -49,7 +54,8 @@ public class BlackFridayAlphaHunterRogue
         while (!Bot.ShouldExit && !Core.CheckInventory(AllRewardsArray, toInv: false))
         {
             Core.KillMonster("blackfridaywar", "r4", "Left", "*", log: false);
-            if (toBank && Bot.Inventory.FreeSlots == 0)
+            // TEMPORARY Game4000 inventory change. Remove after the client inventory fix.
+            if (toBank && Core.InventoryBagFreeSlots == 0)
                 Core.ToBank(AllRewardsArray);
         }
         Core.ToBank(AllRewardsArray);

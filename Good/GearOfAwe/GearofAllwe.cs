@@ -39,17 +39,47 @@ public class GearofAllwe
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static CoreAwe Awe { get => _Awe ??= new CoreAwe(); set => _Awe = value; }    private static CoreAwe _Awe;
-    private static Awescended Awescended { get => _Awescended ??= new Awescended(); set => _Awescended = value; }    private static Awescended _Awescended;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static CoreAwe Awe
+    {
+        get => _Awe ??= new CoreAwe();
+        set => _Awe = value;
+    }
+    private static CoreAwe _Awe;
+    private static Awescended Awescended
+    {
+        get => _Awescended ??= new Awescended();
+        set => _Awescended = value;
+    }
+    private static Awescended _Awescended;
 
     public string OptionsStorage = "GearofAllwe";
     public bool DontPreconfigure = true;
     public List<IOption> Options = new()
     {
-        new Option<bool>("GetAwescended", "Get Awescended? [Long]", $"its a long grind.. are u sure? ᶠᵘᶜᵏ ᶦᵗ ʷᵉ ᵇᵃˡˡ", false),
+        new Option<bool>(
+            "GetAwescended",
+            "Get Awescended? [Long]",
+            $"its a long grind.. are u sure? ᶠᵘᶜᵏ ᶦᵗ ʷᵉ ᵇᵃˡˡ",
+            false
+        ),
         CoreBots.Instance.SkipOptions,
     };
 
@@ -88,11 +118,8 @@ public class GearofAllwe
                 Core.EquipClass(ClassType.Solo);
 
                 Core.RegisterQuests(4162);
-                while (!Bot.ShouldExit && !Core.CheckInventory("Pauldron Fragment", 15))
-                {
-                    Core.HuntMonster("gravestrike", "Ultra Akriloth", "Pauldron Shard", 15, false);
-                    Bot.Wait.ForPickup("Pauldron Fragment");
-                }
+                Core.HuntMonster("gravestrike", "Ultra Akriloth", "Pauldron Fragment", 15, false);
+                Bot.Wait.ForPickup("Pauldron Fragment");
                 Core.CancelRegisteredQuests();
 
                 Core.BuyItem("museum", 1129, "Pauldron Relic");
@@ -109,16 +136,19 @@ public class GearofAllwe
 
         Core.ToBank("Legendary Awe Pass", "Guardian Awe Pass", "Armor of Awe Pass");
     }
+
     public void GetHoA()
     {
         if (Core.CheckInventory("Helm of Awe"))
             return;
 
+        Core.EquipClass(ClassType.Solo);
         Awe.GetAweRelic("Helm", 4175, 10, 5, "doomvaultb", "Undead Raxgore");
         Core.BuyItem("museum", 1129, "Helm of Awe");
 
         Core.ToBank("Legendary Awe Pass", "Guardian Awe Pass", "Armor of Awe Pass");
     }
+
     public void GetCoA()
     {
         if (Core.CheckInventory("Cape of Awe"))
@@ -129,9 +159,6 @@ public class GearofAllwe
 
         Core.ToBank("Legendary Awe Pass", "Guardian Awe Pass", "Armor of Awe Pass");
     }
+
     public void BoA() => Farm.BladeofAweREP(6, true);
-
-
-
 }
-

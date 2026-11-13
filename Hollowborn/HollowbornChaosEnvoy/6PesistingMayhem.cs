@@ -1,7 +1,7 @@
 /*
 name: Hollowborn Chaos Envoy - Persisting Mayhem
 description: does the 'pesisting mayhem' part of hollowborn chaos envoy
-tags: hollowborn chaos envy, hollowborn, pesisting mayhem
+tags: hollowborn chaos envoy, hollowborn, pesisting mayhem
 */
 //cs_include Scripts/Chaos/ChaosAvengerPreReqs.cs
 //cs_include Scripts/Chaos/DrakathsArmor.cs
@@ -30,22 +30,30 @@ public class HBCE6
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreHollowbornChaosEnvoy HBCE { get => _HBCE ??= new CoreHollowbornChaosEnvoy(); set => _HBCE = value; }
+    private static CoreHollowbornChaosEnvoy HBCE
+    {
+        get => _HBCE ??= new CoreHollowbornChaosEnvoy();
+        set => _HBCE = value;
+    }
     private static CoreHollowbornChaosEnvoy _HBCE;
-private static CoreHollowbornChaosEnvoy sHBCE { get => _sHBCE ??= new CoreHollowbornChaosEnvoy(); set => _sHBCE = value; }
-private static CoreHollowbornChaosEnvoy _sHBCE;
+    private static CoreHollowbornChaosEnvoy sHBCE
+    {
+        get => _sHBCE ??= new CoreHollowbornChaosEnvoy();
+        set => _sHBCE = value;
+    }
+    private static CoreHollowbornChaosEnvoy _sHBCE;
 
-    
     public string OptionsStorage = sHBCE.OptionsStorage;
     public bool DontPreconfigure = true;
     public List<IOption> Options = sHBCE.Options;
-    
 
     public void ScriptMain(IScriptInterface bot)
     {
         Core.SetOptions();
 
-        HBCE.PersistingMayhem(Bot.Config!.Get<CoreHollowbornChaosEnvoy.PersistingMayhemRewards >("Persisting Mayhem"));
+        HBCE.PersistingMayhem(
+            Bot.Config!.Get<CoreHollowbornChaosEnvoy.PersistingMayhemRewards>("Persisting Mayhem")
+        );
 
         Core.SetOptions(false);
     }

@@ -1,7 +1,7 @@
 /*
-name: [Script Name Here]
-description: [Brief description of what this script does]
-tags: [comma-separated tags relevant to this script]
+name: 2026 birthday free acs
+description: money
+tags: acs, free, roblox
 */
 
 //cs_include Scripts/CoreBots.cs
@@ -12,7 +12,11 @@ public class FreeAcs
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
 
     public void ScriptMain(IScriptInterface Bot)
@@ -27,25 +31,24 @@ public class FreeAcs
 
     public void GetYourAcsHere()
     {
-        if (Core.isCompletedBefore(10455))
+        if (Core.isCompletedBefore(10894))
         {
             Core.Logger("Quest Already Complete");
             return;
         }
-
         Core.OneTimeMessage("WARNING", "This Quest is a ONE-TIME quest (per account).", true, true);
 
-        if (!Bot.Flash.CallGameFunction<bool>("world.myAvatar.isEmailVerified") || Bot.Player.Level < 20)
+        if (
+            !Bot.Flash.CallGameFunction<bool>("world.myAvatar.isEmailVerified")
+            || Bot.Player.Level < 20
+        )
         {
             Core.Logger("You need to be level 20 and have a verified email!");
             return;
         }
 
-        if (!Core.isCompletedBefore(10455))
-        {
-            Core.EnsureAccept(10455);
-            Core.HuntMonster("yulgar", "Agitated Orb", "Free ACs...");
-            Core.EnsureComplete(10455);
-        }
+        Core.EnsureAccept(10894);
+        Core.HuntMonster("eventhub", "Agitated Orb", "Free ACs...");
+        Core.EnsureComplete(10894);
     }
 }

@@ -18,13 +18,18 @@ tags: null
 //cs_include Scripts/Evil/NSoD/CoreNSOD.cs
 //cs_include Scripts/Evil/SDKA/CoreSDKA.cs
 //cs_include Scripts/Other/Classes/Necromancer.cs
+//cs_include Scripts/Story/DarkCarnax.cs
 using Skua.Core.Interfaces;
 
 public class ArcaneLocus
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreArchMage AM { get => _AM ??= new CoreArchMage(); set => _AM = value; }
+    private static CoreArchMage AM
+    {
+        get => _AM ??= new CoreArchMage();
+        set => _AM = value;
+    }
     private static CoreArchMage _AM;
 
     public void ScriptMain(IScriptInterface Bot)

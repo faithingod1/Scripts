@@ -11,7 +11,11 @@ public class BloodMoon
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
@@ -62,7 +66,12 @@ public class BloodMoon
         Story.MapItemQuest(6054, "bloodmoon", 5457);
 
         //Beat This 6055
-        Story.KillQuest(6055, "bloodmoon", new[] { "Frankentacles", "Spidderbeast" });
+        if (!Story.QuestProgression(6055))
+        {
+            Core.EnsureAccept(6055);
+            Core.HuntMonster("bloodmoon", "Frankentacles", "Franken-beasts Slain", 8);
+            Core.EnsureComplete(6055);
+        }
 
         //Insane in the Brain? 6056
         Story.MapItemQuest(6056, "bloodmoon", 5458);
@@ -70,7 +79,7 @@ public class BloodMoon
         //No Surprise 6057
         Story.KillQuest(6057, "bloodmoon", "Black Unicorn");
 
-        //Killer Kitty 6058 
+        //Killer Kitty 6058
         Story.KillQuest(6058, "bloodmoon", "Bubble");
     }
 
@@ -116,7 +125,6 @@ public class BloodMoon
             Core.EnsureComplete(6067);
         }
     }
-
 
     private void CutSceneFixer(string map, string cell, string pad)
     {

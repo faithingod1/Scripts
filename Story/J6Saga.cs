@@ -12,8 +12,18 @@ public class J6Saga
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -68,19 +78,11 @@ public class J6Saga
         //A Gate and Terrible Monster
         Story.KillQuest(1171, "moonyard", "Junkyard Wall");
 
-        if (!Core.isCompletedBefore(1172))
-            Core.Sleep(5000);
-
         //I'm on the Hunt, I'm after 58-Sr3
         Story.MapItemQuest(1172, "moonyard", 495);
 
         //Intruder Alert! Intruder Alert!
-        if (!Story.QuestProgression(1173, GetReward: false))
-        {
-            Core.Jump("MoonCut", "Left");
-            Core.Join("moonyardb");
-            Story.KillQuest(1173, "moonyardb", "Robo Guard", GetReward: false);
-        }
+        Story.KillQuest(1173, "moonyardb", "Robo Guard", GetReward: false);
 
         //Mission 3
         Story.KillQuest(1177, "marsh2", "Lesser Shadow Serpent");
@@ -90,7 +92,6 @@ public class J6Saga
 
         //Planet Banzai!
         Story.ChainQuest(2168);
-
 
         //L.O.S.E.R. Battle!
         Story.ChainQuest(2169);
@@ -110,12 +111,8 @@ public class J6Saga
             Core.EnsureAccept(2830);
             Core.KillMonster("xantown", "Enter", "Spawn", "*", "Flare Artifact");
             Core.EnsureComplete(2830);
-            Bot.Combat.CancelTarget();
-            Core.JumpWait();
-            Bot.Wait.ForCombatExit();
-            Core.Logger("Joining Whitemap to amke sure your outa xantown as the mobs\n" +
-            "are aggressive.. and you amy potentialy be stuck there");
-            Core.Join("whitemap");
+            if (Bot.Map.Name == "xantown")
+                Core.Jump("r12", "Left"); // map is aggro af this is a safe cell.
             Core.SellItem("Auxiliary Clue 3");
         }
 
@@ -198,7 +195,13 @@ public class J6Saga
         Story.KillQuest(2849, "alley", "Thug Boss");
 
         //Security Breach
-        Story.KillQuest(2844, "alley", new[] { "Security Cam"," Guard Robot" });
+        if (!Story.QuestProgression(2844))
+        {
+            Core.EnsureAccept(2844);
+            Core.HuntMonster("alley", "Security Cam", "Security Cam Destroyed", 5);
+            Core.HuntMonster("alley", "Guard Robot", "Destroyed Robo Guard", 7);
+            Core.EnsureComplete(2844);
+        }
 
         //No Sniffin' Around
         Story.KillQuest(2845, "alley", "Guard Dog Robot");

@@ -12,8 +12,18 @@ public class LightoviaCave
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static ShadowVoid ShadowVoid { get => _ShadowVoid ??= new ShadowVoid(); set => _ShadowVoid = value; }    private static ShadowVoid _ShadowVoid;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static ShadowVoid ShadowVoid
+    {
+        get => _ShadowVoid ??= new ShadowVoid();
+        set => _ShadowVoid = value;
+    }
+    private static ShadowVoid _ShadowVoid;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -31,13 +41,15 @@ public class LightoviaCave
             if (Bot.Quests.IsUnlocked(7123))
             {
                 Core.Logger(
-                    "Quests are locked Shadowvoid quests should be completed first. Starting Shadowvoid script");
+                    "Quests are locked Shadowvoid quests should be completed first. Starting Shadowvoid script"
+                );
                 ShadowVoid.ShadowVoidQuests();
             }
             else
             {
                 Core.Logger(
-                    "Quests are locked You Should Finish Lords Of Chaos story script first");
+                    "Quests are locked You Should Finish Lords Of Chaos story script first"
+                );
                 return;
             }
         }
@@ -51,8 +63,13 @@ public class LightoviaCave
         Story.KillQuest(7132, "LightoviaCave", "Imbalanced Knight");
 
         //Free the Lycans 7133
-        Story.MapItemQuest(7133, "LightoviaCave", 6767, 6);
-        Story.KillQuest(7133, "LightoviaCave", "Imbalanced Mage");
+        if (!Story.QuestProgression(7133))
+        {
+            Core.EnsureAccept(7133);
+            Core.GetMapItem(6767, 6, "LightoviaCave");
+            Core.HuntMonster("lightoviacave", "Imbalanced Mage", "Enchanted Key", 6);
+            Core.EnsureComplete(7133);
+        }
 
         //Cleanse the Land 7134
         Story.MapItemQuest(7134, "LightoviaCave", 6768, 6);

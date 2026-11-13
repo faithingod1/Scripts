@@ -31,13 +31,29 @@ public class HatefulGoliaths
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static UndeadLegionMerge ULM { get => _ULM ??= new UndeadLegionMerge(); set => _ULM = value; }
+    private static UndeadLegionMerge ULM
+    {
+        get => _ULM ??= new UndeadLegionMerge();
+        set => _ULM = value;
+    }
     private static UndeadLegionMerge _ULM;
-    private static CoreIsleOfFotia IOF { get => _IOF ??= new CoreIsleOfFotia(); set => _IOF = value; }
+    private static CoreIsleOfFotia IOF
+    {
+        get => _IOF ??= new CoreIsleOfFotia();
+        set => _IOF = value;
+    }
     private static CoreIsleOfFotia _IOF;
-    private static HeadoftheLegionBeast HOTLB { get => _HOTLB ??= new HeadoftheLegionBeast(); set => _HOTLB = value; }
+    private static HeadoftheLegionBeast HOTLB
+    {
+        get => _HOTLB ??= new HeadoftheLegionBeast();
+        set => _HOTLB = value;
+    }
     private static HeadoftheLegionBeast _HOTLB;
-    private static FortressDelve FD { get => _FD ??= new FortressDelve(); set => _FD = value; }
+    private static FortressDelve FD
+    {
+        get => _FD ??= new FortressDelve();
+        set => _FD = value;
+    }
     private static FortressDelve _FD;
 
     public void ScriptMain(IScriptInterface bot)
@@ -78,11 +94,14 @@ public class HatefulGoliaths
         Core.HuntMonster("fortressdelve", "Astero", "Glass Wing", log: false);
         Core.EnsureComplete(9170);
 
-        Core.HuntMonsterQuest(10103,
-    ("shadowblast", "Thanatos", ClassType.Solo),
-    ("evilwarnul", "Laken", ClassType.Solo),
-    ("envy", "Envy", ClassType.Solo),
-    ("darkfortress", "Wilhelm", ClassType.Solo),
-    ("darkally", "Underfiend", ClassType.Solo));
+        Core.Unbank(28835, 29883, 59992, 77003, 92258, 92259, 92260, 92261, 92262);
+        Core.EnsureAccept(10103);
+        Core.EquipClass(ClassType.Solo);
+        Core.HuntMonster("shadowblast", "Thanatos", "Thanatos' Soul", 1, false);
+        Core.HuntMonster("evilwarnul", "Laken", "Laken's Soul", 1, false);
+        Core.HuntMonster("envy", "Envy", "Envy's Soul", 1, false);
+        Core.HuntMonster("darkfortress", "Wilhelm", "Wilhelm's Soul", 1, false);
+        Core.HuntMonster("darkally", "Underfiend", "Underfiend's Soul", 1, false);
+        Core.EnsureComplete(10103);
     }
 }

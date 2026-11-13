@@ -11,7 +11,12 @@ public class MustyCave
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -40,8 +45,13 @@ public class MustyCave
         //Find Twilly (7038)
         Story.MapItemQuest(7038, "mustycave", 6588);
         //Free Twilly! (7039)
-        Story.MapItemQuest(7039, "mustycave", 6589);
-        Story.KillQuest(7039, "mustycave", "Guard Drone");
+        if (!Story.QuestProgression(7039))
+        {
+            Core.EnsureAccept(7039);
+            Core.GetMapItem(6589, 1, "mustycave");
+            Core.HuntMonster("mustycave", "Guard Drone", "Twilly's Cage Code", 1);
+            Core.EnsureComplete(7039);
+        }
         //Free the Moglins (7040)
         Story.MapItemQuest(7040, "mustycave", 6590, 6);
         //Essence-ial (7041)

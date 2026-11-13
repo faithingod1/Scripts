@@ -16,7 +16,12 @@ public class UltimateBLoD
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreBLOD BLOD { get => _BLOD ??= new CoreBLOD(); set => _BLOD = value; }    private static CoreBLOD _BLOD;
+    private static CoreBLOD BLOD
+    {
+        get => _BLOD ??= new CoreBLOD();
+        set => _BLOD = value;
+    }
+    private static CoreBLOD _BLOD;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -32,13 +37,14 @@ public class UltimateBLoD
         if (Core.CheckInventory("Ultimate Blinding Light of Destiny"))
             return;
 
-        BLOD.BlindingLightOfDestiny();
+        BLOD.BlindingLightOfDestiny(BLODMethod.Fewest_Hours);
+
 
         OverwhelmedAxe();
         ShardOfAnOrb();
         PurifiedUndeadDragonEssence();
 
-        Core.BuyItem("techfortress", 1902, "Ultimate Blinding Light of Destiny", shopItemID: 7585);
+        Core.BuyItem("techfortress", 1902, "Ultimate Blinding Light of Destiny", shopItemID: 6296);
     }
 
     public void OverwhelmedAxe()
@@ -71,7 +77,7 @@ public class UltimateBLoD
         {
             //More then one item of the same name as drop btoh temp and non-temp.
             while (!Bot.ShouldExit && !Core.CheckInventory(55903, 10))
-                Core.KillMonster("dflesson","r12", "Right", "Fluffy the Dracolich", log: false);
+                Core.KillMonster("dflesson", "r12", "Right", "Fluffy the Dracolich", log: false);
             Core.KillMonster("dflesson", "r3", "Right", "Fire Elemental", "Fire Elemental's Bracer", 5, isTemp: false);
             Core.KillMonster("dflesson", "r6", "Right", "Tog", "Tog Claw", 5, isTemp: false);
 
@@ -85,7 +91,8 @@ public class UltimateBLoD
         if (Core.CheckInventory("Purified Undead Dragon Essence", quant))
             return;
 
-        BLOD.BlindingLightOfDestiny();
+        BLOD.BlindingLightOfDestiny(BLODMethod.Fewest_Hours);
+
         OverwhelmedAxe();
 
         Core.AddDrop("Purified Undead Dragon Essence");

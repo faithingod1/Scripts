@@ -14,11 +14,18 @@ public class PoisonForest
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
-    private static Manor Manor { get => _Manor ??= new Manor(); set => _Manor = value; }
+    private static Manor Manor
+    {
+        get => _Manor ??= new Manor();
+        set => _Manor = value;
+    }
     private static Manor _Manor;
-
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -39,28 +46,44 @@ public class PoisonForest
         Story.PreLoad(this);
 
         //Poison Creation 1948
-        Story.MapItemQuest(1948, "PoisonForest", 964, 3);
-        Story.MapItemQuest(1948, "PoisonForest", 965, 3);
-        Story.KillQuest(1948, "PoisonForest", new[] { "Traitor Knight", "Marsh Lurker" });
+        if (!Story.QuestProgression(1948))
+        {
+            Core.EnsureAccept(1948);
+            Core.GetMapItem(964, 3, "PoisonForest");
+            Core.GetMapItem(965, 3, "PoisonForest");
+            Core.HuntMonster("poisonforest", "Marsh Lurker", "Toxic Gallstones", 3);
+            Core.HuntMonster("poisonforest", "Traitor Knight", "Traitor's Sweat", 8);
+            Core.EnsureComplete(1948);
+        }
 
         //Vegetal Decay 1949
-        if (!Story.QuestProgression(1949) || (!Core.CheckInventory("Combustible Krialo Moss") && !Core.isCompletedBefore(1954)))
+        if (
+            !Story.QuestProgression(1949)
+            || (!Core.CheckInventory("Combustible Krialo Moss") && !Core.isCompletedBefore(1954))
+        )
         {
             Core.EnsureAccept(1949);
             Quest? Q = Core.InitializeWithRetries(() => Core.EnsureLoad(1949));
             if (Q?.Requirements?.FirstOrDefault(x => x != null && x.ID == 11803)?.Quantity != 9)
             {
-                Core.Logger("This Quest is literaly impossible until AE fixes the quest ( when fixed will autoprogress and this message wont appear anymopre)", "PosionForest - AE Broke it");
+                Core.Logger(
+                    "This Quest is literaly impossible until AE fixes the quest ( when fixed will autoprogress and this message wont appear anymopre)",
+                    "PosionForest - AE Broke it"
+                );
                 return;
             }
-            else Core.GetMapItem(963, 9, "PoisonForest");
+            else
+                Core.GetMapItem(963, 9, "PoisonForest");
             Core.GetMapItem(971, 1, "PoisonForest");
             Core.HuntMonster("PoisonForest", "Marsh Lurker", "Toxic Gallstones");
             Core.EnsureComplete(1949);
         }
 
         //Recycle, Rebuild, Rescue 1950
-        if (!Story.QuestProgression(1950) || (!Core.CheckInventory("Sour Sap") && !Core.isCompletedBefore(1954)))
+        if (
+            !Story.QuestProgression(1950)
+            || (!Core.CheckInventory("Sour Sap") && !Core.isCompletedBefore(1954))
+        )
         {
             Core.EnsureAccept(1950);
             Core.GetMapItem(966, 1, "PoisonForest");
@@ -70,7 +93,10 @@ public class PoisonForest
         }
 
         //Corrosive Philtre 1951
-        if (!Story.QuestProgression(1951) || (!Core.CheckInventory("Burning Ember") && !Core.isCompletedBefore(1954)))
+        if (
+            !Story.QuestProgression(1951)
+            || (!Core.CheckInventory("Burning Ember") && !Core.isCompletedBefore(1954))
+        )
         {
             Core.EnsureAccept(1951);
             Core.GetMapItem(967, 5, "PoisonForest");
@@ -82,7 +108,10 @@ public class PoisonForest
         Story.KillQuest(1952, "PoisonForest", "Burning Loyalist");
 
         //Storm the Fort 1953
-        if (!Story.QuestProgression(1953) || (!Core.CheckInventory("Flakes of Rust") && !Core.isCompletedBefore(1954)))
+        if (
+            !Story.QuestProgression(1953)
+            || (!Core.CheckInventory("Flakes of Rust") && !Core.isCompletedBefore(1954))
+        )
         {
             Core.EnsureAccept(1953);
             Core.GetMapItem(968, 1, "PoisonForest");
@@ -91,12 +120,21 @@ public class PoisonForest
         }
 
         //Termination Tonic 1954
-        Story.MapItemQuest(1954, "PoisonForest", 970);
-        Story.KillQuest(1954, "PoisonForest", "Traitor Knight");
+        if (!Story.QuestProgression(1954))
+        {
+            Core.EnsureAccept(1954);
+            Core.GetMapItem(970, 1, "PoisonForest");
+            Core.HuntMonster("poisonforest", "Traitor Knight", "Enraged Blood", 11);
+            Core.EnsureComplete(1954);
+        }
 
         //Burn ALL the Things! 1955
-        Story.MapItemQuest(1955, "PoisonForest", 969, 11);
-        Story.KillQuest(1955, "PoisonForest", "Xavier Lionfang");
-
+        if (!Story.QuestProgression(1955))
+        {
+            Core.EnsureAccept(1955);
+            Core.GetMapItem(969, 11, "PoisonForest");
+            Core.HuntMonster("poisonforest", "Xavier Lionfang", "Xavier Lionfang Slain", 1);
+            Core.EnsureComplete(1955);
+        }
     }
 }

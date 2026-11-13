@@ -12,9 +12,17 @@ public class DwarvesVsGiants
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
@@ -28,7 +36,7 @@ public class DwarvesVsGiants
 
     public void StoryLine()
     {
-        if (Core.isCompletedBefore(2784))
+        if (Core.isCompletedBefore(Core.IsMember ? 2785 : 2783))
             return;
 
         Story.PreLoad(this);
@@ -48,7 +56,13 @@ public class DwarvesVsGiants
         Story.KillQuest(2781, "dvg", "Krashh");
 
         // Win The Exhibition Match 2782
-        Story.KillQuest(2782, "dvg", new[] { "Blixx", "Meatball" });
+        if (!Story.QuestProgression(2782))
+        {
+            Core.EnsureAccept(2782);
+            Core.HuntMonster("dvg", "Blixx", "Blixx Defeated", 1);
+            Core.HuntMonster("dvg", "Meatball", "Meatball Defeated", 1);
+            Core.EnsureComplete(2782);
+        }
 
         // Mow Down Munthor 2783
         Story.KillQuest(2783, "dvg", "Munthor");
@@ -58,8 +72,8 @@ public class DwarvesVsGiants
             // Challenge Meatball 2784
             Story.KillQuest(2784, "dvgchallenge", "Meatball");
 
-            // Challenge Blixx 2784
-            Story.KillQuest(2784, "dvgchallenge", "Blixx");
+            // Challenge Blixx 2785
+            Story.KillQuest(2785, "dvgchallenge", "Blixx");
         }
     }
 }

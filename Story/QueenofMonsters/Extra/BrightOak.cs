@@ -14,10 +14,30 @@ public class BrightOak
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static CoreDailies Daily { get => _Daily ??= new CoreDailies(); set => _Daily = value; }    private static CoreDailies _Daily;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static CoreDailies Daily
+    {
+        get => _Daily ??= new CoreDailies();
+        set => _Daily = value;
+    }
+    private static CoreDailies _Daily;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -37,6 +57,10 @@ public class BrightOak
 
         Ælfred();
         AvenGreywhorl(repFarm);
+        // Early exit if we're doing the rep farm
+        if (repFarm)
+            return;
+
         FlixSpiderwhisp();
         LapisPart1();
         RavinosBrightgladePart1();
@@ -57,7 +81,7 @@ public class BrightOak
         Core.Sleep();
         Core.SendPackets($"%xt%zm%equipItem%{Bot.Map.RoomID}%32057%");
 
-        // Take to the Skies 
+        // Take to the Skies
         Story.MapItemQuest(4637, "Rivensylth", 3944);
 
         // Ready to Pounce
@@ -70,8 +94,13 @@ public class BrightOak
         Story.KillQuest(4640, "Rivensylth", "Mushroom");
 
         // Protect the Nest
-        Story.MapItemQuest(4641, "Rivensylth", 3948, 4);
-        Story.KillQuest(4641, "Pines", "Pine Grizzly");
+        if (!Story.QuestProgression(4641))
+        {
+            Core.EnsureAccept(4641);
+            Core.GetMapItem(3948, 4, "Rivensylth");
+            Core.HuntMonster("pines", "Pine Grizzly", "Straw", 3);
+            Core.EnsureComplete(4641);
+        }
 
         // Night in Shining Armor
         Story.KillQuest(4642, "Rivensylth", "Cave Creeper");
@@ -95,8 +124,13 @@ public class BrightOak
 
         // Map: Elfhame
         // Corruption of Elfhame
-        Story.MapItemQuest(4659, "elfhame", 3983);
-        Story.KillQuest(4659, "elfhame", "Ruin Stalker");
+        if (!Story.QuestProgression(4659))
+        {
+            Core.EnsureAccept(4659);
+            Core.GetMapItem(3983, 1, "elfhame");
+            Core.HuntMonster("elfhame", "Ruin Stalker", "Ruin Stalker Defeated", 6);
+            Core.EnsureComplete(4659);
+        }
 
         // Restoring Nature
         if (!Story.QuestProgression(4660))
@@ -173,6 +207,9 @@ public class BrightOak
         // Unlocking the Guardian's Mouth
         Story.MapItemQuest(4667, "elfhame", 3984);
 
+        if (repFarm)
+            return;
+
         // Defeat the Guardian Spirit
         Story.KillQuest(4668, "elfhame", "Guardian Spirit");
     }
@@ -186,8 +223,13 @@ public class BrightOak
         Story.KillQuest(4469, "Brightoak", "Hootbear");
 
         // Guardians Gone Bad
-        Story.MapItemQuest(4470, "Brightoak", 3667, 5);
-        Story.KillQuest(4470, "Brightoak", "Brightpool Guardian");
+        if (!Story.QuestProgression(4470))
+        {
+            Core.EnsureAccept(4470);
+            Core.GetMapItem(3667, 5, "Brightoak");
+            Core.HuntMonster("brightoak", "Brightpool Guardian", "Brightpool Subdued", 9);
+            Core.EnsureComplete(4470);
+        }
     }
 
     public void LapisPart1()
@@ -196,10 +238,15 @@ public class BrightOak
             return;
 
         // That's So Lapis
-        Story.MapItemQuest(4467, "Brightoak", 3666, 10);
-        Story.KillQuest(4467, "Brightoak", "Grove Spore");
+        if (!Story.QuestProgression(4467))
+        {
+            Core.EnsureAccept(4467);
+            Core.GetMapItem(3666, 10, "Brightoak");
+            Core.HuntMonster("brightoak", "Grove Spore", "Herbal Spore", 10);
+            Core.EnsureComplete(4467);
+        }
 
-        // Guts for a Greater Mind     
+        // Guts for a Greater Mind
         Story.KillQuest(4468, "Brightoak", "Twisted Goblin");
     }
 
@@ -221,23 +268,38 @@ public class BrightOak
         // Survey the Landscape
         Story.MapItemQuest(4692, "Darkheart", 4052);
 
-        // Corruption in the Grove 
+        // Corruption in the Grove
         Story.KillQuest(4693, "Darkheart", "Mutated Leech");
 
         // Perilous Supply Run
         Story.KillQuest(4694, "Darkheart", "Mutated Leech");
 
         // Purify Wisterrora
-        Story.MapItemQuest(4695, "Darkheart", 4053, 6);
-        Story.KillQuest(4695, "Darkheart", "Wisterrora");
+        if (!Story.QuestProgression(4695))
+        {
+            Core.EnsureAccept(4695);
+            Core.GetMapItem(4053, 6, "Darkheart");
+            Core.HuntMonster("darkheart", "Wisterrora", "Wisterrora Defeated", 5);
+            Core.EnsureComplete(4695);
+        }
 
         // Arachnophobia
-        Story.MapItemQuest(4696, "Darkheart", 4054, 6);
-        Story.KillQuest(4696, "Darkheart", "Toxic Grove Spider");
+        if (!Story.QuestProgression(4696))
+        {
+            Core.EnsureAccept(4696);
+            Core.GetMapItem(4054, 6, "Darkheart");
+            Core.HuntMonster("darkheart", "Toxic Grove Spider", "Toxic Grove Spider Defeated", 7);
+            Core.EnsureComplete(4696);
+        }
 
         // Brighten up your Day
-        Story.MapItemQuest(4697, "Darkheart", 4055, 7);
-        Story.KillQuest(4697, "Brightoak", "Brightpool Guardian");
+        if (!Story.QuestProgression(4697))
+        {
+            Core.EnsureAccept(4697);
+            Core.GetMapItem(4055, 7, "Darkheart");
+            Core.HuntMonster("brightoak", "Brightpool Guardian", "Brightpool Core Retrieved", 7);
+            Core.EnsureComplete(4697);
+        }
 
         // Cleanse the Grove
         if (!Story.QuestProgression(4698))
@@ -262,7 +324,13 @@ public class BrightOak
         if (Core.isCompletedBefore(4804))
             return;
 
-        Core.AddDrop("Ravinos Token I", "Ravinos Token II", "Ravinos Token III", "Ravinos Token IV", "Ravinos Token V");
+        Core.AddDrop(
+            "Ravinos Token I",
+            "Ravinos Token II",
+            "Ravinos Token III",
+            "Ravinos Token IV",
+            "Ravinos Token V"
+        );
         Core.EquipClass(ClassType.Farm);
 
         // It's Too Bad I'm Poisonous Now
@@ -386,7 +454,7 @@ public class BrightOak
             Core.EnsureComplete(4471);
         }
 
-        // Some Disassembly Required   
+        // Some Disassembly Required
         if (Daily.CheckDailyv2(4472))
         {
             Core.EnsureAccept(4472);

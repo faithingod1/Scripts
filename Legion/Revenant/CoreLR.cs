@@ -17,12 +17,42 @@ public class CoreLR
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static CoreLegion Legion { get => _Legion ??= new CoreLegion(); set => _Legion = value; }    private static CoreLegion _Legion;
-    private static InfiniteLegionDC ILDC { get => _ILDC ??= new InfiniteLegionDC(); set => _ILDC = value; }    private static InfiniteLegionDC _ILDC;
-    private static SeraphicWar_Story Seraph { get => _Seraph ??= new SeraphicWar_Story(); set => _Seraph = value; }    private static SeraphicWar_Story _Seraph;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static CoreLegion Legion
+    {
+        get => _Legion ??= new CoreLegion();
+        set => _Legion = value;
+    }
+    private static CoreLegion _Legion;
+    private static InfiniteLegionDC ILDC
+    {
+        get => _ILDC ??= new InfiniteLegionDC();
+        set => _ILDC = value;
+    }
+    private static InfiniteLegionDC _ILDC;
+    private static SeraphicWar_Story Seraph
+    {
+        get => _Seraph ??= new SeraphicWar_Story();
+        set => _Seraph = value;
+    }
+    private static SeraphicWar_Story _Seraph;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -34,14 +64,14 @@ public class CoreLR
         "Exalted Crown",
         "Revenant's Spellscroll",
         "Conquest Wreath",
-        "Legion Revenant"
+        "Legion Revenant",
     };
     public string[] LF1 =
     {
         "Aeacus Empowered",
         "Tethered Soul",
         "Darkened Essence",
-        "Dracolich Contract"
+        "Dracolich Contract",
     };
     public string[] LF2 =
     {
@@ -63,14 +93,18 @@ public class CoreLR
         "Dage's Favor",
         "Emblem of Dage",
         "Diamond Token of Dage",
-        "Dark Token"
+        "Dark Token",
     };
 
     public void GetLR(bool rankUpClass)
     {
         // Tests for IODA LR since it does not provide the badge and currently has the same ID as normal LR
         if (Core.CheckInventory("Legion Revenant") && Core.Badges.Contains("Legion Revenant"))
+        {
+            if (rankUpClass)
+                Adv.RankUpClass("Legion Revenant");
             return;
+        }
 
         Legion.JoinLegion();
 
@@ -102,7 +136,8 @@ public class CoreLR
     //Legion Fealty 1
     public void RevenantSpellscroll(int quant = 20, bool forquest = false)
     {
-        if (forquest && Core.isCompletedBefore(6897) || !forquest && Core.CheckInventory("Revenant's Spellscroll", quant))
+        if (forquest && Core.isCompletedBefore(6897)
+            || !forquest && Core.CheckInventory("Revenant's Spellscroll", quant))
             return;
 
         Legion.JoinLegion();
@@ -116,19 +151,22 @@ public class CoreLR
         int i = 1;
         Core.FarmingLogger("Revenant's Spellscroll", quant);
         Bot.Quests.UpdateQuest(2060);
-        while (!Bot.ShouldExit && ((forquest && !Core.isCompletedBefore(6897)) || !forquest && !Core.CheckInventory("Revenant's Spellscroll", quant)))
+        while (
+            !Bot.ShouldExit
+            && (
+                (forquest && !Core.isCompletedBefore(6897))
+                || !forquest && !Core.CheckInventory("Revenant's Spellscroll", quant)
+            )
+        )
         {
             Core.EnsureAccept(6897);
 
             Core.EquipClass(ClassType.Solo);
-            //Adv.BestGear(RacialGearBoost.Undead);
             Core.KillMonster("judgement", "r10a", "Left", "Ultra Aeacus", "Aeacus Empowered", 50, false, publicRoom: Core.PublicDifficult);
 
             Core.EquipClass(ClassType.Farm);
-            //Adv.BestGear(GenericGearBoost.dmgAll);
             Core.KillMonster("revenant", "r2", "Left", "*", "Tethered Soul", 300, false);
             Core.KillMonster("shadowrealmpast", "Enter", "Spawn", "*", "Darkened Essence", 500, false);
-            //Adv.BestGear(RacialGearBoost.Undead);
             Core.KillMonster("necrodungeon", "r22", "Down", "*", "Dracolich Contract", 1000, false);
 
             Core.EnsureComplete(6897);
@@ -143,11 +181,15 @@ public class CoreLR
     //Legion Fealty 2
     public void ConquestWreath(int quant = 6, bool forquest = false)
     {
+        if (
+            (forquest && Core.isCompletedBefore(6898))
+            || !forquest && Core.CheckInventory("Conquest Wreath", quant)
+        )
+            return;
+
         if (!Core.isCompletedBefore(6898))
             RevenantSpellscroll(1, true);
 
-        if ((forquest && Core.isCompletedBefore(6898)) || !forquest && Core.CheckInventory("Conquest Wreath", quant))
-            return;
 
         Legion.JoinLegion();
 
@@ -159,23 +201,26 @@ public class CoreLR
         Core.EquipClass(ClassType.Farm);
         Core.FarmingLogger("Conquest Wreath", quant);
         Bot.Quests.UpdateQuest(4614);
-        while (!Bot.ShouldExit && ((forquest && !Core.isCompletedBefore(6898)) || !Core.CheckInventory("Conquest Wreath", quant)))
+        while (
+            !Bot.ShouldExit
+            && (
+                (forquest && !Core.isCompletedBefore(6898))
+                || !Core.CheckInventory("Conquest Wreath", quant)
+            )
+        )
         {
             Core.EnsureAccept(6898);
-            //Adv.BestGear(RacialGearBoost.Undead);
             Core.KillMonster("mummies", "Enter", "Spawn", "*", "Ancient Cohort Conquered", 400, false);
             Core.KillMonster("doomvault", "r1", "Right", "*", "Grim Cohort Conquered", 400, false);
-            //Adv.BestGear(RacialGearBoost.Human);
+
             Core.KillMonster("wrath", "r5", "Left", "*", "Pirate Cohort Conquered", 400, false);
-            //Adv.BestGear(RacialGearBoost.Undead);
             Core.KillMonster("doomwar", "r6", "Left", "*", "Battleon Cohort Conquered", 400, false);
             Core.KillMonster("overworld", "Enter", "Spawn", "*", "Mirror Cohort Conquered", 400, false);
             Core.KillMonster("deathpits", "r1", "Left", "*", "Darkblood Cohort Conquered", 400, false);
             Core.KillMonster("maxius", "r2", "Left", "*", "Vampire Cohort Conquered", 400, false);
             Core.KillMonster("curseshore", "Enter", "Spawn", "*", "Spirit Cohort Conquered", 400, false);
-            //Adv.BestGear(RacialGearBoost.Dragonkin);
+
             Core.KillMonster("dragonbone", "Enter", "Spawn", "*", "Dragon Cohort Conquered", 400, false);
-            //Adv.BestGear(RacialGearBoost.Undead);
             Core.KillMonster("doomwood", "r6", "Right", "*", "Doomwood Cohort Conquered", 400, false);
 
             Core.EnsureComplete(6898);
@@ -190,11 +235,14 @@ public class CoreLR
     //Legion Fealty 3
     public void ExaltedCrown(int quant = 10, bool forquest = false)
     {
+        if (
+            (forquest && Core.isCompletedBefore(6899))
+            || !forquest && Core.CheckInventory("Exalted Crown", quant)
+        )
+            return;
+
         if (!Core.isCompletedBefore(6899))
             ConquestWreath(1, true);
-
-        if ((forquest && Core.isCompletedBefore(6899)) || !forquest && Core.CheckInventory("Exalted Crown", quant))
-            return;
 
         Legion.JoinLegion();
         Seraph.SeraphicWar_Questline();
@@ -205,7 +253,11 @@ public class CoreLR
 
         int i = 1;
         Core.FarmingLogger("Exalted Crown", quant);
-        while (!Bot.ShouldExit && ((forquest && !Core.isCompletedBefore(6899)) || !Core.CheckInventory("Exalted Crown", quant)))
+        while (!Bot.ShouldExit && (
+                (forquest && !Core.isCompletedBefore(6899))
+                || !Core.CheckInventory("Exalted Crown", quant)
+            )
+        )
         {
             Core.EnsureAccept(6899);
 

@@ -13,18 +13,40 @@ public class ShadowBlastArena
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreNation Nation { get => _Nation ??= new CoreNation(); set => _Nation = value; }    private static CoreNation _Nation;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreNation Nation
+    {
+        get => _Nation ??= new CoreNation();
+        set => _Nation = value;
+    }
+    private static CoreNation _Nation;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface Bot)
     {
-        Core.BankingBlackList.AddRange(new[] {  "Shadowscythe Round 1 Medal", "Shadowscythe Round 2 Medal",
-                                               "Shadowscythe Round 3 Medal", "Shadowscythe Round 4 Medal",
-                                                "Emblem of Gravelyn", "Diamond Token of Gravelyn" });
+        Core.BankingBlackList.AddRange(
+            new[]
+            {
+                "Shadowscythe Round 1 Medal",
+                "Shadowscythe Round 2 Medal",
+                "Shadowscythe Round 3 Medal",
+                "Shadowscythe Round 4 Medal",
+                "Emblem of Gravelyn",
+                "Diamond Token of Gravelyn",
+            }
+        );
         Core.SetOptions();
         Doall();
-
 
         Core.SetOptions(false);
     }
@@ -32,7 +54,6 @@ public class ShadowBlastArena
     public void Doall()
     {
         StoryLineP1();
-
     }
 
     public void StoryLineP1()
@@ -43,7 +64,6 @@ public class ShadowBlastArena
         Story.LegacyQuestManager(QuestLogic, Core.FromTo(4733, 4736));
         void QuestLogic()
         {
-
             switch (Story.LegacyQuestID)
             {
                 case 4733: // The Shadowscythe Needs YOU! 4733
@@ -107,11 +127,7 @@ public class ShadowBlastArena
             Core.EquipClass(ClassType.Solo);
             Core.KillMonster("aqlesson", "Frame9", "Right", "Carnax", "Carnax Eye");
             Core.HuntMonster("deepchaos", "Kathool", "Kathool Tentacle");
-
-            //More then one item of the same name as drop btoh temp and non-temp.
-            while (!Bot.ShouldExit && !Core.CheckInventory(33257))
-                Core.KillMonster("dflesson", "r12", "Right", "Fluffy the Dracolich", log: false);
-
+            Core.KillMonster("dflesson", "r12", "Right", 29, 33257, isTemp: true, publicRoom: true);
             Core.HuntMonster("lair", "Red Dragon", "Red Dragon's Fang");
             Core.HuntMonster("bloodtitan", "Blood Titan", "Blood Titan's Blade");
             Bot.Wait.ForPickup("Diamond Token of Dage");

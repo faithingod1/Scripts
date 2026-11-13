@@ -1,7 +1,7 @@
 /*
 name: King's Echo Class
 description: King's Echo Class
-tags: King's, King, Echo, class, kingsecho
+tags: King's, King, Echo, class, kingsecho, kings echo, kingkong, ke, k, kings, booty
 */
 //cs_include Scripts/CoreBots.cs
 //cs_include Scripts/CoreStory.cs
@@ -15,6 +15,7 @@ tags: King's, King, Echo, class, kingsecho
 //cs_include Scripts/Other/MergeShops/BocklinGroveMerge.cs
 //cs_include Scripts/Other/MergeShops/BocklinArmoryMerge.cs
 //cs_include Scripts/Story/SepulchureSaga/CoreSepulchure.cs
+//cs_include Scripts/Story/LordsofChaos/Core13LoC.cs
 
 using Skua.Core.Interfaces;
 using Skua.Core.Models.Items;
@@ -24,18 +25,48 @@ public class KingsEcho
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
-    private static CoreDailies Daily { get => _Daily ??= new CoreDailies(); set => _Daily = value; }
+    private static CoreDailies Daily
+    {
+        get => _Daily ??= new CoreDailies();
+        set => _Daily = value;
+    }
     private static CoreDailies _Daily;
-    private static CoreAOR AOR { get => _AOR ??= new CoreAOR(); set => _AOR = value; }
+    private static CoreAOR AOR
+    {
+        get => _AOR ??= new CoreAOR();
+        set => _AOR = value;
+    }
     private static CoreAOR _AOR;
-    private static BocklinTreasuryMerge BTM { get => _BTM ??= new BocklinTreasuryMerge(); set => _BTM = value; }
+    private static BocklinTreasuryMerge BTM
+    {
+        get => _BTM ??= new BocklinTreasuryMerge();
+        set => _BTM = value;
+    }
     private static BocklinTreasuryMerge _BTM;
+    private static Core13LoC LOC
+    {
+        get => _LOC ??= new Core13LoC();
+        set => _LOC = value;
+    }
+    private static Core13LoC _LOC;
 
     public void ScriptMain(IScriptInterface Bot)
     {
@@ -57,7 +88,7 @@ public class KingsEcho
 
         // Level 80
         Farm.Experience(80);
-
+        LOC.Complete13LOC(true);
 
         // Rank 10 in the Good and Swordhaven factions
         Farm.GoodREP();
@@ -91,14 +122,21 @@ public class KingsEcho
 
                         Core.EnsureAccept(10440);
                         Core.EquipClass(ClassType.Solo);
-                        Core.HuntMonster("queenbattle", "Queen of Monsters", "Calcified Tear", 60, isTemp: false);
+                        Core.HuntMonster("transformation", "Queen of Monsters", "Calcified Tear", 60, isTemp: false);
                         Core.HuntMonster("dreadhaven", "Slugwrath", "Whispers of Chaos", 40, isTemp: false);
                         Core.HuntMonster("ultradrakath", "Champion of Chaos", "Trace of Chaos", 13, isTemp: false);
                         Core.EnsureComplete(10440);
                         break;
 
                     case "Royal Dragon Sword": // 10442 | The Path of the King
+                        Core.AddDrop("Endured Against Chaos", "Endured Against a Fallen Friend", "Endured Against the Great Dragon", "Endured Against the Defiler", "Endured Against the Monster King");
+                        Core.Join("portal");
                         Core.EnsureAccept(10442);
+                        if (!Bot.Quests.IsInProgress(10442))
+                        {
+                            Core.Logger("The Path of the King [10442] could not be accepted.", messageBox: true, stopBot: true);
+                            return;
+                        }
                         Core.EquipClass(ClassType.Farm);
                         Core.KillMonster("chaoswar", "r9", "Left", "*", "Endured Against Chaos", 113, isTemp: false);
                         Core.EquipClass(ClassType.Solo);
@@ -141,9 +179,5 @@ public class KingsEcho
             if (rankup)
                 Adv.RankUpClass("King's Echo");
         }
-
     }
 }
-
-
-

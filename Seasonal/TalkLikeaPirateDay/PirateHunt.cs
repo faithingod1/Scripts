@@ -11,7 +11,11 @@ public class PirateHuntStory
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface Bot)
@@ -19,7 +23,7 @@ public class PirateHuntStory
         Core.SetOptions();
 
         PirateHuntSaga();
-        
+
         Core.SetOptions(false);
     }
 
@@ -31,7 +35,13 @@ public class PirateHuntStory
         Story.PreLoad(this);
 
         // Ensure bot keeps required flags for final quest
-        Core.AddDrop("Belladonna's Flag", "Bourgeois' Flag", "Pirated Tech's Flag", "Merry Celeste's Flag", "Mercurius' Flag");
+        Core.AddDrop(
+            "Belladonna's Flag",
+            "Bourgeois' Flag",
+            "Pirated Tech's Flag",
+            "Merry Celeste's Flag",
+            "Mercurius' Flag"
+        );
 
         // 10389 - My Unfair Lady
         Core.EquipClass(ClassType.Farm);
@@ -71,7 +81,13 @@ public class PirateHuntStory
 
         // 10398 - Mercurious
         Core.EquipClass(ClassType.Solo);
-        Story.KillQuest(10398, "piratehunt", new[] { "Dragonsworn Larunda", "Captain Mercurius" });
+        if (!Story.QuestProgression(10398))
+        {
+            Core.EnsureAccept(10398);
+            Core.HuntMonster("piratehunt", "Captain Mercurius", "Mercurius' Funny Hat", 1);
+            Core.HuntMonster("piratehunt", "Dragonsworn Larunda", "Larunda's Counterfeit Amulet", 1);
+            Core.EnsureComplete(10398);
+        }
 
         // 10399 - Scurvy Most Wanted
         Story.ChainQuest(10399);

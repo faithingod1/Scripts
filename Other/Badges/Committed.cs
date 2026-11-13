@@ -12,7 +12,12 @@ public class Committed
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static Asylum Asylum { get => _Asylum ??= new Asylum(); set => _Asylum = value; }    private static Asylum _Asylum;
+    private static Asylum Asylum
+    {
+        get => _Asylum ??= new Asylum();
+        set => _Asylum = value;
+    }
+    private static Asylum _Asylum;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -35,5 +40,5 @@ public class Committed
         Asylum.StoryLine();
     }
 
-    private string badge = "Committed";
+    private readonly string badge = "Committed";
 }

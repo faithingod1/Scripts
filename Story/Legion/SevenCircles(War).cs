@@ -11,7 +11,12 @@ public class SevenCircles
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -41,13 +46,13 @@ public class SevenCircles
         if (!Story.QuestProgression(7970))
         {
             Core.EnsureAccept(7970);
+            Core.KillMonster("sevencircles", "r2", "Left", "Limbo Guard", "Aura of Happiness", 4);
             Core.KillMonster("sevencircles", "r2", "Left", "Limbo Guard", "Aura of Power");
-            Core.KillMonster("sevencircles", "r2", "Left", "Limbo Guard", "Aura of Happiness");
             Core.KillMonster("sevencircles", "r3", "Left", "Luxuria Guard", "Aura of Pleasure");
             Core.EnsureComplete(7970);
         }
 
-        //Lest Ye Be Destroyed    
+        //Lest Ye Be Destroyed
         Story.KillQuest(7971, "sevencircles", "Luxuria");
 
         //Canto VI
@@ -84,7 +89,12 @@ public class SevenCircles
 
         Circles();
 
-        Core.AddDrop("Essence of Treachery", "Essence of Violence", "Souls of Heresy", "Essence of Wrath");
+        Core.AddDrop(
+            "Essence of Treachery",
+            "Essence of Violence",
+            "Souls of Heresy",
+            "Essence of Wrath"
+        );
 
         //Guards of Wrath
         Core.EquipClass(ClassType.Farm);
@@ -99,7 +109,7 @@ public class SevenCircles
         if (StopForGoldFarm)
             return;
 
-        //Wrath Against the Machine  
+        //Wrath Against the Machine
         Core.EquipClass(ClassType.Solo);
         Story.KillQuest(7982, "sevencircleswar", "Wrath");
 
@@ -136,11 +146,14 @@ public class SevenCircles
         //The Beast
         if (!Story.QuestProgression(7990))
         {
+            if (Core.CheckInventory("ArchPaladin"))
+                Core.Equip("ArchPaladin");
+            else
+                Core.EquipClass(ClassType.Solo);
+
             Core.EnsureAccept(7990);
             Core.KillMonster("sevencircleswar", "r17", "Left", "The Beast", "The Beast Defeated");
             Core.EnsureComplete(7990);
         }
     }
-
-
 }

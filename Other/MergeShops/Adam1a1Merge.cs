@@ -19,27 +19,61 @@ public class Adam1a1Merge
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
-private static CoreAdvanced sAdv { get => _sAdv ??= new CoreAdvanced(); set => _sAdv = value; }
-private static CoreAdvanced _sAdv;
+    private static CoreAdvanced sAdv
+    {
+        get => _sAdv ??= new CoreAdvanced();
+        set => _sAdv = value;
+    }
+    private static CoreAdvanced _sAdv;
 
-    private static Banished Banished { get => _Banished ??= new Banished(); set => _Banished = value; }    private static Banished _Banished;
-    private static Adam1a1Quest Adam1a1Quest { get => _Adam1a1Quest ??= new Adam1a1Quest(); set => _Adam1a1Quest = value; }    private static Adam1a1Quest _Adam1a1Quest;
+    private static Banished Banished
+    {
+        get => _Banished ??= new Banished();
+        set => _Banished = value;
+    }
+    private static Banished _Banished;
+    private static Adam1a1Quest Adam1a1Quest
+    {
+        get => _Adam1a1Quest ??= new Adam1a1Quest();
+        set => _Adam1a1Quest = value;
+    }
+    private static Adam1a1Quest _Adam1a1Quest;
 
     public bool DontPreconfigure = true;
     public List<IOption> Generic = sAdv.MergeOptions;
     public string[] MultiOptions = { "Generic", "Select" };
     public string OptionsStorage = sAdv.OptionsStorage;
+
     // [Can Change] This should only be changed by the author.
     //              If true, it will not stop the script if the default case triggers and the user chose to only get mats
     private bool dontStopMissingIng = false;
 
     public void ScriptMain(IScriptInterface Bot)
     {
-        Core.BankingBlackList.AddRange(new[] { "Diabolical Ectomancer", "Fresh Ectoplasm", "IOU Slip", "EctoBlade", "Ectoplasmic Chains", "Bongo Cart Pet", "Reho's Golden Sword Hilt" });
+        Core.BankingBlackList.AddRange(
+            new[]
+            {
+                "Diabolical Ectomancer",
+                "Fresh Ectoplasm",
+                "IOU Slip",
+                "EctoBlade",
+                "Ectoplasmic Chains",
+                "Bongo Cart Pet",
+                "Reho's Golden Sword Hilt",
+            }
+        );
         Core.SetOptions();
 
         BuyAllMerge();
@@ -58,7 +92,9 @@ private static CoreAdvanced _sAdv;
         {
             ItemBase req = Adv.externalItem;
             int quant = Adv.externalQuant;
-            int currentQuant = req.Temp ? Bot.TempInv.GetQuantity(req.Name) : Bot.Inventory.GetQuantity(req.Name);
+            int currentQuant = req.Temp
+                ? Bot.TempInv.GetQuantity(req.Name)
+                : Bot.Inventory.GetQuantity(req.Name);
             if (req == null)
             {
                 Core.Logger("req is NULL");
@@ -69,10 +105,24 @@ private static CoreAdvanced _sAdv;
             {
                 default:
                     bool shouldStop = !Adv.matsOnly || !dontStopMissingIng;
-                    Core.Logger($"The bot hasn't been taught how to get {req.Name}." + (shouldStop ? " Please report the issue." : " Skipping"), messageBox: shouldStop, stopBot: shouldStop);
+                    Core.Logger(
+                        $"The bot hasn't been taught how to get {req.Name}."
+                            + (shouldStop ? " Please report the issue." : " Skipping"),
+                        messageBox: shouldStop,
+                        stopBot: shouldStop
+                    );
                     break;
-                #endregion
+        #endregion
 
+                case "DoomKitten's Hairball":
+                    Core.KillDoomKitten(req.Name, req.Quantity, req.Temp);
+                    break;
+
+
+                case "Shard of Chaos":
+                    Core.KillMonster("blindingsnow", "r5", "Spawn", "*", "Shard of Chaos", 100, isTemp: false);
+                    break;
+                    
                 case "Diabolical Ectomancer":
                     Core.FarmingLogger(req.Name, quant);
                     Core.EquipClass(ClassType.Farm);
@@ -140,7 +190,8 @@ private static CoreAdvanced _sAdv;
                 case "Bongo Cart Pet":
                     Core.FarmingLogger(req.Name, quant);
                     Core.EquipClass(ClassType.Farm);
-                    Core.AddDrop("Love Token");
+                    Core.AddDrop("Love Token", "Magenta Dye", "Fresh Ectoplasm");
+                    Core.AddDrop(21567);
                     while (!Bot.ShouldExit && !Core.CheckInventory(req.Name, quant))
                     {
                         Core.EnsureAccept(8013);
@@ -217,16 +268,20 @@ private static CoreAdvanced _sAdv;
     {
         new Option<bool>("60473", "Ecto Enforcer", "Mode: [select] only\nShould the bot buy \"Ecto Enforcer\" ?", false),
         new Option<bool>("60481", "Ecto Enforcer Axe", "Mode: [select] only\nShould the bot buy \"Ecto Enforcer Axe\" ?", false),
-        new Option<bool>("60480", "Ecto Enforcer Staff", "Mode: [select] only\nShould the bot buy \"Ecto Enforcer Staff\" ?", false),
-        new Option<bool>("60479", "Ecto Enforcer Sword", "Mode: [select] only\nShould the bot buy \"Ecto Enforcer Sword\" ?", false),
+        new Option<bool>("60477", "Ecto Enforcer Cape", "Mode: [select] only\nShould the bot buy \"Ecto Enforcer Cape\" ?", false),
+        new Option<bool>("60478", "Ecto Enforcer Cape + Weapons", "Mode: [select] only\nShould the bot buy \"Ecto Enforcer Cape + Weapons\" ?", false),
         new Option<bool>("60474", "Ecto Enforcer Helm Jedna", "Mode: [select] only\nShould the bot buy \"Ecto Enforcer Helm Jedna\" ?", false),
         new Option<bool>("60475", "Ecto Enforcer Helm Dva", "Mode: [select] only\nShould the bot buy \"Ecto Enforcer Helm Dva\" ?", false),
         new Option<bool>("60476", "Ecto Enforcer Helm Tri", "Mode: [select] only\nShould the bot buy \"Ecto Enforcer Helm Tri\" ?", false),
-        new Option<bool>("60477", "Ecto Enforcer Cape", "Mode: [select] only\nShould the bot buy \"Ecto Enforcer Cape\" ?", false),
-        new Option<bool>("60478", "Ecto Enforcer Cape + Weapons", "Mode: [select] only\nShould the bot buy \"Ecto Enforcer Cape + Weapons\" ?", false),
-        new Option<bool>("60492", "Ecto Blade of Insanity", "Mode: [select] only\nShould the bot buy \"Ecto Blade of Insanity\" ?", false),
         new Option<bool>("60500", "Battle Bongo Cart Pet", "Mode: [select] only\nShould the bot buy \"Battle Bongo Cart Pet\" ?", false),
+        new Option<bool>("60515", "Stray Ectoplasm", "Mode: [select] only\nShould the bot buy \"Stray Ectoplasm\" ?", false),
+        new Option<bool>("60516", "Doomed Ectoplasm", "Mode: [select] only\nShould the bot buy \"Doomed Ectoplasm\" ?", false),
+        new Option<bool>("60517", "Blessed Ectoplasm", "Mode: [select] only\nShould the bot buy \"Blessed Ectoplasm\" ?", false),
+        new Option<bool>("60518", "Chaotic Ectoplasm", "Mode: [select] only\nShould the bot buy \"Chaotic Ectoplasm\" ?", false),
+        new Option<bool>("60480", "Ecto Enforcer Staff", "Mode: [select] only\nShould the bot buy \"Ecto Enforcer Staff\" ?", false),
+        new Option<bool>("60479", "Ecto Enforcer Sword", "Mode: [select] only\nShould the bot buy \"Ecto Enforcer Sword\" ?", false),
         new Option<bool>("60491", "Reho's Sword", "Mode: [select] only\nShould the bot buy \"Reho's Sword\" ?", false),
         new Option<bool>("60490", "Reho's Golden Sword", "Mode: [select] only\nShould the bot buy \"Reho's Golden Sword\" ?", false),
-    };
+        new Option<bool>("60492", "Ecto Blade of Insanity", "Mode: [select] only\nShould the bot buy \"Ecto Blade of Insanity\" ?", false),
+   };
 }

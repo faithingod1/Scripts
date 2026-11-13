@@ -14,9 +14,18 @@ public class Arcangrove
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static Core13LoC LoC { get => _LoC ??= new Core13LoC(); set => _LoC = value; }    private static Core13LoC _LoC;
-
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static Core13LoC LoC
+    {
+        get => _LoC ??= new Core13LoC();
+        set => _LoC = value;
+    }
+    private static Core13LoC _LoC;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -36,7 +45,6 @@ public class Arcangrove
         LoC.Escherion();
         LoC.Vath();
 
-
         Story.PreLoad(this);
 
         // Gravelyn and Victoria Quests
@@ -48,14 +56,18 @@ public class Arcangrove
         Story.KillQuest(3372, "arcangrove", "Gorillaphant");
 
         //Plants vs Chaos 3373
-        Story.MapItemQuest(3373, "arcangrove", 2505, 6);
-        Story.KillQuest(3373, "arcangrove", "Seed Spitter");
+        if (!Story.QuestProgression(3373))
+        {
+            Core.EnsureAccept(3373);
+            Core.GetMapItem(2505, 6, "arcangrove");
+            Core.HuntMonster("arcangrove", "Seed Spitter", "Spitter Seed", 6);
+            Core.EnsureComplete(3373);
+        }
 
         //Like Aloe... With Teeth 3374
         Story.KillQuest(3374, "arcangrove", "Seed Spitter");
 
         //Kinda Like a Giant Bubble 3375
         Story.MapItemQuest(3375, "arcangrove", new[] { 2514, 2515, 2516, 2517 });
-
     }
 }

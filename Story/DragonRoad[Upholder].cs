@@ -5,14 +5,19 @@ tags: story, quest, dragon-road
 */
 //cs_include Scripts/CoreBots.cs
 //cs_include Scripts/CoreStory.cs
-using Skua.Core.Interfaces;
 using System.Collections.Generic;
+using Skua.Core.Interfaces;
 
 public class DragonRoad
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -34,7 +39,11 @@ public class DragonRoad
         Story.PreLoad(this);
 
         //Obtain the DragonStar Radar 4534
-        if (!Story.QuestProgression(4534) || !Core.CheckInventory("Dragon Star Radar") || !Core.CheckInventory("DragonStar Map"))
+        if (
+            !Story.QuestProgression(4534)
+            || !Core.CheckInventory("Dragon Star Radar")
+            || !Core.CheckInventory("DragonStar Map")
+        )
         {
             Core.AddDrop("Dragon Star Radar", "DragonStar Map");
             Core.EnsureAccept(4534);
@@ -71,12 +80,20 @@ public class DragonRoad
             Core.Join("XanTown");
             Core.Jump("r12");
             Core.GetMapItem(3756, 1, "XanTown");
+            if (Bot.Map.Name == "xantown")
+                Core.Jump("r12", "Left"); // map is aggro af this is a safe cell. aggro af this is a safe cell.
             Core.GetMapItem(3763, 1, "DragonRoad");
             Core.EnsureComplete(4537);
         }
 
         //Find the Fourth DragonStar Crystal 4538
-        Story.KillQuest(4538, "Lair", new[] { "Onyx Lava Dragon", "Onyx Lava Dragon" });
+        if (!Story.QuestProgression(4538))
+        {
+            Core.EnsureAccept(4538);
+            Core.HuntMonster("lair", "Onyx Lava Dragon", "Fourth DragonStar Found", 1);
+            Core.HuntMonster("lair", "Onyx Lava Dragon", "Radar Recharged", 1);
+            Core.EnsureComplete(4538);
+        }
 
         //Find the Fifth DragonStar Crystal 4539
         if (!Story.QuestProgression(4539))
@@ -86,7 +103,6 @@ public class DragonRoad
             Core.HuntMonster("EarthStorm", "Diamond Golem", "Fifth DragonStar Found");
             Core.EnsureComplete(4539);
         }
-
 
         //Find the Sixth DragonStar Crystal  4540
         if (!Story.QuestProgression(4540))
@@ -107,7 +123,13 @@ public class DragonRoad
         Story.KillQuest(4543, "DragonRoad", "Horccolo");
 
         //Eliminate the Legion Cyborgs 4544
-        Story.KillQuest(4544, "DragonRoad", new[] { "Cyborg 71", "Cyborg 81" });
+        if (!Story.QuestProgression(4544))
+        {
+            Core.EnsureAccept(4544);
+            Core.HuntMonster("dragonroad", "Cyborg 81", "Cyborg 81 Defeated");
+            Core.HuntMonster("dragonroad", "Cyborg 71", "Cyborg 71 Defeated");
+            Core.EnsureComplete(4544);
+        }
 
         //Pulverize Majic Guu  4545
         Story.KillQuest(4545, "DragonRoad", "Majic Guu");
@@ -117,6 +139,5 @@ public class DragonRoad
 
         //Defeat Super Dragon Twig! 4547
         Story.KillQuest(4547, "DragonRoad", "Super Dragon Twig");
-
     }
 }

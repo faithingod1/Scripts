@@ -12,9 +12,17 @@ public class SkyGuardSaga
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
@@ -70,7 +78,14 @@ public class SkyGuardSaga
         Story.KillQuest(886, "airship", "Sky Pirate Dragon");
 
         // Things Are Looking Up 887
-        Story.KillQuest(887, "airship", new[] { "Sky Pirate Draconian", "Rehydrated Gell Oh No", "Sky Pirate Dragon" });
+        if (!Story.QuestProgression(887))
+        {
+            Core.EnsureAccept(887);
+            Core.HuntMonster("airship", "Sky Pirate Draconian", "Sky Pirate Medal of Dishonor", 8);
+            Core.HuntMonster("airship", "Rehydrated Gell Oh No", "Gel-O-No Medal of Dishonor", 1);
+            Core.HuntMonster("airship", "Sky Pirate Dragon", "Sky Dragon Medal of Dishonor", 1);
+            Core.EnsureComplete(887);
+        }
 
         // Don't Get Mad, Get Gladius 888
         Story.KillQuest(888, "airship", "Gladius");
@@ -105,7 +120,13 @@ public class SkyGuardSaga
         Story.PreLoad(this);
 
         // Banditing Together 1104
-        Story.KillQuest(1104, "anders", new[] { "Dravir", "Copper Sky Pirate" });
+        if (!Story.QuestProgression(1104))
+        {
+            Core.EnsureAccept(1104);
+            Core.HuntMonster("anders", "Dravir", "Bandit Bashed", 7);
+            Core.HuntMonster("anders", "Copper Sky Pirate", "Pirate Pulverized", 8);
+            Core.EnsureComplete(1104);
+        }
 
         // Booty Becomes Barrier 1105
         Story.MapItemQuest(1105, "anders", 439, 10);
@@ -114,7 +135,11 @@ public class SkyGuardSaga
 
         // We Didn't Start The Fire (Oh, Wait...) 1106
         Story.MapItemQuest(1106, "anders", 441);
-        Story.KillQuest(1106, "anders", new[] { "Copper Sky Pirate", "Copper Sky Pirate", "Dravir" });
+        Story.KillQuest(
+            1106,
+            "anders",
+            new[] { "Copper Sky Pirate", "Copper Sky Pirate", "Dravir" }
+        );
 
         // Granny's Final Request 1107
         Story.KillQuest(1107, "anders", "Iron Hoof");
@@ -152,7 +177,11 @@ public class SkyGuardSaga
         Story.KillQuest(1289, "strategy", "Dravir Pirate Captain");
 
         // SkyPirate Map Hunt 1290
-        Story.KillQuest(1290, "strategy", new[] { "Dravir Pirate", "Dravir Pirate", "Dravir Pirate", "Dravir Pirate" });
+        Story.KillQuest(
+            1290,
+            "strategy",
+            new[] { "Dravir Pirate", "Dravir Pirate", "Dravir Pirate", "Dravir Pirate", "Dravir Pirate" }
+        );
     }
 
     public void PirateBase()
@@ -201,18 +230,29 @@ public class SkyGuardSaga
         Story.MapItemQuest(2039, "highcommand", 1000);
 
         // Comm Module 4dX 2040
-        Story.KillQuest(2040, "highcommand", new[] { "Bronze Sky Pirate", "Chaorrupted Invader" });
+        if (!Story.QuestProgression(2040))
+        {
+            Core.EnsureAccept(2040);
+            Core.HuntMonster("highcommand", "Bronze Sky Pirate", "Comm Module Found!");
+            Core.HuntMonster("highcommand", "Chaorrupted Invader", "Hunting for Powerpack", 10);
+            Core.EnsureComplete(2040);
+        }
 
         // Can You Hear Me Now? 2043
         Story.MapItemQuest(2043, "highcommand", 996, 10);
         Story.MapItemQuest(2043, "highcommand", new[] { 998, 999 });
 
         // Back to Base-ics 2041
-        Story.KillQuest(2041, "piratebase", new[] { "Chaorrupted Sky Pirate", "Chaorrupted Sky Pirate" });
+        if (!Story.QuestProgression(2041))
+        {
+            Core.EnsureAccept(2041);
+            Core.HuntMonster("piratebase", "Chaorrupted Sky Pirate", "SkyPirate Trophy", 10);
+            Core.HuntMonster("piratebase", "Chaorrupted Sky Pirate", "Powerpack Location Found");
+            Core.EnsureComplete(2041);
+        }
 
         // Secret Weapon Mecha-Death! 2042
         Story.KillQuest(2042, "highcommand", "M3CH4-D34TH");
-
     }
 
     public void Bunker()

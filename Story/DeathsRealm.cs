@@ -11,7 +11,12 @@ public class DeathsRealm
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -50,7 +55,9 @@ public class DeathsRealm
         // Death-dealing Blows (2423)
         if (!Story.QuestProgression(2423))
         {
-            Core.Logger("You need to get 5 kills in /doomarena or /bludrutbrawl for [2423] \"Death-dealing Blows\" quest, run the script again when you've completed the quest.");
+            Core.Logger(
+                "You need to get 5 kills in /doomarena or /bludrutbrawl for [2423] \"Death-dealing Blows\" quest, run the script again when you've completed the quest."
+            );
             return;
         }
 
@@ -58,8 +65,13 @@ public class DeathsRealm
         Story.KillQuest(2424, "deathsrealm", "Undead Mage");
 
         // Master Death's Realm (2425)
-        Story.MapItemQuest(2425, "deathsrealm", 1485);
-        Story.KillQuest(2425, "deathsrealm", "Undead Mage");
+        if (!Story.QuestProgression(2425))
+        {
+            Core.EnsureAccept(2425);
+            Core.GetMapItem(1485, 1, "deathsrealm");
+            Core.HuntMonster("deathsrealm", "Undead Mage", "Underworld Creature Slain", 10);
+            Core.EnsureComplete(2425);
+        }
 
         // Real Live Hero-Training (2426)
         Story.MapItemQuest(2426, "trainers", 1491, AutoCompleteQuest: false);

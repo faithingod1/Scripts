@@ -15,10 +15,30 @@ public class ArmorOfAwe
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static CoreAwe Awe { get => _Awe ??= new CoreAwe(); set => _Awe = value; }    private static CoreAwe _Awe;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static CoreAwe Awe
+    {
+        get => _Awe ??= new CoreAwe();
+        set => _Awe = value;
+    }
+    private static CoreAwe _Awe;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -45,11 +65,8 @@ public class ArmorOfAwe
                 Core.EquipClass(ClassType.Solo);
 
                 Core.RegisterQuests(4162);
-                while (!Bot.ShouldExit && !Core.CheckInventory("Pauldron Fragment", 15))
-                {
-                    Core.HuntMonster("gravestrike", "Ultra Akriloth", "Pauldron Shard", 15, false);
-                    Bot.Wait.ForPickup("Pauldron Fragment");
-                }
+                Core.HuntMonster("gravestrike", "Ultra Akriloth", "Pauldron Fragment", 15, false);
+                Bot.Wait.ForPickup("Pauldron Fragment");
                 Core.CancelRegisteredQuests();
 
                 Core.BuyItem("museum", 1129, "Pauldron Relic");

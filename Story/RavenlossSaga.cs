@@ -11,7 +11,12 @@ public class RavenlossSaga
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -150,7 +155,7 @@ public class RavenlossSaga
             return;
 
         WeaverWar();
-        
+
         Story.PreLoad(this);
 
         //Chaos Weavers' Magic  3450
@@ -185,7 +190,5 @@ public class RavenlossSaga
 
         //Defeat the ChaosWeaver Cleric 3460
         Story.KillQuest(3460, "ChaosWeb", "ChaosWeaver Cleric");
-
     }
-
 }

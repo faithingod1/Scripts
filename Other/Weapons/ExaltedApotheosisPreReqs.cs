@@ -14,20 +14,43 @@ public class ExaltedApotheosisPreReqs
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
 
     private string[] Weps =
     {
         "Exalted Apotheosis",
-        "Exalted Penultima", "Exalted Unity",
-        "Apostate Ultima", "Thaumaturgus Ultima",
-        "Apostate Omega", "Thaumaturgus Omega",
+        "Exalted Penultima",
+        "Exalted Unity",
+        "Apostate Ultima",
+        "Thaumaturgus Ultima",
+        "Apostate Omega",
+        "Thaumaturgus Omega",
     };
 
     public void ScriptMain(IScriptInterface bot)
     {
-        Core.BankingBlackList.AddRange(new[] { "Ezrajal Insignia", "Warden Insignia", "Engineer Insignia", "Exalted Relic Piece", "Exalted Artillery Shard", "Exalted Forgemetal" });
+        Core.BankingBlackList.AddRange(
+            new[]
+            {
+                "Ezrajal Insignia",
+                "Warden Insignia",
+                "Engineer Insignia",
+                "Exalted Relic Piece",
+                "Exalted Artillery Shard",
+                "Exalted Forgemetal",
+            }
+        );
         Core.SetOptions();
 
         PreReqs();
@@ -57,11 +80,11 @@ public class ExaltedApotheosisPreReqs
             // Define the weapon pairs in each tier
             string[][] weaponPairs = new[]
             {
-            new[] { "Apostate Alpha", "Thaumaturgus Alpha" },
-            new[] { "Apostate Omega", "Thaumaturgus Omega" },
-            new[] { "Apostate Ultima", "Thaumaturgus Ultima" },
-            new[] { "Exalted Penultima", "Exalted Unity" }
-        };
+                new[] { "Apostate Alpha", "Thaumaturgus Alpha" },
+                new[] { "Apostate Omega", "Thaumaturgus Omega" },
+                new[] { "Apostate Ultima", "Thaumaturgus Ultima" },
+                new[] { "Exalted Penultima", "Exalted Unity" },
+            };
 
             bool obtained = false;
 
@@ -93,27 +116,27 @@ public class ExaltedApotheosisPreReqs
                         bool canBuy = true;
                         foreach (ItemBase req in wepData.Requirements)
                         {
-                            if (!Core.CheckInventory(req.ID, req.Quantity))
+                            if (Core.CheckInventory(req.ID, req.Quantity))
+                                continue;
+                            switch (req.Name)
                             {
-                                switch (req.Name)
-                                {
-                                    case "Exalted Node":
-                                        Core.KillMonster("timeinn", "r3", "Bottom", "*", "Exalted Node", req.Quantity, isTemp: false);
-                                        break;
-                                    case "Exalted Artillery Shard":
-                                        Core.HuntMonster("timeinn", "The Engineer", req.Name, req.Quantity, false);
-                                        break;
-                                    case "Exalted Relic Piece":
-                                        Core.HuntMonster("timeinn", "The Warden", req.Name, req.Quantity, false);
-                                        break;
-                                    case "Exalted Forgemetal":
-                                        Core.HuntMonster("timeinn", "Ezrajal", req.Name, req.Quantity, false);
-                                        break;
-                                    default:
-                                        missingMaterials[req.Name] = req.Quantity - Bot.Inventory?.GetQuantity(req.ID) ?? 0;
-                                        canBuy = false;
-                                        break;
-                                }
+                                case "Exalted Node":
+                                    Core.KillMonster("timeinn", "r3", "Bottom", "*", "Exalted Node", req.Quantity, req.Temp);
+                                    break;
+                                case "Exalted Artillery Shard":
+                                    Core.HuntMonster("timeinn", "The Engineer", req.Name, req.Quantity, req.Temp);
+                                    break;
+                                case "Exalted Relic Piece":
+                                    Core.HuntMonster("timeinn", "The Warden", req.Name, req.Quantity, req.Temp);
+                                    break;
+                                case "Exalted Forgemetal":
+                                    Core.HuntMonster("timeinn", "Ezrajal", req.Name, req.Quantity, req.Temp);
+                                    break;
+                                default:
+                                    missingMaterials[req.Name] =
+                                        req.Quantity - Bot.Inventory?.GetQuantity(req.ID) ?? 0;
+                                    canBuy = false;
+                                    break;
                             }
                         }
 
@@ -121,7 +144,12 @@ public class ExaltedApotheosisPreReqs
                         Core.Logger($"Can complete: {status}");
 
                         // Buy the weapon after fulfilling requirements
-                        if (canBuy && wepData.Requirements.All(req => Core.CheckInventory(req.ID, req.Quantity)))
+                        if (
+                            canBuy
+                            && wepData.Requirements.All(req =>
+                                Core.CheckInventory(req.ID, req.Quantity)
+                            )
+                        )
                             Adv.BuyItem("timeinn", 2010, wep);
 
                         if (Core.CheckInventory("Exalted Apotheosis"))
@@ -145,7 +173,8 @@ public class ExaltedApotheosisPreReqs
             {
                 foreach (ItemBase item in exaltedApo.Requirements)
                 {
-                    int missingQuantity = item.Quantity - (Bot.Inventory?.GetQuantity(item.ID) ?? 0); // It's not handled automatically if Inventory is null, only if item is not in inventory!
+                    int missingQuantity =
+                        item.Quantity - (Bot.Inventory?.GetQuantity(item.ID) ?? 0); // It's not handled automatically if Inventory is null, only if item is not in inventory!
                     if (missingQuantity > 0)
                         missingMaterials[item.Name] = missingQuantity;
                 }
@@ -160,11 +189,15 @@ public class ExaltedApotheosisPreReqs
 
         if (missingMaterials.Count > 0)
         {
-            Bot.Log("Missing materials:\n" + string.Join("\n", missingMaterials.Select(mat => $"\t{mat.Key}: x {mat.Value}")));
+            Bot.Log(
+                "Missing materials:\n"
+                    + string.Join(
+                        "\n",
+                        missingMaterials.Select(mat => $"\t{mat.Key}: x {mat.Value}")
+                    )
+            );
         }
 
         Bot.Wait.ForPickup("Exalted Apotheosis");
     }
-
 }
-

@@ -11,7 +11,11 @@ public class CoreHollowborn
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
 
     public void ScriptMain(IScriptInterface Bot)
@@ -54,12 +58,15 @@ public class CoreHollowborn
         Core.AddDrop("Human Soul");
 
         Core.EquipClass(ClassType.Farm);
-        Core.KillMonster("noxustower", "r14", "Left", "*", "Human Soul", quant, false);
+        Core.KillMonster("noxustower", "r13", "Left", "*", "Human Soul", quant, false);
     }
 
     public void FreshSouls(int Uni36Quant = 3, int FSQuant = 1000)
     {
-        if (Core.CheckInventory("Unidentified 36", Uni36Quant) && Core.CheckInventory("Fresh Soul", FSQuant))
+        if (
+            Core.CheckInventory("Unidentified 36", Uni36Quant)
+            && Core.CheckInventory("Fresh Soul", FSQuant)
+        )
             return;
 
         Farm.Experience(50);
@@ -74,7 +81,13 @@ public class CoreHollowborn
         if (Uni36Quant > 0)
             Core.FarmingLogger("Unidentified 36", Uni36Quant);
 
-        while (!Bot.ShouldExit && (!Core.CheckInventory("Unidentified 36", Uni36Quant) || !Core.CheckInventory(52588, FSQuant)))
+        while (
+            !Bot.ShouldExit
+            && (
+                !Core.CheckInventory("Unidentified 36", Uni36Quant)
+                || !Core.CheckInventory(52588, FSQuant)
+            )
+        )
         {
             Core.HuntMonster("citadel", "Inquisitor Guard", "Fresh Soul?", 10, log: false);
             Bot.Wait.ForPickup(52588);
@@ -93,7 +106,6 @@ public class CoreHollowborn
         Core.KillMonster("hbchallenge", "r9", "Left", "*", "Hollowborn Lycan Claw", quant, isTemp: false);
         Bot.Wait.ForPickup("Hollowborn Lycan Claw");
         Core.CancelRegisteredQuests();
-
     }
 
     public void HBVampireFang(int quant = 1000)

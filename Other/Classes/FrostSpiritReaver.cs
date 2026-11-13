@@ -16,13 +16,29 @@ public class FrostSpiritReaver
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
-    private static GlaceraStory Glacera { get => _Glacera ??= new GlaceraStory(); set => _Glacera = value; }
+    private static GlaceraStory Glacera
+    {
+        get => _Glacera ??= new GlaceraStory();
+        set => _Glacera = value;
+    }
     private static GlaceraStory _Glacera;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreDailies Dailies { get => _Dailies ??= new CoreDailies(); set => _Dailies = value; }
+    private static CoreDailies Dailies
+    {
+        get => _Dailies ??= new CoreDailies();
+        set => _Dailies = value;
+    }
     private static CoreDailies _Dailies;
 
     public void ScriptMain(IScriptInterface bot)
@@ -43,19 +59,22 @@ public class FrostSpiritReaver
         if (Farm.FactionRank("Glacera") < 10)
         {
             // Attempt to relog so the rep works.
-            Core.Relogin("\"GlaceraREP\" wont work, unless its relogged after doing the story... ae really needs to fix this.");
+            Core.Relogin(
+                "\"GlaceraREP\" wont work, unless its relogged after doing the story... ae really needs to fix this."
+            );
             Farm.GlaceraREP();
         }
         if (!Core.CheckInventory("Cryomancer"))
             Dailies.Cryomancer();
-            
+
         if (!Core.CheckInventory("Frost Sigil"))
         {
-            Core.Logger("Cryomancer Required for \"Frost Sigil\" for \"IceNinth\", Comeback tomarrow.");
+            Core.Logger(
+                "\"Frost Sigil\" for \"IceNinth\"(Quest `Cold Hearted`), Comeback tomarrow."
+            );
             return;
         }
         Farm.Experience(60);
-
 
         if (!Core.CheckInventory("Envoy of Kyanos"))
         {
@@ -97,7 +116,7 @@ public class FrostSpiritReaver
 
         //////////////////////////////////////////////
         //////////////////////////////////////////////
-        #region "Quest Prerequisites 
+        #region "Quest Prerequisites
 
         if (!Core.CheckInventory(25464) && Core.CheckInventory(new[] { 27437, 27525 }, any: true))
         {
@@ -128,10 +147,9 @@ public class FrostSpiritReaver
             Adv.BuyItem("Glacera", 1055, "Fallen Scythe of Vengeance");
         }
 
-        #endregion "Quest Prerequisites 
+        #endregion "Quest Prerequisites
         //////////////////////////////////////////////
         //////////////////////////////////////////////
-
 
         while (!Bot.ShouldExit && !Core.CheckInventory("Ice-Ninth", quant))
         {
@@ -182,7 +200,8 @@ public class FrostSpiritReaver
                 Core.HuntMonster("iceplane", "Enfield", "FrostSlayer", 1, false, false);
             }
         }
-        else Core.Logger("Got the Item requirement for \"Cold Blooded\"");
+        else
+            Core.Logger("Got the Item requirement for \"Cold Blooded\"");
 
         Core.AddDrop(59216);
         Core.FarmingLogger("Glaceran Attunement", quant);
@@ -191,6 +210,7 @@ public class FrostSpiritReaver
         {
             Core.EquipClass(ClassType.Solo);
             Core.HuntMonster("cryowar", "Super-Charged Karok", "Glacial Crystal", 100, isTemp: false, log: false);
+            Core.EquipClass(ClassType.Dodge);
             Core.HuntMonster("frozenlair", "Legion Lich Lord", "Necrotic Orb", 2, isTemp: false, log: false);
 
             Core.EquipClass(ClassType.Farm);

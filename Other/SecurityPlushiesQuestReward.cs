@@ -36,7 +36,11 @@ public class SecurityPlushiesQuestRewards
             if (Core.CheckInventory(Reward.Name, toInv: false))
                 return;
 
-            Core.Logger(Core.CheckInventory(Reward.ID, toInv: false) ? $"{Reward.Name}: ✅" : $"{Reward.Name} ❌");
+            Core.Logger(
+                Core.CheckInventory(Reward.ID, toInv: false)
+                    ? $"{Reward.Name}: ✅"
+                    : $"{Reward.Name} ❌"
+            );
 
             Core.RegisterQuests(QuestID);
             Core.FarmingLogger(Reward.Name, 1);

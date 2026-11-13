@@ -14,9 +14,24 @@ public class AvastBadge
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -58,7 +73,7 @@ public class AvastBadge
             Core.EnsureComplete(2390);
         }
 
-        // 2391|Off the Hook! 
+        // 2391|Off the Hook!
         if (!Story.QuestProgression(2391))
         {
             Core.EnsureAccept(2391);
@@ -77,7 +92,11 @@ public class AvastBadge
                         Core.FarmingLogger("Fishin' Chips", 60);
                         Core.FarmingLogger("Fish Caught", 30);
                         GetBaitandDynamite(0, 30);
-                        while (!Bot.ShouldExit && Core.CheckInventory("Fishing Dynamite") && !Core.CheckInventory(10850, 30))
+                        while (
+                            !Bot.ShouldExit
+                            && Core.CheckInventory("Fishing Dynamite")
+                            && !Core.CheckInventory(10850, 30)
+                        )
                         {
                             if (Bot.Inventory.IsMaxStack("Fishing Bait"))
                                 Bot.Drops.Remove("Fishing Bait");
@@ -121,7 +140,7 @@ public class AvastBadge
         // Update quest to acess the `Wind` map.
         if (!Core.isCompletedBefore(1403))
             Bot.Quests.UpdateQuest(1403);
-            
+
         if (!Story.QuestProgression(2394))
         {
             Core.EnsureAccept(2394);
@@ -137,7 +156,10 @@ public class AvastBadge
 
         void GetBaitandDynamite(int FishingBaitQuant, int FishingDynamiteQuant)
         {
-            if (Core.CheckInventory("Fishing Bait", FishingBaitQuant) && Core.CheckInventory("Fishing Dynamite", FishingDynamiteQuant))
+            if (
+                Core.CheckInventory("Fishing Bait", FishingBaitQuant)
+                && Core.CheckInventory("Fishing Dynamite", FishingDynamiteQuant)
+            )
                 return;
 
             Core.Logger("Pre-Fishing XP(This is Required)");
@@ -147,11 +169,19 @@ public class AvastBadge
 
             Core.RegisterQuests(1682);
             Core.FarmingLogger("Fishing Bait", FishingBaitQuant);
-            while (!Bot.ShouldExit && FishingBaitQuant != 0 && !Core.CheckInventory("Fishing Bait", FishingBaitQuant))
+            while (
+                !Bot.ShouldExit
+                && FishingBaitQuant != 0
+                && !Core.CheckInventory("Fishing Bait", FishingBaitQuant)
+            )
                 Core.KillMonster("greenguardwest", "West3", "Right", "Frogzard", "Fishing Bait", FishingBaitQuant, isTemp: false, log: false);
 
             Core.FarmingLogger("Fishing Dynamite", FishingDynamiteQuant);
-            while (!Bot.ShouldExit && FishingDynamiteQuant != 0 && !Core.CheckInventory("Fishing Dynamite", FishingDynamiteQuant))
+            while (
+                !Bot.ShouldExit
+                && FishingDynamiteQuant != 0
+                && !Core.CheckInventory("Fishing Dynamite", FishingDynamiteQuant)
+            )
                 Core.KillMonster("greenguardwest", "West4", "Right", "Slime", "Faith's Fi'shtick", 1, log: false);
 
             Core.CancelRegisteredQuests();

@@ -53,7 +53,7 @@ tags: all classes, class, farm, complete, all
 //cs_include Scripts/Other/MergeShops/BloodAncientMerge.cs
 //cs_include Scripts/Other/Classes/Members-CLasses/BloodAncient[Mem].cs
 //cs_include Scripts/Other/Classes/Members-CLasses/BloodTitan[Mem].cs
-//cs_include Scripts/Other/MergeShops/BloodTitanMerge[Mem].cs
+//cs_include Scripts/Other/MergeShops/BloodTitanMerge[mem].cs
 //cs_include Scripts/Other/Classes/Members-CLasses/ChronoAssassin[Mem].cs
 //cs_include Scripts/Other/MergeShops/DeathPitArenaRepMerge.cs
 //cs_include Scripts/Other/Classes/Members-CLasses/DrakelWarlord[Mem].cs
@@ -85,11 +85,15 @@ tags: all classes, class, farm, complete, all
 //cs_include Scripts/Legion/MergeShops/AtlasFallsGearMerge.cs
 //cs_include Scripts/Seasonal/TalkLikeaPirateDay/PirateClass.cs
 //cs_include Scripts/Story/Legion/SevenCircles(War).cs
+//cs_include Scripts/Story/DarkCarnax.cs
 
+//cs_include Scripts/Ultrasv3/ChallengeBosses/QueenIonav3.cs
 //cs_include Scripts/Evil/VordredsArmor.cs
 //cs_include Scripts/Other/Concerts/BattleConcert2023.cs
 //cs_include Scripts/Other/Concerts/NeoMetalNecro.cs
 //cs_include Scripts/Other/Concerts/DoomMetalNecro.cs
+//cs_include Scripts/Other/Classes/DeathKnightLord[mem].cs
+//cs_include Scripts/Other/Classes/KingsEcho.cs
 //cs_include Scripts/Legion/LegionExcercise/LegionExercise3.cs
 //cs_include Scripts/Legion/LegionExcercise/LegionExercise4.cs
 //cs_include Scripts/Legion/MergeShops/UndeadLegionMerge.cs
@@ -208,6 +212,8 @@ tags: all classes, class, farm, complete, all
 //cs_include Scripts/Prototypes/MoreSkullsBoss.cs
 //cs_include Scripts/Other/Classes/Lich.cs
 //cs_include Scripts/Chaos/DrakathsArmor.cs
+//cs_include Scripts/Ultrasv3/Entwined Eclipse/CoreEngine.cs
+//cs_include Scripts/Ultrasv3/Entwined Eclipse/CoreUltra.cs
 //cs_include Scripts/Chaos/EternalDrakathSet.cs
 //cs_include Scripts/Darkon/Various/PrinceDarkonsPoleaxePreReqs.cs
 //cs_include Scripts/Enhancement/UnlockForgeEnhancements.cs
@@ -265,17 +271,16 @@ tags: all classes, class, farm, complete, all
 //cs_include Scripts/Story/Nation/VoidChasm.cs
 //cs_include Scripts/Story/StarSinc.cs
 //cs_include Scripts/Story/ThirdSpell.cs
+//cs_include Scripts/Story/TitanAttack.cs
 //cs_include Scripts/Story/TowerOfDoom.cs
 //cs_include Scripts/Prototypes/Grimgaol.cs
 //cs_include Scripts/Story/7DeadlyDragons/Extra/HatchTheEgg.cs
 //cs_include Scripts/Other/MergeShops/InfernalArenaMerge.cs
-//cs_include Scripts/Other/Classes/DeathKnightLord[mem].cs
 //cs_include Scripts/Other/MergeShops/BocklinTreasuryMerge.cs
 //cs_include Scripts/Other/MergeShops/BocklinArmoryMerge.cs
 //cs_include Scripts/Story/Lynaria/CoreLynaria.cs
 //cs_include Scripts/Other/MergeShops/BocklinGroveMerge.cs
-//cs_include Scripts/Other/Classes/KingsEcho.cs
-#endregion includes
+#endregion
 
 using Skua.Core.Interfaces;
 using Skua.Core.Models.Items;
@@ -283,207 +288,579 @@ using Skua.Core.Options;
 
 public class AllClasses
 {
+    #region Class stuffs
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
 
     #region Dailies
-    private static CoreDailies Daily { get => _Daily ??= new CoreDailies(); set => _Daily = value; }
+    private static CoreDailies Daily
+    {
+        get => _Daily ??= new CoreDailies();
+        set => _Daily = value;
+    }
     private static CoreDailies _Daily;
-    private static BlazeBinder BB { get => _BB ??= new BlazeBinder(); set => _BB = value; }
+    private static BlazeBinder BB
+    {
+        get => _BB ??= new BlazeBinder();
+        set => _BB = value;
+    }
     private static BlazeBinder _BB;
-    private static Cryomancer Cryo { get => _Cryo ??= new Cryomancer(); set => _Cryo = value; }
+    private static Cryomancer Cryo
+    {
+        get => _Cryo ??= new Cryomancer();
+        set => _Cryo = value;
+    }
     private static Cryomancer _Cryo;
-    private static LordOfOrder LOO { get => _LOO ??= new LordOfOrder(); set => _LOO = value; }
+    private static LordOfOrder LOO
+    {
+        get => _LOO ??= new LordOfOrder();
+        set => _LOO = value;
+    }
     private static LordOfOrder _LOO;
     #endregion Dailies
 
     #region Rep
-    private static Arachnomancer Arach { get => _Arach ??= new Arachnomancer(); set => _Arach = value; }
+    private static Arachnomancer Arach
+    {
+        get => _Arach ??= new Arachnomancer();
+        set => _Arach = value;
+    }
     private static Arachnomancer _Arach;
-    private static ChaosSlayer CS { get => _CS ??= new ChaosSlayer(); set => _CS = value; }
+    private static ChaosSlayer CS
+    {
+        get => _CS ??= new ChaosSlayer();
+        set => _CS = value;
+    }
     private static ChaosSlayer _CS;
-    private static DarkbloodStormKing DBSK { get => _DBSK ??= new DarkbloodStormKing(); set => _DBSK = value; }
+    private static DarkbloodStormKing DBSK
+    {
+        get => _DBSK ??= new DarkbloodStormKing();
+        set => _DBSK = value;
+    }
     private static DarkbloodStormKing _DBSK;
-    private static ElementalDracomancer ED { get => _ED ??= new ElementalDracomancer(); set => _ED = value; }
+    private static ElementalDracomancer ED
+    {
+        get => _ED ??= new ElementalDracomancer();
+        set => _ED = value;
+    }
     private static ElementalDracomancer _ED;
-    private static EternalInversionist EI { get => _EI ??= new EternalInversionist(); set => _EI = value; }
+    private static EternalInversionist EI
+    {
+        get => _EI ??= new EternalInversionist();
+        set => _EI = value;
+    }
     private static EternalInversionist _EI;
-    private static EvolvedShaman ES { get => _ES ??= new EvolvedShaman(); set => _ES = value; }
+    private static EvolvedShaman ES
+    {
+        get => _ES ??= new EvolvedShaman();
+        set => _ES = value;
+    }
     private static EvolvedShaman _ES;
-    private static GlacialBerserker GB { get => _GB ??= new GlacialBerserker(); set => _GB = value; }
+    private static GlacialBerserker GB
+    {
+        get => _GB ??= new GlacialBerserker();
+        set => _GB = value;
+    }
     private static GlacialBerserker _GB;
-    private static HorcEvader HE { get => _HE ??= new HorcEvader(); set => _HE = value; }
+    private static HorcEvader HE
+    {
+        get => _HE ??= new HorcEvader();
+        set => _HE = value;
+    }
     private static HorcEvader _HE;
-    private static ImperialChunin IC { get => _IC ??= new ImperialChunin(); set => _IC = value; }
+    private static ImperialChunin IC
+    {
+        get => _IC ??= new ImperialChunin();
+        set => _IC = value;
+    }
     private static ImperialChunin _IC;
-    private static Lycan Lycan { get => _Lycan ??= new Lycan(); set => _Lycan = value; }
+    private static Lycan Lycan
+    {
+        get => _Lycan ??= new Lycan();
+        set => _Lycan = value;
+    }
     private static Lycan _Lycan;
-    private static MasterRanger MR { get => _MR ??= new MasterRanger(); set => _MR = value; }
+    private static MasterRanger MR
+    {
+        get => _MR ??= new MasterRanger();
+        set => _MR = value;
+    }
     private static MasterRanger _MR;
-    private static Paladin Pal { get => _Pal ??= new Paladin(); set => _Pal = value; }
+    private static Paladin Pal
+    {
+        get => _Pal ??= new Paladin();
+        set => _Pal = value;
+    }
     private static Paladin _Pal;
-    private static RoyalBattleMage RBM { get => _RBM ??= new RoyalBattleMage(); set => _RBM = value; }
+    private static RoyalBattleMage RBM
+    {
+        get => _RBM ??= new RoyalBattleMage();
+        set => _RBM = value;
+    }
     private static RoyalBattleMage _RBM;
-    private static Shaman Shaman { get => _Shaman ??= new Shaman(); set => _Shaman = value; }
+    private static Shaman Shaman
+    {
+        get => _Shaman ??= new Shaman();
+        set => _Shaman = value;
+    }
     private static Shaman _Shaman;
-    private static StoneCrusher SC { get => _SC ??= new StoneCrusher(); set => _SC = value; }
+    private static StoneCrusher SC
+    {
+        get => _SC ??= new StoneCrusher();
+        set => _SC = value;
+    }
     private static StoneCrusher _SC;
-    private static ThiefOfHours TOH { get => _TOH ??= new ThiefOfHours(); set => _TOH = value; }
+    private static ThiefOfHours TOH
+    {
+        get => _TOH ??= new ThiefOfHours();
+        set => _TOH = value;
+    }
     private static ThiefOfHours _TOH;
-    private static TrollSpellsmith TS { get => _TS ??= new TrollSpellsmith(); set => _TS = value; }
+    private static TrollSpellsmith TS
+    {
+        get => _TS ??= new TrollSpellsmith();
+        set => _TS = value;
+    }
     private static TrollSpellsmith _TS;
     #endregion Rep
 
+    #region Legion
+
+    private static CoreLegion Legion
+    {
+        get => _Legion ??= new CoreLegion();
+        set => _Legion = value;
+    }
+    private static CoreLegion _Legion;
+
+    #endregion
+
     #region Member
-    private static AlphaOmega AO { get => _AO ??= new AlphaOmega(); set => _AO = value; }
+    private static AlphaOmega AO
+    {
+        get => _AO ??= new AlphaOmega();
+        set => _AO = value;
+    }
     private static AlphaOmega _AO;
-    private static DeathKnightLord DKL { get => _DKL ??= new DeathKnightLord(); set => _DKL = value; }
+    private static DeathKnightLord DKL
+    {
+        get => _DKL ??= new DeathKnightLord();
+        set => _DKL = value;
+    }
     private static DeathKnightLord _DKL;
-    private static Acolyte Acolyte { get => _Acolyte ??= new Acolyte(); set => _Acolyte = value; }
+    private static Acolyte Acolyte
+    {
+        get => _Acolyte ??= new Acolyte();
+        set => _Acolyte = value;
+    }
     private static Acolyte _Acolyte;
-    private static Bard Bard { get => _Bard ??= new Bard(); set => _Bard = value; }
+    private static Bard Bard
+    {
+        get => _Bard ??= new Bard();
+        set => _Bard = value;
+    }
     private static Bard _Bard;
-    private static BeastMaster BM { get => _BM ??= new BeastMaster(); set => _BM = value; }
+    private static BeastMaster BM
+    {
+        get => _BM ??= new BeastMaster();
+        set => _BM = value;
+    }
     private static BeastMaster _BM;
-    private static BloodAncient BA { get => _BA ??= new BloodAncient(); set => _BA = value; }
+    private static BloodAncient BA
+    {
+        get => _BA ??= new BloodAncient();
+        set => _BA = value;
+    }
     private static BloodAncient _BA;
-    private static BloodTitan BT { get => _BT ??= new BloodTitan(); set => _BT = value; }
+    private static BloodTitan BT
+    {
+        get => _BT ??= new BloodTitan();
+        set => _BT = value;
+    }
     private static BloodTitan _BT;
-    private static ChronoAssassin CA { get => _CA ??= new ChronoAssassin(); set => _CA = value; }
+    private static ChronoAssassin CA
+    {
+        get => _CA ??= new ChronoAssassin();
+        set => _CA = value;
+    }
     private static ChronoAssassin _CA;
-    private static DeathKnight DK { get => _DK ??= new DeathKnight(); set => _DK = value; }
+    private static DeathKnight DK
+    {
+        get => _DK ??= new DeathKnight();
+        set => _DK = value;
+    }
     private static DeathKnight _DK;
-    private static DoomKnight DoomK { get => _DoomK ??= new DoomKnight(); set => _DoomK = value; }
+    private static DoomKnight DoomK
+    {
+        get => _DoomK ??= new DoomKnight();
+        set => _DoomK = value;
+    }
     private static DoomKnight _DoomK;
-    private static DrakelWarlord DW { get => _DW ??= new DrakelWarlord(); set => _DW = value; }
+    private static DrakelWarlord DW
+    {
+        get => _DW ??= new DrakelWarlord();
+        set => _DW = value;
+    }
     private static DrakelWarlord _DW;
-    private static LegionDoomKnight LDK { get => _LDK ??= new LegionDoomKnight(); set => _LDK = value; }
+    private static LegionDoomKnight LDK
+    {
+        get => _LDK ??= new LegionDoomKnight();
+        set => _LDK = value;
+    }
     private static LegionDoomKnight _LDK;
-    private static LegendaryElementalWarrior LEW { get => _LEW ??= new LegendaryElementalWarrior(); set => _LEW = value; }
+    private static LegendaryElementalWarrior LEW
+    {
+        get => _LEW ??= new LegendaryElementalWarrior();
+        set => _LEW = value;
+    }
     private static LegendaryElementalWarrior _LEW;
-    private static Renegade Ren { get => _Ren ??= new Renegade(); set => _Ren = value; }
+    private static Renegade Ren
+    {
+        get => _Ren ??= new Renegade();
+        set => _Ren = value;
+    }
     private static Renegade _Ren;
-    private static UndeadSlayer US { get => _US ??= new UndeadSlayer(); set => _US = value; }
+    private static UndeadSlayer US
+    {
+        get => _US ??= new UndeadSlayer();
+        set => _US = value;
+    }
     private static UndeadSlayer _US;
     #endregion Member
 
     #region Seasonal
-    private static AlphaPirate APir { get => _APir ??= new AlphaPirate(); set => _APir = value; }
+    private static AlphaPirate APir
+    {
+        get => _APir ??= new AlphaPirate();
+        set => _APir = value;
+    }
     private static AlphaPirate _APir;
-    private static DarkLord DL { get => _DL ??= new DarkLord(); set => _DL = value; }
+    private static DarkLord DL
+    {
+        get => _DL ??= new DarkLord();
+        set => _DL = value;
+    }
     private static DarkLord _DL;
-    private static EvolvedLeprechaun EL { get => _EL ??= new EvolvedLeprechaun(); set => _EL = value; }
+    private static EvolvedLeprechaun EL
+    {
+        get => _EL ??= new EvolvedLeprechaun();
+        set => _EL = value;
+    }
     private static EvolvedLeprechaun _EL;
-    private static ExaltedHarbinger EH { get => _EH ??= new ExaltedHarbinger(); set => _EH = value; }
+    private static ExaltedHarbinger EH
+    {
+        get => _EH ??= new ExaltedHarbinger();
+        set => _EH = value;
+    }
     private static ExaltedHarbinger _EH;
-    private static FrostvalBarbarian FB { get => _FB ??= new FrostvalBarbarian(); set => _FB = value; }
+    private static FrostvalBarbarian FB
+    {
+        get => _FB ??= new FrostvalBarbarian();
+        set => _FB = value;
+    }
     private static FrostvalBarbarian _FB;
-    private static LegionSwordMasterAssassin LSMA { get => _LSMA ??= new LegionSwordMasterAssassin(); set => _LSMA = value; }
+    private static LegionSwordMasterAssassin LSMA
+    {
+        get => _LSMA ??= new LegionSwordMasterAssassin();
+        set => _LSMA = value;
+    }
     private static LegionSwordMasterAssassin _LSMA;
-    private static NorthlandsMonk NM { get => _NM ??= new NorthlandsMonk(); set => _NM = value; }
+    private static NorthlandsMonk NM
+    {
+        get => _NM ??= new NorthlandsMonk();
+        set => _NM = value;
+    }
     private static NorthlandsMonk _NM;
-    private static PirateClass Pirate { get => _Pirate ??= new PirateClass(); set => _Pirate = value; }
+    private static PirateClass Pirate
+    {
+        get => _Pirate ??= new PirateClass();
+        set => _Pirate = value;
+    }
     private static PirateClass _Pirate;
-    private static ShadowDragonShinobi SDS { get => _SDS ??= new ShadowDragonShinobi(); set => _SDS = value; }
+    private static ShadowDragonShinobi SDS
+    {
+        get => _SDS ??= new ShadowDragonShinobi();
+        set => _SDS = value;
+    }
     private static ShadowDragonShinobi _SDS;
-    private static PumpkinLord PL { get => _PL ??= new PumpkinLord(); set => _PL = value; }
+    private static PumpkinLord PL
+    {
+        get => _PL ??= new PumpkinLord();
+        set => _PL = value;
+    }
     private static PumpkinLord _PL;
-    private static VampireLord VL { get => _VL ??= new VampireLord(); set => _VL = value; }
+    private static VampireLord VL
+    {
+        get => _VL ??= new VampireLord();
+        set => _VL = value;
+    }
     private static VampireLord _VL;
-    private static NoHollowbornClass NHBC { get => _NHBC ??= new NoHollowbornClass(); set => _NHBC = value; }
+    private static NoHollowbornClass NHBC
+    {
+        get => _NHBC ??= new NoHollowbornClass();
+        set => _NHBC = value;
+    }
     private static NoHollowbornClass _NHBC;
     #endregion Seasonal
 
     #region Various
-    private static AbyssalAngelsShadow AAS { get => _AAS ??= new AbyssalAngelsShadow(); set => _AAS = value; }
+    private static AbyssalAngelsShadow AAS
+    {
+        get => _AAS ??= new AbyssalAngelsShadow();
+        set => _AAS = value;
+    }
     private static AbyssalAngelsShadow _AAS;
-    private static ArchFiend AF { get => _AF ??= new ArchFiend(); set => _AF = value; }
+    private static ArchFiend AF
+    {
+        get => _AF ??= new ArchFiend();
+        set => _AF = value;
+    }
     private static ArchFiend _AF;
-    private static BloodSorceress BS { get => _BS ??= new BloodSorceress(); set => _BS = value; }
+    private static BloodSorceress BS
+    {
+        get => _BS ??= new BloodSorceress();
+        set => _BS = value;
+    }
     private static BloodSorceress _BS;
-    private static DoomMetalNecro DMN { get => _DMN ??= new DoomMetalNecro(); set => _DMN = value; }
+    private static DoomMetalNecro DMN
+    {
+        get => _DMN ??= new DoomMetalNecro();
+        set => _DMN = value;
+    }
     private static DoomMetalNecro _DMN;
-    private static Dragonslayer DS { get => _DS ??= new Dragonslayer(); set => _DS = value; }
+    private static Dragonslayer DS
+    {
+        get => _DS ??= new Dragonslayer();
+        set => _DS = value;
+    }
     private static Dragonslayer _DS;
-    private static DragonslayerGeneral DSG { get => _DSG ??= new DragonslayerGeneral(); set => _DSG = value; }
+    private static DragonslayerGeneral DSG
+    {
+        get => _DSG ??= new DragonslayerGeneral();
+        set => _DSG = value;
+    }
     private static DragonslayerGeneral _DSG;
-    private static DragonShinobi DSS { get => _DSS ??= new DragonShinobi(); set => _DSS = value; }
+    private static DragonShinobi DSS
+    {
+        get => _DSS ??= new DragonShinobi();
+        set => _DSS = value;
+    }
     private static DragonShinobi _DSS;
-    private static Enforcer Enf { get => _Enf ??= new Enforcer(); set => _Enf = value; }
+    private static Enforcer Enf
+    {
+        get => _Enf ??= new Enforcer();
+        set => _Enf = value;
+    }
     private static Enforcer _Enf;
-    private static ExaltedSoulCleaver ESC { get => _ESC ??= new ExaltedSoulCleaver(); set => _ESC = value; }
+    private static ExaltedSoulCleaver ESC
+    {
+        get => _ESC ??= new ExaltedSoulCleaver();
+        set => _ESC = value;
+    }
     private static ExaltedSoulCleaver _ESC;
-    private static FrostSpiritReaver FSR { get => _FSR ??= new FrostSpiritReaver(); set => _FSR = value; }
+    private static FrostSpiritReaver FSR
+    {
+        get => _FSR ??= new FrostSpiritReaver();
+        set => _FSR = value;
+    }
     private static FrostSpiritReaver _FSR;
-    private static GrimNecromancer GN { get => _GN ??= new GrimNecromancer(); set => _GN = value; }
+    private static GrimNecromancer GN
+    {
+        get => _GN ??= new GrimNecromancer();
+        set => _GN = value;
+    }
     private static GrimNecromancer _GN;
-    private static HighSeasCommander HSC { get => _HSC ??= new HighSeasCommander(); set => _HSC = value; }
+    private static HighSeasCommander HSC
+    {
+        get => _HSC ??= new HighSeasCommander();
+        set => _HSC = value;
+    }
     private static HighSeasCommander _HSC;
-    private static InfiniteLegionDC ILDC { get => _ILDC ??= new InfiniteLegionDC(); set => _ILDC = value; }
+    private static InfiniteLegionDC ILDC
+    {
+        get => _ILDC ??= new InfiniteLegionDC();
+        set => _ILDC = value;
+    }
     private static InfiniteLegionDC _ILDC;
-    private static LightMage LM { get => _LM ??= new LightMage(); set => _LM = value; }
+    private static LightMage LM
+    {
+        get => _LM ??= new LightMage();
+        set => _LM = value;
+    }
     private static LightMage _LM;
-    private static MechaJouster MJ { get => _MJ ??= new MechaJouster(); set => _MJ = value; }
+    private static MechaJouster MJ
+    {
+        get => _MJ ??= new MechaJouster();
+        set => _MJ = value;
+    }
     private static MechaJouster _MJ;
-    private static MartialArtist MA { get => _MA ??= new MartialArtist(); set => _MA = value; }
+    private static MartialArtist MA
+    {
+        get => _MA ??= new MartialArtist();
+        set => _MA = value;
+    }
     private static MartialArtist _MA;
-    private static Necromancer Necro { get => _Necro ??= new Necromancer(); set => _Necro = value; }
+    private static Necromancer Necro
+    {
+        get => _Necro ??= new Necromancer();
+        set => _Necro = value;
+    }
     private static Necromancer _Necro;
-    private static NeoMetalNecro NMN { get => _NMN ??= new NeoMetalNecro(); set => _NMN = value; }
+    private static NeoMetalNecro NMN
+    {
+        get => _NMN ??= new NeoMetalNecro();
+        set => _NMN = value;
+    }
     private static NeoMetalNecro _NMN;
-    private static ProtoSartorium PS { get => _PS ??= new ProtoSartorium(); set => _PS = value; }
+    private static ProtoSartorium PS
+    {
+        get => _PS ??= new ProtoSartorium();
+        set => _PS = value;
+    }
     private static ProtoSartorium _PS;
-    private static Rustbucket RB { get => _RB ??= new Rustbucket(); set => _RB = value; }
+    private static Rustbucket RB
+    {
+        get => _RB ??= new Rustbucket();
+        set => _RB = value;
+    }
     private static Rustbucket _RB;
-    private static ScarletSorceress SS { get => _SS ??= new ScarletSorceress(); set => _SS = value; }
+    private static ScarletSorceress SS
+    {
+        get => _SS ??= new ScarletSorceress();
+        set => _SS = value;
+    }
     private static ScarletSorceress _SS;
-    private static SkyChargedGrenadier SCG { get => _SCG ??= new SkyChargedGrenadier(); set => _SCG = value; }
+    private static SkyChargedGrenadier SCG
+    {
+        get => _SCG ??= new SkyChargedGrenadier();
+        set => _SCG = value;
+    }
     private static SkyChargedGrenadier _SCG;
-    private static SwordMaster SM { get => _SM ??= new SwordMaster(); set => _SM = value; }
+    private static SwordMaster SM
+    {
+        get => _SM ??= new SwordMaster();
+        set => _SM = value;
+    }
     private static SwordMaster _SM;
-    private static Sentinel Sentinel { get => _Sentinel ??= new Sentinel(); set => _Sentinel = value; }
+    private static Sentinel Sentinel
+    {
+        get => _Sentinel ??= new Sentinel();
+        set => _Sentinel = value;
+    }
     private static Sentinel _Sentinel;
     #endregion Various
 
     #region End game
-    private static ArcanaInvoker AI { get => _AI ??= new ArcanaInvoker(); set => _AI = value; }
+    private static ArcanaInvoker AI
+    {
+        get => _AI ??= new ArcanaInvoker();
+        set => _AI = value;
+    }
     private static ArcanaInvoker _AI;
-    private static CoreArchMage AM { get => _AM ??= new CoreArchMage(); set => _AM = value; }
+    private static CoreArchMage AM
+    {
+        get => _AM ??= new CoreArchMage();
+        set => _AM = value;
+    }
     private static CoreArchMage _AM;
-    private static ArchPaladin AP { get => _AP ??= new ArchPaladin(); set => _AP = value; }
+    private static ArchPaladin AP
+    {
+        get => _AP ??= new ArchPaladin();
+        set => _AP = value;
+    }
     private static ArchPaladin _AP;
-    private static ChaosAvengerClass CAV { get => _CAV ??= new ChaosAvengerClass(); set => _CAV = value; }
+    private static ChaosAvengerClass CAV
+    {
+        get => _CAV ??= new ChaosAvengerClass();
+        set => _CAV = value;
+    }
     private static ChaosAvengerClass _CAV;
-    private static DragonOfTime DOT { get => _DOT ??= new DragonOfTime(); set => _DOT = value; }
+    private static DragonOfTime DOT
+    {
+        get => _DOT ??= new DragonOfTime();
+        set => _DOT = value;
+    }
     private static DragonOfTime _DOT;
-    private static HBVNonInsig HBV { get => _HBV ??= new HBVNonInsig(); set => _HBV = value; }
+    private static HBVNonInsig HBV
+    {
+        get => _HBV ??= new HBVNonInsig();
+        set => _HBV = value;
+    }
     private static HBVNonInsig _HBV;
-    private static KingsEcho KE { get => _KE ??= new KingsEcho(); set => _KE = value; }
+    private static KingsEcho KE
+    {
+        get => _KE ??= new KingsEcho();
+        set => _KE = value;
+    }
     private static KingsEcho _KE;
-    private static Lich lich { get => _lich ??= new Lich(); set => _lich = value; }
+    private static Lich lich
+    {
+        get => _lich ??= new Lich();
+        set => _lich = value;
+    }
     private static Lich _lich;
-    private static LightCaster LC { get => _LC ??= new LightCaster(); set => _LC = value; }
+    private static LightCaster LC
+    {
+        get => _LC ??= new LightCaster();
+        set => _LC = value;
+    }
     private static LightCaster _LC;
-    private static CoreLR LR { get => _LR ??= new CoreLR(); set => _LR = value; }
+    private static CoreLR LR
+    {
+        get => _LR ??= new CoreLR();
+        set => _LR = value;
+    }
     private static CoreLR _LR;
-    private static SovereignOfStorms SOS { get => _SOS ??= new SovereignOfStorms(); set => _SOS = value; }
+    private static SovereignOfStorms SOS
+    {
+        get => _SOS ??= new SovereignOfStorms();
+        set => _SOS = value;
+    }
     private static SovereignOfStorms _SOS;
-    private static VerusDoomKnightClass VDK { get => _VDK ??= new VerusDoomKnightClass(); set => _VDK = value; }
+    private static VerusDoomKnightClass VDK
+    {
+        get => _VDK ??= new VerusDoomKnightClass();
+        set => _VDK = value;
+    }
     private static VerusDoomKnightClass _VDK;
-    private static CoreVHL VHL { get => _VHL ??= new CoreVHL(); set => _VHL = value; }
+    private static CoreVHL VHL
+    {
+        get => _VHL ??= new CoreVHL();
+        set => _VHL = value;
+    }
     private static CoreVHL _VHL;
-    private static CoreYnR YNR { get => _YNR ??= new CoreYnR(); set => _YNR = value; }
+    private static CoreYnR YNR
+    {
+        get => _YNR ??= new CoreYnR();
+        set => _YNR = value;
+    }
     private static CoreYnR _YNR;
     #endregion End game
+    #endregion 
 
 
     public string OptionsStorage = "GetAllClasses";
     public bool DontPreconfigure = true;
     public List<IOption> Options = new()
     {
-        new Option<bool>("RankALL", "Rankup All Classes", "wether to Rankup the class to 10 after acquiring it", true),
+        new Option<bool>(
+            "RankALL",
+            "Rankup All Classes",
+            "wether to Rankup the class to 10 after acquiring it",
+            true
+        ),
+        new Option<bool>(
+            "DoLegion",
+            "GetLegionClasses",
+            "Join Legion if not( you'll have to stuck around for this one itll be at the top) -- cost 1200acs",
+            false
+        ),
         CoreBots.Instance.SkipOptions,
     };
 
@@ -495,12 +872,15 @@ public class AllClasses
         int ReputationBoostID = Bot.Boosts.GetBoostID(BoostType.Reputation, true);
 
         Core.BankingBlackList.AddRange(
-            Bot.Inventory.Items
-                .Where(x => x.ID == GoldBoostID || x.ID == ClassBoostID || x.ID == ExperienceBoostID || x.ID == ReputationBoostID)
+            Bot.Inventory.Items.Where(x =>
+                    x.ID == GoldBoostID
+                    || x.ID == ClassBoostID
+                    || x.ID == ExperienceBoostID
+                    || x.ID == ReputationBoostID
+                )
                 .Cast<ItemBase>()
                 .Select(item => item.Name)
         );
-
 
         Core.SetOptions();
 
@@ -512,6 +892,8 @@ public class AllClasses
     public void GetAllClasses()
     {
         bool rankUpClass = Bot.Config!.Get<bool>("RankALL");
+        // Start off with legion classes as they cost 1200 acs to start with by joining the legion
+        LegionCLasses(rankUpClass);
 
         //some of these are required for forge enhancements
         MoreClassesToGet(rankUpClass);
@@ -524,13 +906,14 @@ public class AllClasses
         VariousClasses(rankUpClass);
         EndGameClasses(rankUpClass);
         ACorToHardtoGetClasses(rankUpClass);
-
     }
 
     public void MoreClassesToGet(bool rankUpClass)
     {
-        Core.Logger("=== Buying `beginner` classes start (will help with forge enhancements later)===");
-        Adv.GearStore();
+        Core.Logger(
+            "=== Buying `beginner` classes start (will help with forge enhancements later)==="
+        );
+        Adv.GearStore(EnhAfter: true);
         Core.BuyItem("trainers", 170, "Warrior");
         Core.BuyItem("trainers", 174, "Mage");
         Core.BuyItem("trainers", 176, "Healer");
@@ -542,7 +925,21 @@ public class AllClasses
         Core.BuyItem(Bot.Map.Name, 222, "Battle Healer");
         Core.BuyItem(Bot.Map.Name, 222, "No Class");
         Adv.GearStore(true, true);
-        Core.ToBank(new[] { "Warrior", "Mage", "Healer", "Rogue", "Ninja", "Barber", "Oracle", "Battle Warrior", "Battle Healer", "No Class" });
+        Core.ToBank(
+            new[]
+            {
+                "Warrior",
+                "Mage",
+                "Healer",
+                "Rogue",
+                "Ninja",
+                "Barber",
+                "Oracle",
+                "Battle Warrior",
+                "Battle Healer",
+                "No Class",
+            }
+        );
         Core.Logger("=== `beginner` classes - Bought! ===");
     }
 
@@ -550,13 +947,22 @@ public class AllClasses
     {
         Core.Logger("=== Doing Daily Classes ===");
 
-        Adv.GearStore();
+        Adv.GearStore(EnhAfter: true);
         CheckAndExecute("Blaze Binder", () => BB.GetClass(rankUpClass));
         CheckAndExecute("The Collector", Daily.CollectorClass);
         CheckAndExecute("Cryomancer", () => Cryo.DoCryomancer(rankUpClass));
         CheckAndExecute("Lord of Order", () => LOO.GetLoO(rankUpClass));
         Adv.GearStore(true, true);
-        Core.ToBank(new[] { "Blaze Binder", "The Collector", "Cryomancer", "Death KnightLord", "Lord of Order" });
+        Core.ToBank(
+            new[]
+            {
+                "Blaze Binder",
+                "The Collector",
+                "Cryomancer",
+                "Death KnightLord",
+                "Lord of Order",
+            }
+        );
 
         Core.Logger("=== Daily Classes - Completed! ===");
     }
@@ -565,7 +971,7 @@ public class AllClasses
     {
         Core.Logger("=== Doing Reputation Classes ===");
 
-        Adv.GearStore();
+        Adv.GearStore(EnhAfter: true);
         CheckAndExecute("Arachnomancer", () => Arach.GetArach(rankUpClass));
         CheckAndExecute("Darkblood StormKing", () => DBSK.GetDSK(rankUpClass));
         CheckAndExecute("Elemental Dracomancer", () => ED.GetED(rankUpClass));
@@ -589,8 +995,31 @@ public class AllClasses
         CheckAndExecute("Chaos Slayer Cleric", () => CS.GetCS(CSvariant.Cleric, rankUpClass));
         CheckAndExecute("Chaos Slayer Thief", () => CS.GetCS(CSvariant.Thief, rankUpClass));
         Adv.GearStore(true, true);
-        Core.ToBank(new[] { "Arachnomancer", "Darkblood StormKing", "Elemental Dracomancer", "Eternal Inversionist", "Evolved Shaman", "Glacial Berserker", "Horc Evader", "Imperial Chunin", "Lycan", "Master Ranger", "Paladin", "Royal BattleMage", "Shaman", "StoneCrusher", "Thief of Hours", "Troll Spellsmith", "Chaos Slayer Mystic", "Chaos Slayer Berserker", "Chaos Slayer Cleric", "Chaos Slayer Thief" });
-
+        Core.ToBank(
+            new[]
+            {
+                "Arachnomancer",
+                "Darkblood StormKing",
+                "Elemental Dracomancer",
+                "Eternal Inversionist",
+                "Evolved Shaman",
+                "Glacial Berserker",
+                "Horc Evader",
+                "Imperial Chunin",
+                "Lycan",
+                "Master Ranger",
+                "Paladin",
+                "Royal BattleMage",
+                "Shaman",
+                "StoneCrusher",
+                "Thief of Hours",
+                "Troll Spellsmith",
+                "Chaos Slayer Mystic",
+                "Chaos Slayer Berserker",
+                "Chaos Slayer Cleric",
+                "Chaos Slayer Thief",
+            }
+        );
 
         Core.Logger("=== Reputation Classes - Completed! ===");
     }
@@ -602,7 +1031,7 @@ public class AllClasses
 
         Core.Logger("=== Doing Member Classes ===");
 
-        Adv.GearStore();
+        Adv.GearStore(EnhAfter: true);
         CheckAndExecute("Alpha Omega", () => AO.GetAlphaOmega(rankUpClass));
         CheckAndExecute("Acolyte", () => Acolyte.GetAcolyte(rankUpClass));
         CheckAndExecute("Bard", () => Bard.GetBard(rankUpClass));
@@ -619,7 +1048,25 @@ public class AllClasses
         CheckAndExecute("Renegade", () => Ren.Getclass(rankUpClass));
         CheckAndExecute("UndeadSlayer", () => US.GetUS(rankUpClass));
         Adv.GearStore(true, true);
-        Core.ToBank(new[] { "Alpha Omega", "Acolyte", "Bard", "BeastMaster", "Blood Ancient", "Blood Titan", "Chrono Assassin", "DeathKnight", "DoomKnight", "Drakel Warlord", "Legion DoomKnight", "Legendary Elemental Warrior", "Renegade", "UndeadSlayer" });
+        Core.ToBank(
+            new[]
+            {
+                "Alpha Omega",
+                "Acolyte",
+                "Bard",
+                "BeastMaster",
+                "Blood Ancient",
+                "Blood Titan",
+                "Chrono Assassin",
+                "DeathKnight",
+                "DoomKnight",
+                "Drakel Warlord",
+                "Legion DoomKnight",
+                "Legendary Elemental Warrior",
+                "Renegade",
+                "UndeadSlayer",
+            }
+        );
 
         Core.Logger("=== Member Classes - Completed! ===");
     }
@@ -628,13 +1075,11 @@ public class AllClasses
     {
         Core.Logger("=== Doing Seasonal Classes ===");
 
-        Adv.GearStore();
+        Adv.GearStore(EnhAfter: true);
         CheckAndExecute("Alpha Pirate", () => APir.GetAlphaPirate(rankUpClass));
         CheckAndExecute("Dark Lord", () => DL.GetDL(rankUpClass));
         CheckAndExecute("Evolved Leprechaun", () => EL.GetClass(rankUpClass));
-        CheckAndExecute("Exalted Harbinger", () => EH.GetEH(rankUpClass));
         CheckAndExecute("Frostval Barbarian", () => FB.GetFB(rankUpClass));
-        CheckAndExecute("Legion SwordMaster Assassin", () => LSMA.GetClass(rankUpClass));
         CheckAndExecute("Northlands Monk", () => NM.GetNlMonk(rankUpClass));
         CheckAndExecute("Pirate", () => Pirate.GetPirate(rankUpClass));
         CheckAndExecute("Shadow Dragon Shinobi", () => SDS.GetClass(rankUpClass));
@@ -643,7 +1088,22 @@ public class AllClasses
         // CheckAndExecute("No Hollowborn Class", () => NHBC.GetNHBC(rankUpClass));
 
         Adv.GearStore(true, true);
-        Core.ToBank(new[] { "Alpha Pirate", "Dark Lord", "Evolved Leprechaun", "Exalted Harbinger", "Frostval Barbarian", "Legion SwordMaster Assassin", "Northlands Monk", "Pirate", "Shadow Dragon Shinobi", "Pumpkin Lord", "Vampire Lord" });
+        Core.ToBank(
+            new[]
+            {
+                "Alpha Pirate",
+                "Dark Lord",
+                "Evolved Leprechaun",
+                "Exalted Harbinger",
+                "Frostval Barbarian",
+                "Legion SwordMaster Assassin",
+                "Northlands Monk",
+                "Pirate",
+                "Shadow Dragon Shinobi",
+                "Pumpkin Lord",
+                "Vampire Lord",
+            }
+        );
 
         Core.Logger("=== Seasonal Classes - Completed! ===");
     }
@@ -652,7 +1112,7 @@ public class AllClasses
     {
         Core.Logger("=== Doing Various Classes ===");
 
-        Adv.GearStore();
+        Adv.GearStore(EnhAfter: true);
         CheckAndExecute("Abyssal Angel Shadow", () => AAS.GetAbyssal(rankUpClass));
         CheckAndExecute("Archfiend", () => AF.GetArchfiend(rankUpClass));
         CheckAndExecute("Blood Sorceress", () => BS.GetBSorc(rankUpClass));
@@ -663,7 +1123,6 @@ public class AllClasses
         CheckAndExecute("Enforcer", () => Enf.GetClass(rankUpClass));
         CheckAndExecute("Frost SpititReaver", () => FSR.GetFSR(rankUpClass));
         CheckAndExecute("HighSeas Commander", () => HSC.GetHSC(rankUpClass));
-        CheckAndExecute("Infinite Legion Dark Caster", () => ILDC.GetILDC(rankUpClass));
         CheckAndExecute("Martial Artist", () => MA.GetMartialArtist(rankUpClass));
         CheckAndExecute("MechaJouster", () => MJ.GetMJ(rankUpClass));
         CheckAndExecute("Necromancer", () => Necro.GetNecromancer(rankUpClass));
@@ -671,9 +1130,30 @@ public class AllClasses
         CheckAndExecute("ProtoSartorium", () => PS.GetPS(rankUpClass));
         CheckAndExecute("Rustbucket", () => RB.GetRustbucket(rankUpClass));
         CheckAndExecute("Scarlet Sorceress", () => SS.GetSSorc(rankUpClass));
-        CheckAndExecute("SwordMaster", () => SM.GetSwordMaster(rankUpClass));
         Adv.GearStore(true, true);
-        Core.ToBank(new[] { "Abyssal Angel Shadow", "Archfiend", "Blood Sorceress", "Doom Metal Necro", "Dragonslayer", "Dragonslayer General", "DragonSoul Shinobi", "Enforcer", "Frost SpititReaver", "HighSeas Commander", "Infinite Legion Dark Caster", "MechaJouster", "Necromancer", "Neo Metal Necro", "ProtoSartorium", "Rustbucket", "Scarlet Sorceress", "SwordMaster" });
+        Core.ToBank(
+            new[]
+            {
+                "Abyssal Angel Shadow",
+                "Archfiend",
+                "Blood Sorceress",
+                "Doom Metal Necro",
+                "Dragonslayer",
+                "Dragonslayer General",
+                "DragonSoul Shinobi",
+                "Enforcer",
+                "Frost SpititReaver",
+                "HighSeas Commander",
+                "Infinite Legion Dark Caster",
+                "MechaJouster",
+                "Necromancer",
+                "Neo Metal Necro",
+                "ProtoSartorium",
+                "Rustbucket",
+                "Scarlet Sorceress",
+                "SwordMaster",
+            }
+        );
 
         Core.Logger("=== Various Classes - Completed! ===");
     }
@@ -682,7 +1162,7 @@ public class AllClasses
     {
         Core.Logger("=== Doing End Game Classes ===");
 
-        Adv.GearStore();
+        Adv.GearStore(EnhAfter: true);
         CheckAndExecute("ArchPaladin", () => AP.GetAP(rankUpClass));
         CheckAndExecute("Dragon of Time", () => DOT.GetDoT(rankUpClass, doExtra: false));
         CheckAndExecute("Void Highlord", () => VHL.GetVHL(rankUpClass));
@@ -697,7 +1177,7 @@ public class AllClasses
     {
         Core.Logger("=== AC / Special Requirement / Army Classes ===");
 
-        Adv.GearStore();
+        Adv.GearStore(EnhAfter: true);
         // Why do you own these classes?
         CheckAndExecute("Grim Necromancer", () => GN.GetGN(rankUpClass)); // 600k ac purchased
 
@@ -707,7 +1187,6 @@ public class AllClasses
 
         // Classes that Cost ACs / AC badges:
         CheckAndExecute("LightCaster", () => LC.GetLC(rankUpClass)); // LC gets LM at the same time
-        CheckAndExecute("Legion Revenant", () => LR.GetLR(rankUpClass));
         CheckAndExecute("Exalted Soul Cleaver", () => ESC.GetClass(rankUpClass));
 
         // Classes that require an army or are just to damn hard to solo,
@@ -724,28 +1203,55 @@ public class AllClasses
         CheckAndExecute("ShadowScythe General", Daily.ShadowScytheClass);
         // CheckAndExecute("Sovereign of Storms", () => SOS.GetSOS(rankUpClass));
         Adv.GearStore(true, true);
-        Core.ToBank(new[] { "Grim Necromancer", "SkyCharged Grenadier", "Sentinel", "LightCaster", "Legion Revenant", "Exalted Soul Cleaver", "Chaos Avenger", "Archmage", "Verus DoomKnight", "Arcana Invoker", "Hollowborn Vindicator", "Lich", "ShadowScythe General", "Sovereign of Storms" });
+        Core.ToBank(
+            new[]
+            {
+                "Grim Necromancer",
+                "SkyCharged Grenadier",
+                "Sentinel",
+                "LightCaster",
+                "Legion Revenant",
+                "Exalted Soul Cleaver",
+                "Chaos Avenger",
+                "Archmage",
+                "Verus DoomKnight",
+                "Arcana Invoker",
+                "Hollowborn Vindicator",
+                "Lich",
+                "ShadowScythe General",
+                "Sovereign of Storms",
+            }
+        );
 
         Core.Logger("=== AC / Special Requirement / Army Classes - Completed! ===");
     }
 
-
-    bool IsitRank10(ItemBase item) => item != null && item.Quantity == 302500;
-
-    void CheckAndExecute(string className, Action action)
+    void LegionCLasses(bool rankUpClass)
     {
-        // Find the item in both inventory and bank.
-        ItemBase? Class = Bot.Inventory.Items.Concat(Bot.Bank.Items)
-            .FirstOrDefault(x => x.Name.ToLower() == className.ToLower());
+        if (!Bot.Config!.Get<bool>("DoLegion"))
+            return;
 
-        bool ItemOwned = Bot.Inventory.Items.Concat(Bot.Bank.Items).Contains(Class);
+        Core.Logger("=== AC / Join Legion REquired / 1200 acs ===");
 
-        // Check if the item is found and if it meets the quantity requirement.
-        if (!ItemOwned || (Class != null && !IsitRank10(Class)))
-        {
-            action();
-        }
+        Legion.JoinLegion();
+
+        Adv.GearStore(EnhAfter: true);
+
+        CheckAndExecute("Legion Revenant", () => LR.GetLR(rankUpClass));
+        CheckAndExecute("Exalted Harbinger", () => EH.GetEH(rankUpClass));
+        CheckAndExecute("Legion SwordMaster Assassin", () => LSMA.GetClass(rankUpClass));
+        CheckAndExecute("Infinite Legion Dark Caster", () => ILDC.GetILDC(rankUpClass));
+        CheckAndExecute("SwordMaster", () => SM.GetSwordMaster(rankUpClass));
+
+
     }
 
 
+    void CheckAndExecute(string className, Action action)
+    {
+        InventoryItem? classItem = Bot.Inventory.Items.Concat(Bot.Bank.Items).FirstOrDefault(x => x.Category == ItemCategory.Class && x.Name.Equals(className, StringComparison.OrdinalIgnoreCase));
+
+        if (classItem == null || classItem.Quantity < 302500)
+            action();
+    }
 }

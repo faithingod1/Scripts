@@ -15,33 +15,45 @@ public class ArmyBankAllItems
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static BankAllItems BAI { get => _BAI ??= new BankAllItems(); set => _BAI = value; }
+    private static BankAllItems BAI
+    {
+        get => _BAI ??= new BankAllItems();
+        set => _BAI = value;
+    }
     private static BankAllItems _BAI;
-    private static CoreArmyLite Army { get => _Army ??= new CoreArmyLite(); set => _Army = value; }
+    private static CoreArmyLite Army
+    {
+        get => _Army ??= new CoreArmyLite();
+        set => _Army = value;
+    }
     private static CoreArmyLite _Army;
 
     public void ScriptMain(IScriptInterface Bot)
     {
         Core.SetOptions();
 
-        AllBankAll();
+        // AllBankAll();
+        Bot.Log("OneClient scripts area bit fucked, and i just cant fix the \"not logging into full server\" issue.. so they will be disabled -- please use the normal varients of the scripts.");
+
 
         Core.SetOptions(false);
     }
 
     public void AllBankAll()
     {
+        Bot.Options.ReloginServer =
+            (Bot.Options.ReloginServer ?? "Twilly") ?? new[] { "Twilly", "Twig" }[new Random().Next(2)];
+
         while (!Bot.ShouldExit && Army.doForAll())
         {
             BAI.BankAll(true, true, false, string.Empty);
             Core.Logger("All \"Allowed\" items banked, onto the next Acc");
 
-            // if either are enabled set them to empty, so the next acc doesnt try to 
+            // if either are enabled set them to empty, so the next acc doesnt try to
             if (Core.FarmGearOn && Core.FarmGear.Length > 0)
-                Core.FarmGear = Array.Empty<string>();
+                Core.FarmGear = [];
             if (Core.SoloGearOn && Core.SoloGear.Length > 0)
-                Core.SoloGear = Array.Empty<string>();
+                Core.SoloGear = [];
         }
-
     }
 }

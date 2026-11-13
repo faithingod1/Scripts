@@ -14,9 +14,24 @@ public class GoldenHanzoVoid
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreNation Nation { get => _Nation ??= new CoreNation(); set => _Nation = value; }    private static CoreNation _Nation;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreNation Nation
+    {
+        get => _Nation ??= new CoreNation();
+        set => _Nation = value;
+    }
+    private static CoreNation _Nation;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -32,16 +47,14 @@ public class GoldenHanzoVoid
         if (Core.CheckInventory("Golden Hanzo Void"))
             return;
 
-
-        Nation.ApprovalAndFavor(50, 200);
-        Farm.BattleGroundE(100000);
-        Nation.FarmTaintedGem(30);
-        Nation.TheAssistant("Dark Crystal Shard", 15);
-        Nation.FarmDiamondofNulgath(50);
+        Nation.ApprovalAndFavor(50, 0);
+        Nation.FarmTaintedGem(45);
+        Nation.TheAssistant("Dark Crystal Shard", 45);
+        Nation.FarmDiamondofNulgath(75);
         Nation.FarmVoucher(false);
 
-        Adv.BuyItem("evilwarnul", 456, 27843, shopItemID: 3142);
+        // Buy GHV
+        Adv.BuyItem("evilwarnul", 456, 27843, shopItemID: 2694);
         Bot.Wait.ForItemBuy();
     }
 }
-

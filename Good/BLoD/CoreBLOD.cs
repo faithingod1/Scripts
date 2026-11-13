@@ -9,22 +9,38 @@ tags: null
 //cs_include Scripts/CoreStory.cs
 //cs_include Scripts/Story/BattleUnder.cs
 using Skua.Core.Interfaces;
-using Skua.Core.Models.Shops;
 using Skua.Core.Models.Items;
-using Skua.Core.Utils;
 using Skua.Core.Models.Quests;
+using Skua.Core.Models.Shops;
+using Skua.Core.Utils;
 
 public class CoreBLOD
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreDailies Daily { get => _Daily ??= new CoreDailies(); set => _Daily = value; }
+    private static CoreDailies Daily
+    {
+        get => _Daily ??= new CoreDailies();
+        set => _Daily = value;
+    }
     private static CoreDailies _Daily;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
-    private static BattleUnder BattleUnder { get => _BattleUnder ??= new BattleUnder(); set => _BattleUnder = value; }
+    private static BattleUnder BattleUnder
+    {
+        get => _BattleUnder ??= new BattleUnder();
+        set => _BattleUnder = value;
+    }
     private static BattleUnder _BattleUnder;
 
     public void ScriptMain(IScriptInterface bot)
@@ -184,7 +200,9 @@ public class CoreBLOD
         FarmFindingFrag(WeaponOfDestiny.Blade, "Loyal Spirit Orb", quant);
         FarmFindingFrag(WeaponOfDestiny.Daggers, "Loyal Spirit Orb", quant);
         FarmFindingFrag(WeaponOfDestiny.Scythe, "Loyal Spirit Orb", quant);
-        FarmUltimateWK("Loyal Spirit Orb", quant);
+
+        if (Bot.Quests.IsUnlocked(2163))
+            FarmUltimateWK("Loyal Spirit Orb", quant);
 
         // Default
         while (!Bot.ShouldExit && !Core.CheckInventory("Loyal Spirit Orb", quant))
@@ -203,7 +221,8 @@ public class CoreBLOD
         FarmFindingFrag(WeaponOfDestiny.Bow, "Bright Aura", quant);
         FarmFindingFrag(WeaponOfDestiny.Broadsword, "Bright Aura", quant);
         FarmFindingFrag(WeaponOfDestiny.Scythe, "Bright Aura", quant);
-        FarmUltimateWK("Bright Aura", quant);
+        if (Bot.Quests.IsUnlocked(2163))
+            FarmUltimateWK("Bright Aura", quant);
 
         // Default
         while (!Bot.ShouldExit && !Core.CheckInventory("Bright Aura", quant))
@@ -256,9 +275,18 @@ public class CoreBLOD
 
         Core.EquipClass(ClassType.Solo);
 
-        Core.AddDrop(farmSpiritOrbs
-            ? new[] { "Bone Dust", "Undead Energy", "Cavern Celestite", "Undead Essence", "Spirit Orb" }
-            : new[] { "Cavern Celestite", "Undead Essence", item });
+        Core.AddDrop(
+            farmSpiritOrbs
+                ? new[]
+                {
+                    "Bone Dust",
+                    "Undead Energy",
+                    "Cavern Celestite",
+                    "Undead Essence",
+                    "Spirit Orb",
+                }
+                : new[] { "Cavern Celestite", "Undead Essence", item }
+        );
 
         Core.RegisterQuests(farmSpiritOrbs ? new[] { 2082, 2083, 939 } : new[] { 939 });
 
@@ -274,8 +302,7 @@ public class CoreBLOD
 
         Core.CancelRegisteredQuests();
 
-
-        /* 
+        /*
         using register quest + accept and complete seems to break
         things.. not sure how to solve this besides just picking
         
@@ -307,7 +334,7 @@ public class CoreBLOD
 
         GetBlindingWeapon(weapon);
 
-        int quest = (weapon) switch
+        int quest = weapon switch
         {
             WeaponOfDestiny.Bow => 2174,
             WeaponOfDestiny.Daggers => 2175,
@@ -318,26 +345,52 @@ public class CoreBLOD
             _ => 0,
         };
 
-        Core.AddDrop(Core.QuestRewards(quest).Append("Blinding Light Fragments").ToArray());
+        Core.Logger("Selling \"Blinding Light Fragments\" before starting this as it can bug out and just stay at 1/1 forever.. ( blame ae).");
+        Core.Unbank("Blinding Light Fragments");
+        Core.SellItem("Blinding Light Fragments", all: true);
+
+        Core.AddDrop("Blinding Light Fragments");
+        Core.AddDrop(Core.QuestRewards(quest));
         Core.EquipClass(ClassType.Farm);
         Core.FarmingLogger(item, quant);
 
-        Core.RegisterQuests(quest);
+        if (item == "Spirit Orb")
+        {
+            if (Bot.Quests.IsUnlocked(2082))
+            {
+                Core.AddDrop("Undead Essence");
+                Core.RegisterQuests(2082);
+            }
+            if (Bot.Quests.IsUnlocked(2083))
+            {
+                Core.AddDrop("Bone Dust");
+                Core.RegisterQuests(2083);
+            }
+        }
+
         while (!Bot.ShouldExit && !Core.CheckInventory(item, quant))
-            Core.KillMonster("battleunderb", "Enter", "Spawn", "Skeleton Warrior", item, quant, log: false, isTemp: false);
+        {
+            Core.EnsureAccept(quest);
+            Core.KillMonster("battleunderb", "Enter", "Spawn", "*", "Blinding Light Fragments", 10, isTemp: false, log: false);
+            Core.EnsureComplete(quest);
+        }
         Core.CancelRegisteredQuests();
     }
 
     private void FarmFindingFrag(WeaponOfDestiny weapon, string item, int quant)
     {
-        if (!Core.CheckInventory(item, quant) && Core.isCompletedBefore(2163) &&
-            (Core.CheckInventory($"Blinding {weapon} of Destiny") || Core.CheckInventory(40187))) // Basically means you can buy it from the final shop
+        if (
+            !Core.CheckInventory(item, quant)
+            && Core.isCompletedBefore(2163)
+            && (Core.CheckInventory($"Blinding {weapon} of Destiny") || Core.CheckInventory(40187))
+        ) // Basically means you can buy it from the final shop
             FindingFragments(weapon, item, quant);
     }
 
     private void FarmUltimateWK(string item, int quant)
     {
-        if (!Core.CheckInventory(item, quant) && Bot.Quests.IsUnlocked(2163))
+        // We'll be able to use this later once we unlock UWK
+        if (!Core.CheckInventory(item, quant))
             UltimateWK(item, quant);
     }
 
@@ -354,8 +407,9 @@ public class CoreBLOD
         Core.FarmingLogger("Basic Wepon Kit", quant);
         Core.AddDrop("Basic Weapon Kit");
 
-        if (Core.isCompletedBefore(2136))
+        if (!Bot.Quests.IsUnlocked(2136))
         {
+            Core.Logger("Unlocking \"Basic Weapon Kit\" Quest!");
             // Define valid metals in enum form
             MineCraftingMetalsEnum[] validMetals = new[]
             {
@@ -365,19 +419,21 @@ public class CoreBLOD
                 MineCraftingMetalsEnum.Iron,
                 MineCraftingMetalsEnum.Copper,
                 MineCraftingMetalsEnum.Silver,
-                MineCraftingMetalsEnum.Platinum
+                MineCraftingMetalsEnum.Platinum,
             };
 
             // Find first matching item in inventory/bank
-            ItemBase? itemToUpgrade = Bot.Inventory.Items.Concat(Bot.Bank.Items)
+            ItemBase? itemToUpgrade = Bot
+                .Inventory.Items.Concat(Bot.Bank.Items)
                 .FirstOrDefault(i => Enum.TryParse<MineCraftingMetalsEnum>(i.Name, out var _));
 
             // Upgrade the metal (fallback to Aluminum if none found)
-            UpgradeMetal(itemToUpgrade != null
-                ? Enum.Parse<MineCraftingMetalsEnum>(itemToUpgrade.Name)
-                : MineCraftingMetalsEnum.Aluminum);
+            UpgradeMetal(
+                itemToUpgrade != null
+                    ? Enum.Parse<MineCraftingMetalsEnum>(itemToUpgrade.Name)
+                    : MineCraftingMetalsEnum.Aluminum
+            );
         }
-
 
         while (!Bot.ShouldExit && !Core.CheckInventory("Basic Weapon Kit", quant))
         {
@@ -385,8 +441,8 @@ public class CoreBLOD
             Core.KillMonster("forest", "Forest3", "Left", "*", "Zardman's StoneHammer", 1, false);
             Core.KillMonster("noobshire", "North", "Left", "Horc Noob", "Noob Blade Oil");
             Core.KillMonster("farm", "Crop1", "Right", "Scarecrow", "Burlap Cloth", 4);
-
-            Bot.Quests.UpdateQuest(4614);
+            if (!Bot.Quests.IsUnlocked(4614))
+                Bot.Quests.UpdateQuest(4614);
             Core.HuntMonster("pyramid", "Mummy", "Triple Ply Mummy Wrap", 7);
             Core.HuntMonster("pyramid", "Golden Scarab", "Golden Lacquer Finish");
             Core.HuntMonster("lair", "Bronze Draconian", "Bronze Brush");
@@ -401,6 +457,12 @@ public class CoreBLOD
     {
         if (Core.CheckInventory("Advanced Weapon Kit", quant))
             return;
+
+        if (!Bot.Quests.IsUnlocked(2162))
+        {
+            Core.Logger("Unlocking \"Advanced Weapon Kit\" Quest!");
+            BasicWK();
+        }
 
         Core.FarmingLogger("Advanced Weapon Kit", quant);
         Core.AddDrop("Advanced Weapon Kit");
@@ -430,7 +492,19 @@ public class CoreBLOD
         if (Core.CheckInventory(item, quant))
             return;
 
-        Core.AddDrop("Ultimate Weapon Kit", "Blinding Light Fragments", "Bright Aura", "Spirit Orb", "Loyal Spirit Orb");
+        if (!Bot.Quests.IsUnlocked(2163))
+        {
+            Core.Logger("Unlocking \"Ultimate Weapon Kit\" Quest!");
+            AdvancedWK();
+        }
+
+        Core.AddDrop(
+            "Ultimate Weapon Kit",
+            "Blinding Light Fragments",
+            "Bright Aura",
+            "Spirit Orb",
+            "Loyal Spirit Orb"
+        );
         Core.FarmingLogger(item, quant);
         Bot.Quests.UpdateQuest(999);
         while (!Bot.ShouldExit && !Core.CheckInventory(item, quant))
@@ -446,7 +520,7 @@ public class CoreBLOD
 
             //ensure we're not aggroed in crashsite by the robots in boss cell
             Core.JumpWait();
-            
+
             Core.KillKitsune("No. 1337 Blade Oil", log: false);
             Core.KillMonster("citadel", "m14", "Left", "Grand Inquisitor", "Blinding Lacquer Finish", log: false);
             Core.HuntMonster("djinn", "Harpy", "Suede Travel Case", log: false);
@@ -488,9 +562,14 @@ public class CoreBLOD
 
         GetBaseWeapon(weapon);
 
-        List<ItemBase> weaponReqs = (LightMergeShopItems ??= Core.GetShopItems("necropolis", 422)).First(item => item.Name == weaponName).Requirements;
+        List<ItemBase> weaponReqs = (LightMergeShopItems ??= Core.GetShopItems("necropolis", 422))
+            .First(item => item.Name == weaponName)
+            .Requirements;
 
-        GetMergeRequirements(weaponReqs, weaponReqs.First(item => item.Name == weapon + " of Destiny").ID);
+        GetMergeRequirements(
+            weaponReqs,
+            weaponReqs.First(item => item.Name == weapon + " of Destiny").ID
+        );
         LightMerge(weaponName);
     }
 
@@ -500,9 +579,14 @@ public class CoreBLOD
         if (Core.CheckInventory(weaponName))
             return;
 
-        List<ItemBase> weaponReqs = (LightMergeShopItems ??= Core.GetShopItems("necropolis", 422)).First(item => item.Name == weaponName).Requirements;
+        List<ItemBase> weaponReqs = (LightMergeShopItems ??= Core.GetShopItems("necropolis", 422))
+            .First(item => item.Name == weaponName)
+            .Requirements;
         ItemBase metal = weaponReqs.First(req => req.Name.EndsWith("of Destiny"));
-        UpgradeMetal((MineCraftingMetalsEnum)Enum.Parse(typeof(MineCraftingMetalsEnum), metal.Name.Split(' ')[1]));
+        UpgradeMetal(
+            (MineCraftingMetalsEnum)
+                Enum.Parse(typeof(MineCraftingMetalsEnum), metal.Name.Split(' ')[1])
+        );
 
         GetMergeRequirements(weaponReqs, metal.ID);
         LightMerge(weaponName);
@@ -593,17 +677,20 @@ public class CoreBLOD
             return;
         }
         // Get the forge key itemid for the quest
-        forgekeyitemID = ForgeQuestdata.Requirements.FirstOrDefault(x => x != null && x.Name == "Forge Key")?.ID ?? 0;
+        forgekeyitemID =
+            ForgeQuestdata.Requirements.FirstOrDefault(x => x != null && x.Name == "Forge Key")?.ID
+            ?? 0;
         if (forgekeyitemID == 0)
         {
-            Core.Logger($"Failed to find the item ID for the Forge Key from the quest ID {forgeKeyQuest}");
+            Core.Logger(
+                $"Failed to find the item ID for the Forge Key from the quest ID {forgeKeyQuest}"
+            );
             return;
         }
         string upgradeMetalName = fullMetalName.Split(' ')[..2].Join(' ');
 
         if (!Core.CheckInventory(fullMetalName))
         {
-
             // Getting the name of the metal used to upgrade
             Core.FarmingLogger(fullMetalName, 1);
 
@@ -617,8 +704,12 @@ public class CoreBLOD
                 if (!Core.CheckInventory((int)metal))
                     Daily.MineCrafting(new[] { metal.ToString() });
                 if (!Core.CheckInventory((int)metal))
-                    Core.Logger($"Can't complete {fullMetalName.Split(' ')[..2].Join(' ')} Enchantment (missing {metal}).\n" +
-                                "This requires a daily, please run the bot again after the daily reset has occurred.", messageBox: true, stopBot: true);
+                    Core.Logger(
+                        $"Can't complete {fullMetalName.Split(' ')[..2].Join(' ')} Enchantment (missing {metal}).\n"
+                            + "This requires a daily, please run the bot again after the daily reset has occurred.",
+                        messageBox: true,
+                        stopBot: true
+                    );
 
                 Farm.BattleUnderB("Undead Energy", 25);
                 SpiritOrb(5);
@@ -634,8 +725,8 @@ public class CoreBLOD
             Core.BuyItem("dwarfhold", 434, fullMetalName);
         }
 
-        // Unlocking "Basic Weapon Kit Construction" [Quest ID 2136]
-        if (!Core.isCompletedBefore(2136))
+        // Check if "Basic Weapon Kits [Quest ID 2136] is unlocked
+        if (!Bot.Quests.IsUnlocked(2136))
         {
             Bot.Log("Doing Quest to Unlock Basic Weapon Kit (hopefully...)");
             Core.AddDrop(fullMetalName);
@@ -651,8 +742,8 @@ public class CoreBLOD
 
     private List<ShopItem>? LightMergeShopItems = null;
 
-    private void LightMerge(string item, int quant = 1)
-        => Core.BuyItem("necropolis", 422, item, quant);
+    private void LightMerge(string item, int quant = 1) =>
+        Core.BuyItem("necropolis", 422, item, quant);
 }
 
 public enum WeaponOfDestiny

@@ -13,12 +13,29 @@ public class DjinnGateStory
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
 
     private string[] drops =
     {
-        "Armor of Zular", "Djinn's Essence", "Unseen Essence", "Fangs of the Lion", "Claws of the Daeva", "Light of the Serpent", "Pike of the Shimmering Sands", "Reavers of the Gilded Sun"
+        "Armor of Zular",
+        "Djinn's Essence",
+        "Unseen Essence",
+        "Fangs of the Lion",
+        "Claws of the Daeva",
+        "Light of the Serpent",
+        "Pike of the Shimmering Sands",
+        "Reavers of the Gilded Sun",
     };
 
     public void ScriptMain(IScriptInterface bot)
@@ -114,9 +131,9 @@ public class DjinnGateStory
         {
             Core.EnsureAccept(6158);
             Core.EquipClass(ClassType.Solo);
-            Adv.GearStore();
+            Adv.GearStore(EnhAfter: true);
             Core.KillDoomKitten("Potent DoomKitten Mana", isTemp: true);
-            Adv.GearStore(true);
+            Adv.GearStore(true, EnhAfter: true);
             Core.KillMonster("bloodtitan", "Ultra", "Left", "*", "Potent Blood Titan Mana");
             Core.KillTrigoras("Potent Trigoras Mana", isTemp: true);
             Core.KillMonster("phoenixrise", "r8", "Left", "*", "Potent CinderClaw Mana");
@@ -148,7 +165,13 @@ public class DjinnGateStory
         Story.KillQuest(6161, "DjinnGate", "Gedoz");
 
         //Quest for Resources 6162
-        Story.KillQuest(6162, "DjinnGate", new[] { "Harpy", "Lamia" });
+        if (!Story.QuestProgression(6162))
+        {
+            Core.EnsureAccept(6162);
+            Core.HuntMonster("djinngate", "Harpy", "Potent Harpy Mana", 2);
+            Core.HuntMonster("djinngate", "Lamia", "Potent Lamia Mana", 2);
+            Core.EnsureComplete(6162);
+        }
 
         //The Key of Smoke 7301
         Story.KillQuest(7301, "AshfallCamp", "Smoldur");

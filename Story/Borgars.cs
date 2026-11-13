@@ -11,7 +11,12 @@ public class Borgars
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -31,7 +36,13 @@ public class Borgars
 
         // Beef Up 7510
         Core.AddDrop("Slice of Cake");
-        Story.KillQuest(7510, "extinction", new[] { "Lard", "Freezer Drone" });
+        if (!Story.QuestProgression(7510))
+        {
+            Core.EnsureAccept(7510);
+            Core.HuntMonster("extinction", "Lard", "Lard", 2);
+            Core.HuntMonster("extinction", "Freezer Drone", "Ground Beef", 4);
+            Core.EnsureComplete(7510);
+        }
 
         // Creamy! 7511
         Story.KillQuest(7511, "battlefowl", "Chickencow", false);

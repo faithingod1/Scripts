@@ -5,7 +5,9 @@ tags: blood, titan, merge, classhallc, horns, titans, gilded, crusher
 */
 //cs_include Scripts/CoreBots.cs
 //cs_include Scripts/CoreFarms.cs
+//cs_include Scripts/Story/TitanAttack.cs
 //cs_include Scripts/CoreAdvanced.cs
+//cs_include Scripts/CoreStory.cs
 using Skua.Core.Interfaces;
 using Skua.Core.Models.Items;
 using Skua.Core.Options;
@@ -14,18 +16,36 @@ public class BloodTitanMerge
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
-private static CoreAdvanced sAdv { get => _sAdv ??= new CoreAdvanced(); set => _sAdv = value; }
-private static CoreAdvanced _sAdv;
-
+    private static CoreAdvanced sAdv
+    {
+        get => _sAdv ??= new CoreAdvanced();
+        set => _sAdv = value;
+    }
+    private static CoreAdvanced _sAdv;
+    private static TitanAttackStory Tas
+    {
+        get => _Tas ??= new TitanAttackStory();
+        set => _Tas = value;
+    }
+    private static TitanAttackStory _Tas;
 
     public bool DontPreconfigure = true;
     public List<IOption> Generic = sAdv.MergeOptions;
     public string[] MultiOptions = { "Generic", "Select" };
     public string OptionsStorage = sAdv.OptionsStorage;
+
     // [Can Change] This should only be changed by the author.
     //              If true, it will not stop the script if the default case triggers and the user chose to only get mats
     private bool dontStopMissingIng = false;
@@ -41,6 +61,7 @@ private static CoreAdvanced _sAdv;
 
     public void BuyAllMerge(string? buyOnlyThis = null, mergeOptionsEnum? buyMode = null)
     {
+        Tas.DoAll();
         //Only edit the map and shopID here
         Adv.StartBuyAllMerge("classhallc", 617, findIngredients, buyOnlyThis, buyMode: buyMode);
 
@@ -49,7 +70,9 @@ private static CoreAdvanced _sAdv;
         {
             ItemBase req = Adv.externalItem;
             int quant = Adv.externalQuant;
-            int currentQuant = req.Temp ? Bot.TempInv.GetQuantity(req.Name) : Bot.Inventory.GetQuantity(req.Name);
+            int currentQuant = req.Temp
+                ? Bot.TempInv.GetQuantity(req.Name)
+                : Bot.Inventory.GetQuantity(req.Name);
             if (req == null)
             {
                 Core.Logger("req is NULL");
@@ -60,13 +83,23 @@ private static CoreAdvanced _sAdv;
             {
                 default:
                     bool shouldStop = !Adv.matsOnly || !dontStopMissingIng;
-                    Core.Logger($"The bot hasn't been taught how to get {req.Name}." + (shouldStop ? " Please report the issue." : " Skipping"), messageBox: shouldStop, stopBot: shouldStop);
+                    Core.Logger(
+                        $"The bot hasn't been taught how to get {req.Name}."
+                            + (shouldStop ? " Please report the issue." : " Skipping"),
+                        messageBox: shouldStop,
+                        stopBot: shouldStop
+                    );
                     break;
-                #endregion
+        #endregion
 
                 case "Blood Titan Token":
                     Core.FarmingLogger(req.Name, quant);
-                    Core.AddDrop(Core.EnsureLoad(9253).Requirements.Select(item => item.Name).Concat(Core.EnsureLoad(2908).Requirements.Select(item => item.Name)).ToArray());
+                    Core.AddDrop(
+                        Core.EnsureLoad(9253)
+                            .Requirements.Select(item => item.Name)
+                            .Concat(Core.EnsureLoad(2908).Requirements.Select(item => item.Name))
+                            .ToArray()
+                    );
                     Core.EquipClass(ClassType.Solo);
                     Core.RegisterQuests(9253);
                     while (!Bot.ShouldExit && !Core.CheckInventory(req.Name, quant))
@@ -86,16 +119,35 @@ private static CoreAdvanced _sAdv;
                     }
                     Core.CancelRegisteredQuests();
                     break;
-
             }
         }
     }
 
     public List<IOption> Select = new()
     {
-        new Option<bool>("16641", "Blood Titan", "Mode: [select] only\nShould the bot buy \"Blood Titan\" ?", false),
-        new Option<bool>("16650", "Blood Titan Horns", "Mode: [select] only\nShould the bot buy \"Blood Titan Horns\" ?", false),
-        new Option<bool>("17253", "Titan's Gilded Crusher", "Mode: [select] only\nShould the bot buy \"Titan's Gilded Crusher\" ?", false),
-        new Option<bool>("48200", "Blood Titan Armor", "Mode: [select] only\nShould the bot buy \"Blood Titan Armor\" ?", false),
+        new Option<bool>(
+            "16641",
+            "Blood Titan",
+            "Mode: [select] only\nShould the bot buy \"Blood Titan\" ?",
+            false
+        ),
+        new Option<bool>(
+            "16650",
+            "Blood Titan Horns",
+            "Mode: [select] only\nShould the bot buy \"Blood Titan Horns\" ?",
+            false
+        ),
+        new Option<bool>(
+            "17253",
+            "Titan's Gilded Crusher",
+            "Mode: [select] only\nShould the bot buy \"Titan's Gilded Crusher\" ?",
+            false
+        ),
+        new Option<bool>(
+            "48200",
+            "Blood Titan Armor",
+            "Mode: [select] only\nShould the bot buy \"Blood Titan Armor\" ?",
+            false
+        ),
     };
 }

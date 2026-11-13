@@ -1,7 +1,7 @@
 /*
 name: Hollowborn Chaos Envoy - Stirring Discord
 description: does the 'stirring discord' part of hollowborn chaos envoy
-tags: hollowborn chaos envy, hollowborn, stirring discord
+tags: hollowborn chaos envoy, hollowborn, stirring discord
 */
 //cs_include Scripts/Chaos/ChaosAvengerPreReqs.cs
 //cs_include Scripts/Chaos/DrakathsArmor.cs
@@ -30,8 +30,8 @@ public class HBCE1
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    static private CoreHollowbornChaosEnvoy HBCE = new();
-    static private CoreHollowbornChaosEnvoy sHBCE = new();
+    private static CoreHollowbornChaosEnvoy HBCE = new();
+    private static CoreHollowbornChaosEnvoy sHBCE = new();
 
     public string OptionsStorage = sHBCE.OptionsStorage;
     public bool DontPreconfigure = true;
@@ -41,7 +41,9 @@ public class HBCE1
     {
         Core.SetOptions();
 
-        HBCE.StirringDiscord(Bot.Config!.Get<CoreHollowbornChaosEnvoy.StirringDiscordRewards>("Stirring Discord"));
+        HBCE.StirringDiscord(
+            Bot.Config!.Get<CoreHollowbornChaosEnvoy.StirringDiscordRewards>("Stirring Discord")
+        );
 
         Core.SetOptions(false);
     }

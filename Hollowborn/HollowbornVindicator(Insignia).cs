@@ -25,24 +25,65 @@ public class HBVInsig
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static HollowSoul HS { get => _HS ??= new HollowSoul(); set => _HS = value; }
+    private static HollowSoul HS
+    {
+        get => _HS ??= new HollowSoul();
+        set => _HS = value;
+    }
     private static HollowSoul _HS;
-    private static HBVNonInsig HBV { get => _HBV ??= new HBVNonInsig(); set => _HBV = value; }
+    private static HBVNonInsig HBV
+    {
+        get => _HBV ??= new HBVNonInsig();
+        set => _HBV = value;
+    }
     private static HBVNonInsig _HBV;
-    private static CoreHollowbornStory HBS { get => _HBS ??= new CoreHollowbornStory(); set => _HBS = value; }
+    private static CoreHollowbornStory HBS
+    {
+        get => _HBS ??= new CoreHollowbornStory();
+        set => _HBS = value;
+    }
     private static CoreHollowbornStory _HBS;
-    private static VindicatorBadge VB { get => _VB ??= new VindicatorBadge(); set => _VB = value; }
+    private static VindicatorBadge VB
+    {
+        get => _VB ??= new VindicatorBadge();
+        set => _VB = value;
+    }
     private static VindicatorBadge _VB;
-    private static DeathsPower DP { get => _DP ??= new DeathsPower(); set => _DP = value; }
+    private static DeathsPower DP
+    {
+        get => _DP ??= new DeathsPower();
+        set => _DP = value;
+    }
     private static DeathsPower _DP;
-    private static GraceOrb GO { get => _GO ??= new GraceOrb(); set => _GO = value; }
+    private static GraceOrb GO
+    {
+        get => _GO ??= new GraceOrb();
+        set => _GO = value;
+    }
     private static GraceOrb _GO;
-    private static GramielsEmblem GE { get => _GE ??= new GramielsEmblem(); set => _GE = value; }
+    private static GramielsEmblem GE
+    {
+        get => _GE ??= new GramielsEmblem();
+        set => _GE = value;
+    }
     private static GramielsEmblem _GE;
-    private static VindicatorCrest VC { get => _VC ??= new VindicatorCrest(); set => _VC = value; }
+    private static VindicatorCrest VC
+    {
+        get => _VC ??= new VindicatorCrest();
+        set => _VC = value;
+    }
     private static VindicatorCrest _VC;
 
     public void ScriptMain(IScriptInterface bot)
@@ -54,6 +95,7 @@ public class HBVInsig
 
     public void GetClass(bool rankUpClass = true)
     {
+        // Already own the class
         if (Core.CheckInventory(94357))
         {
             if (rankUpClass)
@@ -61,60 +103,63 @@ public class HBVInsig
             return;
         }
 
+        // Prereqs
         Farm.Experience(80);
         Farm.HollowbornREP();
-
         HBS.DawnSanctum();
-        string reqName = Core.QuestRewards(10300)[0];
-        Core.AddDrop(reqName);
 
-        if (!Core.CheckInventory(reqName, 4))
+        Core.AddDrop("Condensed Grace");
+
+        int currentQty = Bot.Inventory.GetQuantity("Condensed Grace");
+        int missingQty = 4 - currentQty;
+        int multiplier = missingQty;
+
+        // Still need weekly turn-ins
+        if (missingQty > 0)
         {
-            Core.EnsureAccept(10300);
-
-            // Vindicator Crest
-            VC.GetVindicatorCrest(5);
-
-            // Gramiel's Emblem
-            GE.GetGramielsEmblem(15);
-
-            // Grace Orb
-            GO.GetGraceOrb(20);
-
-            // Vindicator Badge
-            VB.GetVindicatorBadge(10);
-
-            // Hollow Soul
-            HS.GetYaSoulsHeeeere(75);
-
-            // Death's Power
-            DP.GetDP(1);
-
+            // Hard gate: need insignias before wasting time farming mats
             if (!Core.CheckInventory("Gramiel the Graceful's Insignia", 5))
             {
-                Core.Logger($"You need 5x Gramiel the Graceful's Insignia to complete the quest.");
+                Core.Logger("Requires 5x Gramiel the Graceful's Insignia.");
                 return;
             }
-            if (!Bot.Quests.IsAvailable(10300))
+
+            // Weekly lock check
+            if (Bot.Quests.IsDailyComplete(10300))
             {
-                Core.Logger("This is a weekly quest, you need to wait until next week to get the class.");
+                Core.Logger("Weekly already completed.");
+                Core.Logger($"Next run: {DateTime.Now.AddDays(7):yyyy-MM-dd HH:mm:ss}");
                 return;
             }
+
+            Core.EnsureAccept(10300);
+
+            // Farm all remaining weeks worth of materials in one run
+
+            DP.GetDP(multiplier);                   // Death's Power      (1 per weekly)
+            HS.GetYaSoulsHeeeere(75 * multiplier);  // Hollow Soul        (75 per weekly)
+            VB.GetVindicatorBadge(10 * multiplier); // Vindicator Badge   (10 per weekly)
+            GO.GetGraceOrb(20 * multiplier);        // Grace Orb          (20 per weekly)
+            GE.GetGramielsEmblem(15 * multiplier);  // Gramiel's Emblem   (15 per weekly)
+            VC.GetVindicatorCrest(5 * multiplier);  // Vindicator Crest   (5 per weekly)
+
             Core.EnsureComplete(10300);
-            Bot.Wait.ForPickup(reqName);
+            Bot.Wait.ForPickup("Condensed Grace");
         }
 
-        if (!Core.CheckInventory(reqName, 4))
+        // Not enough weeklies yet → wait for reset
+        if (!Core.CheckInventory("Condensed Grace", 4))
         {
-            Core.Logger($"You need 4x {reqName} to get the class. Run the script next week.");
+            Core.Logger($"Progress: {Bot.Inventory.GetQuantity("Condensed Grace")}/4 {"Condensed Grace"}");
+            Core.Logger($"Run again next week: {DateTime.Now.AddDays(7):yyyy-MM-dd HH:mm:ss}");
             return;
         }
-        else
-            Adv.BuyItem("ultragramielhub", 2593, "Hollowborn Vindicator");
+
+        // Buy + optionally rank up class
+        Adv.BuyItem("ultragramielhub", 2593, "Hollowborn Vindicator");
 
         if (rankUpClass)
             Adv.RankUpClass("Hollowborn Vindicator");
-
     }
 
 }

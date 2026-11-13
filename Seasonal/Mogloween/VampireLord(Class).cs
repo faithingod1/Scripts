@@ -12,8 +12,18 @@ public class VampireLord
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -49,9 +59,8 @@ public class VampireLord
             Bot.Wait.ForPickup("Blood Moon Token");
             if (Bot.Inventory.Contains("Blood Moon Token", 300))
                 break;
-
         }
-        Core.BuyItem("mogloween", 1477, "Vampire Lord", shopItemID: 5459);
+        Core.BuyItem("mogloween", 1477, "Vampire Lord", shopItemID: 4496);
 
         if (rankUpClass)
             Adv.RankUpClass("Vampire Lord");

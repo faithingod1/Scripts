@@ -14,10 +14,30 @@ public class YokaiQuests
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
-    private static Core13LoC LOC { get => _LOC ??= new Core13LoC(); set => _LOC = value; }    private static Core13LoC _LOC;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
+    private static Core13LoC LOC
+    {
+        get => _LOC ??= new Core13LoC();
+        set => _LOC = value;
+    }
+    private static Core13LoC _LOC;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -35,7 +55,6 @@ public class YokaiQuests
         Shadowfortress();
     }
 
-
     public void ShogunWar()
     {
         if (Core.isCompletedBefore(6459))
@@ -46,7 +65,12 @@ public class YokaiQuests
         Core.Logger("ShogunWar Quest line");
 
         // Shadow Medals 6450
-        Story.KillQuest(6450, "ShogunWar", "Shadow Samurai");
+        if (!Story.QuestProgression(6450))
+        {
+            Core.EnsureAccept(6450);
+            Core.HuntMonster("ShogunWar", "Shadow Samurai", "Shadow Medallions", 5);
+            Core.EnsureComplete(6450);
+        }
 
         // We Need Supplies 6451
         if (!Story.QuestProgression(6451))
@@ -92,7 +116,14 @@ public class YokaiQuests
         Story.KillQuest(6460, "ShogunWar", "Shadow Samurai");
 
         // Tea for Me 6461
-        Story.KillQuest(6461, "ShogunWar", new[] { "Kijimuna", "Reishi", "Bamboo Treeant" });
+        if (!Story.QuestProgression(6461))
+        {
+            Core.EnsureAccept(6461);
+            Core.HuntMonster("shogunwar", "Kijimuna", "Kijimuna Pollen", 3);
+            Core.HuntMonster("shogunwar", "Reishi", "Glowing Mushroom Cap", 3);
+            Core.HuntMonster("shogunwar", "Bamboo Treeant", "Bamboo Leaf", 3);
+            Core.EnsureComplete(6461);
+        }
     }
 
     public void ShinrinGrove()
@@ -102,13 +133,17 @@ public class YokaiQuests
 
         Story.PreLoad(this);
 
-
         Core.Logger("ShinrinGrove Quest line");
 
         Core.EquipClass(ClassType.Farm);
 
         // Get Rid of Kame 6462
-        Story.KillQuest(6462, "shinringrove", "Kame");
+        if (!Story.QuestProgression(6462))
+        {
+            Core.EnsureAccept(6462);
+            Core.HuntMonster("shinringrove", "Kame", "Kame Defeated");
+            Core.EnsureComplete(6462);
+        }
 
         // Food for the Utoroshi 6463
         if (!Story.QuestProgression(6463))
@@ -132,8 +167,13 @@ public class YokaiQuests
 
         // Put out the Fire 6465
         Core.EquipClass(ClassType.Farm);
-        Story.MapItemQuest(6465, "greenshell", 5964, 5);
-        Story.KillQuest(6465, "greenshell", "Tsurubebi");
+        if (!Story.QuestProgression(6465))
+        {
+            Core.EnsureAccept(6465);
+            Core.GetMapItem(5964, 5, "greenshell");
+            Core.HuntMonster("greenshell", "Tsurubebi", "Tsurubebi Extinguished", 5);
+            Core.EnsureComplete(6465);
+        }
 
         // Expell the Tsukumogami 6466
         Story.KillQuest(6466, "greenshell", "Tsukumogami");
@@ -145,17 +185,27 @@ public class YokaiQuests
         Story.KillQuest(6468, "shinringrove", "Moglinberry Bush");
 
         // How to Breathe Underwater 6469
-        Story.MapItemQuest(6469, "greenshell", 5965, 8);
-        Story.KillQuest(6469, "shinringrove", "Reishi");
+        if (!Story.QuestProgression(6469))
+        {
+            Core.EnsureAccept(6469);
+            Core.GetMapItem(5965, 8, "greenshell");
+            Core.HuntMonster("shinringrove", "Reishi", "Luminous Spores", 6);
+            Core.EnsureComplete(6469);
+        }
 
         // Search for the Shinrin Do 6470
-        Story.MapItemQuest(6470, "greenshell", 5966);
-        Story.KillQuest(6470, "greenshell", "Merdraconian");
+        if (!Story.QuestProgression(6470))
+        {
+            Core.EnsureAccept(6470);
+            Core.GetMapItem(5966, 1, "greenshell");
+            Core.HuntMonster("greenshell", "Merdraconian", "Merdraconians Slain", 3);
+            Core.EnsureComplete(6470);
+        }
 
         // Take the Shinrin Do 6471
         Story.MapItemQuest(6471, "greenshell", 5967);
 
-        // Battle for the Shinrin Do 6472  
+        // Battle for the Shinrin Do 6472
         if (!Story.QuestProgression(6472))
         {
             Core.EquipClass(ClassType.Solo);
@@ -182,7 +232,6 @@ public class YokaiQuests
 
         Story.PreLoad(this);
 
-
         Core.Logger("Shadowfortress Quest line");
 
         Core.EquipClass(ClassType.Farm);
@@ -200,8 +249,13 @@ public class YokaiQuests
         }
 
         // Burn the Bones 6476
-        Story.MapItemQuest(6476, "heiwavalley", 5968, 6);
-        Story.KillQuest(6476, "heiwavalley", "Kosenjobi");
+        if (!Story.QuestProgression(6476))
+        {
+            Core.EnsureAccept(6476);
+            Core.GetMapItem(5968, 6, "heiwavalley");
+            Core.HuntMonster("heiwavalley", "Kosenjobi", "Kosenjobi Flame", 6);
+            Core.EnsureComplete(6476);
+        }
 
         // Goryuken 6477
         Story.KillQuest(6477, "heiwavalley", "Goryo");
@@ -217,10 +271,8 @@ public class YokaiQuests
         // Get Some Fur 6479
         Story.KillQuest(6479, "heiwavalley", "Abumi Guchi");
 
-
         // Howl-ing For You! 6480
         Story.KillQuest(6480, "heiwavalley", "Inugami");
-
 
         // Eyes on the Prize 6481
         if (!Story.QuestProgression(6481))
@@ -230,11 +282,9 @@ public class YokaiQuests
             Story.MapItemQuest(6481, "heiwavalley", 5970, 8);
         }
 
-
         // Reveal the Trail 6482
         Story.MapItemQuest(6482, "heiwavalley", 5971);
         Story.MapItemQuest(6482, "heiwavalley", 5972, 8);
-
 
         // Defeat the Onryo 6483
         if (!Story.QuestProgression(6483))
@@ -254,15 +304,25 @@ public class YokaiQuests
         Story.MapItemQuest(6487, "shadowfortress", 5973);
 
         // Shadow Essences 6488
-        Story.MapItemQuest(6488, "shadowfortress", 5974);
-        Story.KillQuest(6488, "shadowfortress", "Living Shadow");
+        if (!Story.QuestProgression(6488))
+        {
+            Core.EnsureAccept(6488);
+            Core.GetMapItem(5974, 1, "shadowfortress");
+            Core.HuntMonster("shadowfortress", "Living Shadow", "Shadow Essence", 7);
+            Core.EnsureComplete(6488);
+        }
 
         // New Recruits 6489
         Story.KillQuest(6489, "shadowfortress", "Shadow Samurai");
 
         // Shadow Heads 6490
-        Story.MapItemQuest(6490, "shadowfortress", 5975, 7);
-        Story.KillQuest(6490, "shadowfortress", "Creeping Shadow");
+        if (!Story.QuestProgression(6490))
+        {
+            Core.EnsureAccept(6490);
+            Core.GetMapItem(5975, 7, "shadowfortress");
+            Core.HuntMonster("shadowfortress", "Creeping Shadow", "Shadows Slain", 7);
+            Core.EnsureComplete(6490);
+        }
 
         // A Head has Woken
         Story.KillQuest(6491, "shadowfortress", "7th Head of Orochi");
@@ -284,7 +344,7 @@ public class YokaiQuests
             Story.MapItemQuest(6493, "shadowfortress", 5977);
         }
 
-        // Defeat Jaaku! 6494        
+        // Defeat Jaaku! 6494
         if (!Story.QuestProgression(6494))
         {
             Core.EquipClass(ClassType.Solo);

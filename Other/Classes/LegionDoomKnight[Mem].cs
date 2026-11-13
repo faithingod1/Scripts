@@ -15,9 +15,24 @@ public class LegionDoomKnight
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
-    private static CoreSDKA SDKA { get => _SDKA ??= new CoreSDKA(); set => _SDKA = value; }    private static CoreSDKA _SDKA;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
+    private static CoreSDKA SDKA
+    {
+        get => _SDKA ??= new CoreSDKA();
+        set => _SDKA = value;
+    }
+    private static CoreSDKA _SDKA;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -30,7 +45,7 @@ public class LegionDoomKnight
 
     public void GetLDK(bool rankUpClass = true)
     {
-        if (Core.CheckInventory("Legion DoomKnight"))
+        if (Core.CheckInventory(38742))
             return;
 
         if (!Core.CheckInventory("Sepulchure's DoomKnight Armor"))
@@ -40,9 +55,9 @@ public class LegionDoomKnight
         Core.HuntMonster("sepulchure", "Dark Sepulchure", "Dark Sepulchure's Badge", 100, isTemp: false);
         Core.CancelRegisteredQuests();
 
-        Core.BuyItem("battleon", 1106, "Legion DoomKnight");
+        Core.BuyItem("battleon", 1106, 38742);
 
         if (rankUpClass)
-            Adv.RankUpClass("Legion DoomKnight");
+            Adv.RankUpClass(38742);
     }
 }

@@ -16,15 +16,36 @@ public class EvolvedBloodOrbItems
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreNation Nation { get => _Nation ??= new CoreNation(); set => _Nation = value; }
+    private static CoreNation Nation
+    {
+        get => _Nation ??= new CoreNation();
+        set => _Nation = value;
+    }
     private static CoreNation _Nation;
-    private static EvolvedBloodOrb EBO { get => _EBO ??= new EvolvedBloodOrb(); set => _EBO = value; }
+    private static EvolvedBloodOrb EBO
+    {
+        get => _EBO ??= new EvolvedBloodOrb();
+        set => _EBO = value;
+    }
     private static EvolvedBloodOrb _EBO;
-    private static JuggernautItemsofNulgath juggernaut { get => _juggernaut ??= new JuggernautItemsofNulgath(); set => _juggernaut = value; }    private static JuggernautItemsofNulgath _juggernaut;
+    private static JuggernautItemsofNulgath juggernaut
+    {
+        get => _juggernaut ??= new JuggernautItemsofNulgath();
+        set => _juggernaut = value;
+    }
+    private static JuggernautItemsofNulgath _juggernaut;
 
     public void ScriptMain(IScriptInterface Bot)
     {
@@ -52,13 +73,15 @@ public class EvolvedBloodOrbItems
 
     public void FlowLikeBlood()
     {
+        if (!Core.CheckInventory("Platinum Coin of Nulgath: 2500") || !Core.CheckInventory(33196)
+        || Core.CheckInventory("Evolved Blood of Nulgath"))
+            return;
+
         #region Required Items
         if (!Core.CheckInventory("1v1 PvP Trophy", 10))
             Core.Logger("You do not own \"10x 1v1 PvP Trophies\", stopping", stopBot: true);
 
         Core.AddDrop("Evolved Blood of Nulgath");
-        if (!Core.CheckInventory("Platinum Coin of Nulgath: 2500") || !Core.CheckInventory(33196))
-            return;
 
         if (!Core.CheckInventory("RustBucket"))
         {
@@ -81,12 +104,12 @@ public class EvolvedBloodOrbItems
         }
 
         Nation.FarmUni13(3);
-        Nation.TheAssistant("Unidentified 25");
+        Nation.TheAssistant("Unidentified 23");
         juggernaut.JuggItems(reward: JuggernautItemsofNulgath.RewardsSelection.Dimensional_Championof_Nulgath);
         if (Core.IsMember)
             Nation.ForgeBloodGems(20);
-        else Nation.FarmBloodGem(20);
-
+        else
+            Nation.FarmBloodGem(20);
         Core.EnsureComplete(4780);
         Bot.Wait.ForPickup("Evolved Blood of Nulgath");
     }
@@ -94,14 +117,19 @@ public class EvolvedBloodOrbItems
     public void BloodTears()
     {
         //Void Emotion 4774
-        if (!Core.CheckInventory("Platinum Coin of Nulgath: 300") || !Core.CheckInventory("Evolved Blood Orb"))
+        if (
+            !Core.CheckInventory("Platinum Coin of Nulgath: 300")
+            || !Core.CheckInventory("Evolved Blood Orb")
+            || Core.CheckInventory("Evolved Blood Guard")
+        )
             return;
 
+        // Blood Tears | 4783
         Core.EnsureAccept(4783);
 
         Nation.FarmDiamondofNulgath(10);
         Nation.FarmVoucher(false);
-        Nation.FarmBloodGem(5);
+        Core.HuntMonster("orchestra", "Faust", "Faust Face", isTemp: false);
         Nation.FarmTotemofNulgath(1);
         Nation.FarmBloodGem(5);
 
@@ -109,9 +137,5 @@ public class EvolvedBloodOrbItems
         Bot.Wait.ForPickup("Evolved Blood Guard");
     }
 
-    private readonly string[] Rewards =
-    {
-        "Evolved Blood of Nulgath",
-        "Evolved Blood Guard",
-    };
+    private readonly string[] Rewards = { "Evolved Blood of Nulgath", "Evolved Blood Guard" };
 }

@@ -14,12 +14,49 @@ public class ProofOFRecruitmentQuest
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static CoreNation Nation { get => _Nation ??= new CoreNation(); set => _Nation = value; }    private static CoreNation _Nation;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static CoreNation Nation
+    {
+        get => _Nation ??= new CoreNation();
+        set => _Nation = value;
+    }
+    private static CoreNation _Nation;
 
-    string[] RequiredItems = { "ArchToken I", "ArchToken II", "Portal Key", "ArchToken III", "ArchToken IV", "ArchToken V", "ArchToken VI", "ArchToken VII", "ArchToken VIII", "ArchToken IX", "ArchToken X", "ArchToken XI" };
-    string[] Rewards = { "Tainted Gem", "Dark Crystal Shard", "Diamond of Nulgath", "Gem of Nulgath", "Unidentified 13" };
+    string[] RequiredItems =
+    {
+        "ArchToken I",
+        "ArchToken II",
+        "Portal Key",
+        "ArchToken III",
+        "ArchToken IV",
+        "ArchToken V",
+        "ArchToken VI",
+        "ArchToken VII",
+        "ArchToken VIII",
+        "ArchToken IX",
+        "ArchToken X",
+        "ArchToken XI",
+    };
+    string[] Rewards =
+    {
+        "Tainted Gem",
+        "Dark Crystal Shard",
+        "Diamond of Nulgath",
+        "Gem of Nulgath",
+        "Unidentified 13",
+    };
+
     public void ScriptMain(IScriptInterface bot)
     {
         Core.SetOptions();
@@ -32,7 +69,6 @@ public class ProofOFRecruitmentQuest
 
     public void CompleteQuests()
     {
-
         LegacyQuest();
         Core.AddDrop(RequiredItems);
         Core.AddDrop(Rewards);
@@ -40,10 +76,14 @@ public class ProofOFRecruitmentQuest
         for (int i = 0; i < Rewards.Length; i++)
         {
             if (Bot.Inventory.IsMaxStack(Rewards[i]))
-                Core.Logger($"{Rewards[i]} is max stack Checking next item in the \"Proof of Recruitment\" Quest's Rewards");
+                Core.Logger(
+                    $"{Rewards[i]} is max stack Checking next item in the \"Proof of Recruitment\" Quest's Rewards"
+                );
             else
             {
-                Core.Logger($"farming {Rewards[i]} till max stack from  \"Proof of Recruitment Quest\"");
+                Core.Logger(
+                    $"farming {Rewards[i]} till max stack from  \"Proof of Recruitment Quest\""
+                );
 
                 if (!Core.CheckInventory("ArchToken XI"))
                 {
@@ -74,8 +114,17 @@ public class ProofOFRecruitmentQuest
                                                         }
                                                         //Souls for the Nation 4752 [ArchToken II]
                                                         Core.EnsureAccept(4752);
-                                                        if (!Core.CheckInventory("Doomwood Token", 5))
-                                                            Core.Logger($"Can't Finish The quest as it requires \"Doomwood Token x5 [temp item]\"  which can only be obtained from DoomWood PVP Arena", messageBox: true, stopBot: true);
+                                                        if (
+                                                            !Core.CheckInventory(
+                                                                "Doomwood Token",
+                                                                5
+                                                            )
+                                                        )
+                                                            Core.Logger(
+                                                                $"Can't Finish The quest as it requires \"Doomwood Token x5 [temp item]\"  which can only be obtained from DoomWood PVP Arena",
+                                                                messageBox: true,
+                                                                stopBot: true
+                                                            );
                                                         Core.EnsureComplete(4752);
                                                     }
                                                     //More Souls! 4753 [ArchToken III]
@@ -167,7 +216,11 @@ public class ProofOFRecruitmentQuest
                     // Souls for the Nation [ArchToken II]
                     Core.EnsureAccept(4752);
                     if (!Core.CheckInventory("Doomwood Token", 5))
-                        Core.Logger($"Can't finish the quest as it requires 'Doomwood Token x5 [temp item]', which can only be obtained from DoomWood PVP Arena", messageBox: true, stopBot: true);
+                        Core.Logger(
+                            $"Can't finish the quest as it requires 'Doomwood Token x5 [temp item]', which can only be obtained from DoomWood PVP Arena",
+                            messageBox: true,
+                            stopBot: true
+                        );
                     Core.EnsureComplete(4752);
                     Bot.Wait.ForPickup("ArchToken II");
                     break;
@@ -255,7 +308,5 @@ public class ProofOFRecruitmentQuest
                     break;
             }
         }
-
     }
-
 }

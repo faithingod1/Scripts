@@ -43,6 +43,8 @@ tags: Lich, class, pre-requisites, necronomicon, nictos, klaatu, verata, necromi
 //cs_include Scripts/Nation/AFDL/WillpowerExtraction.cs
 //cs_include Scripts/Nation/AssistingCragAndBamboozle[Mem].cs
 //cs_include Scripts/Nation/CoreNation.cs
+//cs_include Scripts/Ultrasv3/Entwined Eclipse/CoreEngine.cs
+//cs_include Scripts/Ultrasv3/Entwined Eclipse/CoreUltra.cs
 //cs_include Scripts/Nation/EmpoweringItems.cs
 //cs_include Scripts/Nation/MergeShops/DilligasMerge.cs
 //cs_include Scripts/Nation/MergeShops/DirtlickersMerge.cs
@@ -124,30 +126,54 @@ tags: Lich, class, pre-requisites, necronomicon, nictos, klaatu, verata, necromi
 #endregion
 
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using Skua.Core.Interfaces;
+using Skua.Core.Models.Auras;
+using Skua.Core.Models.Items;
+using Skua.Core.Models.Monsters;
 using Skua.Core.Models.Players;
 using Skua.Core.Options;
-using Newtonsoft.Json.Linq;
-using Skua.Core.Models.Monsters;
-using Skua.Core.Models.Items;
-using Skua.Core.Models.Auras;
 
 public class Lich
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
 
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
-    private static CoreDailies Daily { get => _Daily ??= new CoreDailies(); set => _Daily = value; }
+    private static CoreDailies Daily
+    {
+        get => _Daily ??= new CoreDailies();
+        set => _Daily = value;
+    }
     private static CoreDailies _Daily;
-    private static ColossalWaresMerge ColossalWaresMerge { get => _ColossalWaresMerge ??= new ColossalWaresMerge(); set => _ColossalWaresMerge = value; }
+    private static ColossalWaresMerge ColossalWaresMerge
+    {
+        get => _ColossalWaresMerge ??= new ColossalWaresMerge();
+        set => _ColossalWaresMerge = value;
+    }
     private static ColossalWaresMerge _ColossalWaresMerge;
-    private static GrimskullTrollingRep GrimskullTrollingRep { get => _GrimskullTrollingRep ??= new GrimskullTrollingRep(); set => _GrimskullTrollingRep = value; }
+    private static GrimskullTrollingRep GrimskullTrollingRep
+    {
+        get => _GrimskullTrollingRep ??= new GrimskullTrollingRep();
+        set => _GrimskullTrollingRep = value;
+    }
     private static GrimskullTrollingRep _GrimskullTrollingRep;
     public static Grimgaol GRunOptions
     {
@@ -156,9 +182,12 @@ public class Lich
     }
     public static Grimgaol _GRunOptions;
 
-    private static Grimgaol GrimGaolRun { get => _GrimGaolRun ??= new Grimgaol(); set => _GrimGaolRun = value; }
+    private static Grimgaol GrimGaolRun
+    {
+        get => _GrimGaolRun ??= new Grimgaol();
+        set => _GrimGaolRun = value;
+    }
     private static Grimgaol _GrimGaolRun;
-
 
     public bool DontPreconfigure = true;
     public string OptionsStorage = GRunOptions.OptionsStorage;
@@ -168,71 +197,9 @@ public class Lich
     {
         Core.SetOptions(disableClassSwap: true);
 
-        Example();
+        LichClass();
 
         Core.SetOptions(false);
-    }
-
-    public void Example(bool rankUpClass = true)
-    {
-        if (Core.CheckInventory("Lich"))
-        {
-            if (rankUpClass)
-                Adv.RankUpClass("Lich");
-            return;
-        }
-        // Verata's Necronomicon
-        // Ensure you have the required items for Grimskull Trolling Rep
-        if (!Core.CheckInventory("Verata's Necronomicon"))
-        {
-            GrimskullTrollingRep.DoGrimskullTrollingRep();
-            Core.BuyItem("gaolcell", 2362, "Verata's Necronomicon");
-            Bot.Wait.ForPickup("Verata's Necronomicon");
-        }
-
-        // Nictos Necronomicon
-        if (!Core.CheckInventory("Nicto's Necronomicon"))
-        {
-            if (Core.isSeasonalMapActive("moreskulls"))
-            {
-                ColossalWaresMerge.BuyAllMerge("Nicto's Necronomicon");
-                Bot.Wait.ForPickup("Nicto's Necronomicon");
-            }
-            else
-            {
-                Core.Logger("Cannot get Nicto's Necronomicon: 'moreskulls' not active and not a member.");
-            }
-        }
-
-        // Klaatu's Necronomicon
-        Core.AddDrop("Klaatu's Necronomicon");
-        if (!Core.CheckInventory("Klaatu's Necronomicon"))
-        {
-            Core.EnsureAccept(10338);
-            Core.EquipClass(ClassType.Farm);
-            Farm.BattleUnderB(quant: 6666);
-            Farm.EvilREP();
-            Adv.BuyItem("Shadowfall", 89, "Shadow Lich");
-            Core.EquipClass(ClassType.Solo);
-            Core.HuntMonster("DarkoviaForest", "Lich of the Stone", "Lich Of The Stone", isTemp: false);
-            Core.HuntMonster("frozenlair", "Legion Lich Lord", "Sapphire Orb", 113, isTemp: false);
-            Core.GetMapItem(14740, 1, "necroproject");
-            Core.EnsureComplete(10338);
-            Bot.Wait.ForPickup("Klaatu's Necronomicon");
-        }
-
-        // Lich Class
-        if (!Core.CheckInventory("Lich Class"))
-        {
-            Core.AddDrop(94824 /* Lich class item ID */);
-            Core.ChainComplete(10339);
-            Bot.Wait.ForPickup("Lich");
-
-
-        }
-
-        if (rankUpClass)
-            Adv.RankUpClass("Lich");
     }
 
     // Create a void for each necropnomicon:
@@ -248,11 +215,13 @@ public class Lich
         Adv.BuyItem("Shadowfall", 89, "Shadow Lich");
         Core.EquipClass(ClassType.Solo);
         Core.HuntMonster("DarkoviaForest", "Lich of the Stone", "Lich Of The Stone", isTemp: false);
+        Core.EquipClass(ClassType.Dodge);
         Core.HuntMonster("frozenlair", "Legion Lich Lord", "Sapphire Orb", 113, isTemp: false);
         Core.GetMapItem(14740, 1, "necroproject");
         Core.EnsureComplete(10338);
         Bot.Wait.ForPickup("Klaatu's Necronomicon");
     }
+
     public void NictosNecropnomicon()
     {
         if (Core.CheckInventory("Nicto's Necronomicon"))
@@ -261,6 +230,7 @@ public class Lich
         ColossalWaresMerge.BuyAllMerge("Nicto's Necronomicon");
         Bot.Wait.ForPickup("Nicto's Necronomicon");
     }
+
     public void VeratasNecropnomicon()
     {
         if (Core.CheckInventory("Verata's Necromicon"))
@@ -268,24 +238,27 @@ public class Lich
 
         if (Farm.FactionRank("Grimskull Trolling") < 10)
         {
-            Core.Logger("You need to have rank 10 Grimskull Trolling Rep to buy Verata's Necromicon.");
+            Core.Logger(
+                "You need to have rank 10 Grimskull Trolling Rep to buy Verata's Necromicon."
+            );
             GrimGaolRun.DoGrimGaol();
         }
-        Core.BuyItem("gaolcell", 2362, "Verata's Necromicon");
+        Core.BuyItem("gaolcell", 2362, "Verata's Necromicon", shopItemID: 60505);
         Bot.Wait.ForPickup("Verata's Necromicon");
     }
 
     public void LichClass(bool rankup = true)
     {
-        if (Core.CheckInventory("Lich"))
+        // Lich class
+        if (Core.CheckInventory(94824))
         {
             if (rankup && Core.CheckClassRank(false, "Lich") < 10)
             {
                 Core.Logger("You have the Lich Class, but not at max rank. Rank up to 10.");
-                Adv.GearStore();
+                Adv.GearStore(EnhAfter: true);
                 Adv.SmartEnhance("Lich");
                 Farm.Experience(rankUpClass: true);
-                Adv.GearStore(true);
+                Adv.GearStore(true, EnhAfter: true);
             }
             return;
         }
@@ -297,24 +270,28 @@ public class Lich
 
         // Complete the quest to get the Lich Class
         {
-            if (Core.CheckInventory(94824 /* Lich class item ID */))
+            if (
+                Core.CheckInventory(
+                    94824 /* Lich class item ID */
+                )
+            )
             {
-
                 return;
             }
-            Core.AddDrop(94824 /* Lich class item ID */);
+            Core.AddDrop(
+                94824 /* Lich class item ID */
+            );
             Core.ChainComplete(10339);
-            Bot.Wait.ForPickup("Lich");
+            Bot.Wait.ForPickup(94824);
 
             if (rankup && Core.CheckClassRank(false, "Lich") < 10)
             {
                 Core.Logger("Ranking up Lich Class.");
-                Adv.GearStore();
+                Adv.GearStore(EnhAfter: true);
                 Adv.SmartEnhance("Lich");
                 Farm.Experience(rankUpClass: true);
-                Adv.GearStore(true);
+                Adv.GearStore(true, EnhAfter: true);
             }
         }
     }
 }
-

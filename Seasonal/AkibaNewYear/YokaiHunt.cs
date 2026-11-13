@@ -11,7 +11,11 @@ public class YokaiHunt
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface Bot)
@@ -28,6 +32,7 @@ public class YokaiHunt
         YueHuang();
         BaoyuLin();
         AiNoMiko2();
+        ShiWaLam();
     }
 
     public void AiNoMiko()
@@ -68,7 +73,13 @@ public class YokaiHunt
         Story.PreLoad(this);
 
         //Vitamoon (9092)
-        Story.KillQuest(9092, "natatorium", new[] { "Anglerfish", "Merdraconian" });
+        if (!Story.QuestProgression(9092))
+        {
+            Core.EnsureAccept(9092);
+            Core.HuntMonster("natatorium", "Anglerfish", "Angler Oil", 7);
+            Core.HuntMonster("natatorium", "Merdraconian", "Draconian Oil", 7);
+            Core.EnsureComplete(9092);
+        }
 
         //Fill'er Up (9093)
         if (!Story.QuestProgression(9093))
@@ -80,13 +91,31 @@ public class YokaiHunt
         }
 
         //Mirror Flowers (9094)
-        Story.KillQuest(9094, "guardiantree", new[] { "Blossoming Treeant", "Seed Spitter" });
+        if (!Story.QuestProgression(9094))
+        {
+            Core.EnsureAccept(9094);
+            Core.HuntMonster("guardiantree", "Blossoming Treeant", "Fresh Blossoms", 8);
+            Core.HuntMonster("guardiantree", "Seed Spitter", "Fresh Seeds", 8);
+            Core.EnsureComplete(9094);
+        }
 
         //Moon's Reflection (9095)
-        Story.KillQuest(9095, "beachparty", new[] { "Water Elemental", "Boiling Elemental" });
+        if (!Story.QuestProgression(9095))
+        {
+            Core.EnsureAccept(9095);
+            Core.HuntMonster("beachparty", "Water Elemental", "Sparkling Water", 9);
+            Core.HuntMonster("beachparty", "Boiling Elemental", "Boiling Water", 9);
+            Core.EnsureComplete(9095);
+        }
 
         //Shifting Faces (9096)
-        Story.KillQuest(9096, "safiria", new[] { "Albino Bat", "Chaos Lycan" });
+        if (!Story.QuestProgression(9096))
+        {
+            Core.EnsureAccept(9096);
+            Core.HuntMonster("safiria", "Albino Bat ", "White Bat", 10);
+            Core.HuntMonster("safiria", "Chaos Lycan", "Violet Wolf", 10);
+            Core.EnsureComplete(9096);
+        }
 
         //Eto... Bleh (9097)
         Core.EquipClass(ClassType.Solo);
@@ -109,7 +138,13 @@ public class YokaiHunt
         Story.KillQuest(9571, "zhu", "Plum Treeant");
 
         // Lucky Red (9572)
-        Story.KillQuest(9572, "shipwreck", new[] { "Gilded Merdraconian", "Lobthulhu" });
+        if (!Story.QuestProgression(9572))
+        {
+            Core.EnsureAccept(9572);
+            Core.HuntMonster("shipwreck", "Gilded Merdraconian", "Merdraconian Coins", 15);
+            Core.HuntMonster("shipwreck", "Lobthulhu", "Lobthulu's Gold Bar", 1);
+            Core.EnsureComplete(9572);
+        }
 
         // Palm Soot (9573)
         Story.KillQuest(9573, "burningbeach", "Lava Guardian");
@@ -133,54 +168,99 @@ public class YokaiHunt
         #region Useable Monsters
         string[] UseableMonsters = new[]
         {
-    "Ox Nopperabo", // UseableMonsters[0],
-	"Golden Ox Guard", // UseableMonsters[1],
-	"Ox Yokai Spirit", // UseableMonsters[2],
-	"Etokoun", // UseableMonsters[3],
-	"Elixir Etokoun", // UseableMonsters[4],
-	"Mutou Hong", // UseableMonsters[5],
-	"Zhenzhu Shé", // UseableMonsters[6]
-};
+            "Ox Nopperabo", // UseableMonsters[0],
+            "Golden Ox Guard", // UseableMonsters[1],
+            "Ox Yokai Spirit", // UseableMonsters[2],
+            "Etokoun", // UseableMonsters[3],
+            "Elixir Etokoun", // UseableMonsters[4],
+            "Mutou Hong", // UseableMonsters[5],
+            "Zhenzhu Shé", // UseableMonsters[6]
+        };
         #endregion Useable Monsters
 
         // 10056 | Xionghuang Remedy
         if (!Story.QuestProgression(10056))
         {
-            Core.HuntMonsterQuest(10056,
-                ("yokairiver", "Kappa Ninja", ClassType.Farm),
-                ("yokairiver", "Funa-yurei", ClassType.Farm));
+            Core.EnsureAccept(10056);
+            Core.EquipClass(ClassType.Farm);
+            Core.HuntMonster("yokairiver", "Kappa Ninja", "Kappa Spirits", 8);
+            Core.HuntMonster("yokairiver", "Funa-yurei", "Funa-Yurei Powder", 8);
+            Core.EnsureComplete(10056);
         }
-
 
         // 10057 | Calabash Elixir
         if (!Story.QuestProgression(10057))
         {
-            Core.HuntMonsterQuest(10057,
-                ("yokaihunt", UseableMonsters[4], ClassType.Solo));
+            Core.HuntMonsterQuest(10057, ("yokaihunt", UseableMonsters[4], ClassType.Solo));
         }
-
 
         // 10058 | Duàn Qiáo
         if (!Story.QuestProgression(10058))
         {
-            Core.HuntMonsterQuest(10058,
-                ("hakuvillage", "Mountain Oni", ClassType.Farm));
+            Core.HuntMonsterQuest(10058, ("hakuvillage", "Mountain Oni", ClassType.Farm));
         }
-
 
         // 10059 | Sangharama's Blessing
         if (!Story.QuestProgression(10059))
         {
-            Core.HuntMonsterQuest(10059,
-                ("shogunwar", "Shadow Samurai", ClassType.Farm));
+            Core.HuntMonsterQuest(10059, ("shogunwar", "Shadow Samurai", ClassType.Farm));
         }
-
 
         // 10060 | Lady Suzhen
         if (!Story.QuestProgression(10060))
         {
-            Core.HuntMonsterQuest(10060,
-                ("yokaihunt", UseableMonsters[6], ClassType.Solo));
+            Core.HuntMonsterQuest(10060, ("yokaihunt", UseableMonsters[6], ClassType.Solo));
+        }
+    }
+
+    public void ShiWaLam()
+    {
+        if (Core.isCompletedBefore(10590) || !Core.isSeasonalMapActive("yokaihunt"))
+            return;
+
+        AiNoMiko2();
+        Story.PreLoad(this);
+
+        // 10586 | Wartime Kaidan
+        if (!Story.QuestProgression(10586))
+        {
+            Core.HuntMonsterQuest(10586,
+                ("yokaiwar", "Samurai Nopperabo", ClassType.Farm));
+        }
+
+
+        // 10587 | Act of Loyalty
+        if (!Story.QuestProgression(10587))
+        {
+            Core.HuntMonsterQuest(10587,
+                ("shogunwar", "Shadow Samurai", ClassType.Farm));
+        }
+
+
+        // 10588 | Natural Betrayal
+        if (!Story.QuestProgression(10588))
+        {
+            Core.EnsureAccept(10588);
+            Core.EquipClass(ClassType.Farm);
+            Core.HuntMonster("hakuwar", "Dark Zmey", "Zmey Alexandrite", 9);
+            Core.HuntMonster("hakuwar", "Kitsune Spy", "Kitsune Kinchaku", 9);
+            Core.EnsureComplete(10588);
+        }
+
+
+        // 10589 | Coming Conflict
+        if (!Story.QuestProgression(10589))
+        {
+            Core.HuntMonsterQuest(10589,
+                ("shadowbattleon", "Ouro Spawn", ClassType.Farm));
+        }
+
+
+        // 10590 | Chi Tu
+        if (!Story.QuestProgression(10590))
+        {
+            Core.HuntMonsterQuest(10590,
+                ("yokaihunt", "Red Hare", ClassType.Solo));
         }
 
 

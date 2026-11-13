@@ -11,7 +11,12 @@ public class IcePlane
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -35,8 +40,13 @@ public class IcePlane
         Story.KillQuest(5777, "iceplane", "Spirit of Ice");
 
         // Make a Bridge (5778)
-        Story.MapItemQuest(5778, "iceplane", 5218);
-        Story.KillQuest(5778, "iceplane", "Frozen Jellyfish");
+        if (!Story.QuestProgression(5778))
+        {
+            Core.EnsureAccept(5778);
+            Core.GetMapItem(5218, 1, "iceplane");
+            Core.HuntMonster("iceplane", "Frozen Jellyfish", "Eternal Crystal", 21);
+            Core.EnsureComplete(5778);
+        }
 
         // Don't Fall (5779)
         Story.MapItemQuest(5779, "iceplane", new[] { 5219, 5220 });
@@ -45,8 +55,13 @@ public class IcePlane
         if (!Core.isCompletedBefore(5780))
         {
             Core.EquipClass(ClassType.Solo);
-            Story.MapItemQuest(5780, "iceplane", 5221);
-            Story.KillQuest(5780, "iceplane", "Crystalline Shade");
+            if (!Story.QuestProgression(5780))
+            {
+                Core.EnsureAccept(5780);
+                Core.GetMapItem(5221, 1, "iceplane");
+                Core.HuntMonster("iceplane", "Crystalline Shade", "Frozen Soul", 1);
+                Core.EnsureComplete(5780);
+            }
             Core.EquipClass(ClassType.Farm);
         }
 
@@ -63,6 +78,5 @@ public class IcePlane
             Story.KillQuest(5783, "iceplane", "Enfield");
             Core.EquipClass(ClassType.Farm);
         }
-
     }
 }

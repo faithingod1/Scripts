@@ -11,7 +11,12 @@ public class DerpMoosefishBadge
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -24,7 +29,7 @@ public class DerpMoosefishBadge
 
     public void Badge()
     {
-        if (Core.HasAchievement(14))
+        if (Core.HasAchievement(14) || Core.HasWebBadge("Derp Moosefish"))
             return;
 
         Farm.FishingREP(11, true);

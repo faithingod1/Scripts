@@ -12,7 +12,11 @@ public class CoreMogloween
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
@@ -45,6 +49,9 @@ public class CoreMogloween
         Eldritchbattletown();
         EldritchWorld();
         ElodeaTemple();
+		BirgittaMogloween();
+		ShadowSlayerWar();
+		Walpurgisnacht();
     }
 
     public void Mogloween()
@@ -100,7 +107,6 @@ public class CoreMogloween
 
         //Candy Shop Cutscene 395
         Story.MapItemQuest(395, "candyshop", 69);
-
     }
 
     public void CandyShop()
@@ -139,6 +145,7 @@ public class CoreMogloween
         //What’s Up, Doc? 401
         Story.KillQuest(401, "voltabolt", "Dental Driller");
     }
+
     public void CandyCorn()
     {
         if (!Core.isSeasonalMapActive("candycorn"))
@@ -172,8 +179,8 @@ public class CoreMogloween
 
         //She Who Walks Behind The Stalks 878
         Story.KillQuest(878, "candycorn", "Stalkwalker");
-
     }
+
     public void Pie()
     {
         if (!Core.isSeasonalMapActive("pie"))
@@ -216,7 +223,6 @@ public class CoreMogloween
 
         //Head to WillowCreek! 1363
         Story.MapItemQuest(1363, "willowcreek", 657);
-
     }
 
     public void Asylum()
@@ -302,10 +308,15 @@ public class CoreMogloween
         }
 
         //Her Herbalism 3835
-        Story.MapItemQuest(3835, "crusher", 2941, 2);
-        Story.MapItemQuest(3835, "crusher", 2942, 3);
-        Story.MapItemQuest(3835, "crusher", 2943, 2);
-        Story.KillQuest(3835, "crusher", "Bookcase");
+        if (!Story.QuestProgression(3835))
+        {
+            Core.EnsureAccept(3835);
+            Core.GetMapItem(2941, 2, "crusher");
+            Core.GetMapItem(2942, 3, "crusher");
+            Core.GetMapItem(2943, 2, "crusher");
+            Core.HuntMonster("crusher", "Bookcase", "Herbology Book", 1);
+            Core.EnsureComplete(3835);
+        }
 
         //Extra-Sensory Siblings 3836
         Story.KillQuest(3836, "crusher", "Apparition");
@@ -323,8 +334,13 @@ public class CoreMogloween
         Story.KillQuest(3840, "cask", "Fire Performer");
 
         //Nitre Fighter 3841
-        Story.MapItemQuest(3841, "cask", 2945);
-        Story.KillQuest(3841, "cask", "Nitre Golem");
+        if (!Story.QuestProgression(3841))
+        {
+            Core.EnsureAccept(3841);
+            Core.GetMapItem(2945, 1, "cask");
+            Core.HuntMonster("cask", "Nitre Golem", "Nitre Crystal", 1);
+            Core.EnsureComplete(3841);
+        }
 
         //Spider Trouble 3842
         Story.KillQuest(3842, "cask", "Cellar Spider");
@@ -364,12 +380,22 @@ public class CoreMogloween
         Story.KillQuest(5420, "mystcroftforest", "Eerie Apparition");
 
         //Accessorize! 5421
-        Story.MapItemQuest(5421, "mystcroftforest", 4801, 8);
-        Story.KillQuest(5421, "mystcroftforest", "Grim Goblin");
+        if (!Story.QuestProgression(5421))
+        {
+            Core.EnsureAccept(5421);
+            Core.GetMapItem(4801, 8, "mystcroftforest");
+            Core.HuntMonster("mystcroftforest", "Grim Goblin", "Gobbled String", 1);
+            Core.EnsureComplete(5421);
+        }
 
         //Make those Munchies 5422
-        Story.MapItemQuest(5422, "mystcroftforest", 4802, 8);
-        Story.KillQuest(5422, "mystcroftforest", "Eerie Apparition");
+        if (!Story.QuestProgression(5422))
+        {
+            Core.EnsureAccept(5422);
+            Core.GetMapItem(4802, 8, "mystcroftforest");
+            Core.HuntMonster("mystcroftforest", "Eerie Apparition", "Truffle Puree", 2);
+            Core.EnsureComplete(5422);
+        }
 
         //Every Party Needs Drinks 5423
         Story.KillQuest(5423, "mystcroftforest", "Grim Goblin");
@@ -388,8 +414,13 @@ public class CoreMogloween
         }
 
         //Time to get Dressed Up! 5426
-        Story.MapItemQuest(5426, "mystcroftforest", 4800);
-        Story.KillQuest(5426, "mystcroftforest", "Grim Goblin");
+        if (!Story.QuestProgression(5426))
+        {
+            Core.EnsureAccept(5426);
+            Core.GetMapItem(4800, 1, "mystcroftforest");
+            Core.HuntMonster("mystcroftforest", "Grim Goblin", "Gilded Bookmark", 1);
+            Core.EnsureComplete(5426);
+        }
 
         //EEEEK 5427
         Story.KillQuest(5427, "mystcroftforest", "Barghest");
@@ -439,19 +470,30 @@ public class CoreMogloween
         Story.PreLoad(this);
 
         //Stop the Hurting 6568
-        Story.KillQuest(6568, "twigsarcade", new[] { "Scotty Sneevil", "Clucky Moo" });
+        if (!Story.QuestProgression(6568))
+        {
+            Core.EnsureAccept(6568);
+            Core.HuntMonster("twigsarcade", "SCOTTY SNEEVIL", "Mascots \"Stopped\"", 8);
+            Core.EnsureComplete(6568);
+        }
 
         //Gather the Goods 6569
         if (!Story.QuestProgression(6569))
         {
             // Hinge
-            Story.MapItemQuest(6569, "twigsarcade", 6069, 3);
+            if (!Story.QuestProgression(6569))
+            {
+                Core.EnsureAccept(6569);
+                Core.GetMapItem(6069, 3, "twigsarcade");
 
-            // Fully Charged Battery
-            Story.MapItemQuest(6569, "twigsarcade", 6070, 3);
+                // Fully Charged Battery
+                Core.GetMapItem(6070, 3, "twigsarcade");
 
-            // Wires && Small Screw
-            Story.KillQuest(6569, "twigsarcade", new[] { "Scotty Sneevil", "Clucky Moo" });
+                // Wires && Small Screw
+                Core.HuntMonster("twigsarcade", "SCOTTY SNEEVIL", "Wires", 5);
+                Core.HuntMonster("twigsarcade", "SCOTTY SNEEVIL", "Small Screw", 16);
+                Core.EnsureComplete(6569);
+            }
         }
 
         //Spooky Casings 6570
@@ -464,7 +506,12 @@ public class CoreMogloween
         Story.MapItemQuest(6572, "twigsarcade", 6071);
 
         //Test the Ghost box 6573
-        Story.KillQuest(6573, "twigsarcade", new[] { "Scotty Sneevil", "Clucky Moo" });
+        if (!Story.QuestProgression(6573))
+        {
+            Core.EnsureAccept(6573);
+            Core.HuntMonster("twigsarcade", "SCOTTY SNEEVIL", "Ghost Caught", 5);
+            Core.EnsureComplete(6573);
+        }
 
         //Get Wid of CWEEPY TWIG 6574
         Story.KillQuest(6574, "twigsarcade", "Cweepy Twig");
@@ -522,8 +569,13 @@ public class CoreMogloween
         Story.MapItemQuest(7147, "masquerade", 6785);
 
         //Feed Bramblebite 7148
-        Story.MapItemQuest(7148, "masquerade", 6786, 6);
-        Story.KillQuest(7148, "masquerade", "Glass Spitter");
+        if (!Story.QuestProgression(7148))
+        {
+            Core.EnsureAccept(7148);
+            Core.GetMapItem(6786, 6, "masquerade");
+            Core.HuntMonster("masquerade", "Glass Spitter", "Gemseeds", 10);
+            Core.EnsureComplete(7148);
+        }
 
         //So Glamourous 7149
         Story.KillQuest(7149, "masquerade", "Garden Sprite");
@@ -535,8 +587,13 @@ public class CoreMogloween
         Story.KillQuest(7151, "masquerade", "Wandering Guest");
 
         //Nap Time for Barb 7152
-        Story.MapItemQuest(7152, "masquerade", 6789);
-        Story.KillQuest(7152, "masquerade", "Scriptkeeper");
+        if (!Story.QuestProgression(7152))
+        {
+            Core.EnsureAccept(7152);
+            Core.GetMapItem(6789, 1, "masquerade");
+            Core.HuntMonster("masquerade", "Scriptkeeper", "Put Barb to Sleep", 1);
+            Core.EnsureComplete(7152);
+        }
 
         //Sneak Out 7153
         Story.MapItemQuest(7153, "masquerade", 6787);
@@ -555,8 +612,13 @@ public class CoreMogloween
         Story.PreLoad(this);
 
         //Yeti Witual 7167
-        Story.MapItemQuest(7167, "that", 6790, 8);
-        Story.KillQuest(7167, "that", "Candy Goblin");
+        if (!Story.QuestProgression(7167))
+        {
+            Core.EnsureAccept(7167);
+            Core.GetMapItem(6790, 8, "that");
+            Core.HuntMonster("that", "Candy Goblin", "Witch Twuffles", 8);
+            Core.EnsureComplete(7167);
+        }
 
         //Get the Fur 7168
         Story.KillQuest(7168, "that", "Moglinster");
@@ -571,7 +633,12 @@ public class CoreMogloween
         Story.MapItemQuest(7171, "that", 6791);
 
         //Cweepie-cwawlie Time 7172
-        Story.KillQuest(7172, "that", new[] { "Well Spider", "Congealed Fear" });
+        if (!Story.QuestProgression(7172))
+        {
+            Core.EnsureAccept(7172);
+            Core.HuntMonster("that", "Well Spider", "Minion Slain", 10);
+            Core.EnsureComplete(7172);
+        }
 
         //Gwoop Destruction 7173
         Story.KillQuest(7173, "that", "Congealed Fear");
@@ -581,8 +648,13 @@ public class CoreMogloween
         Story.MapItemQuest(7174, "that", 6793);
 
         //Free Bubble! 7175
-        Story.MapItemQuest(7175, "that", 6794);
-        Story.KillQuest(7175, "that", "Congealed Fear");
+        if (!Story.QuestProgression(7175))
+        {
+            Core.EnsureAccept(7175);
+            Core.GetMapItem(6794, 1, "that");
+            Core.HuntMonster("that", "Congealed Fear", "Skeleton Key", 1);
+            Core.EnsureComplete(7175);
+        }
 
         //Echo... echo... echo 7176
         Story.KillQuest(7176, "that", "Echo of That");
@@ -607,32 +679,68 @@ public class CoreMogloween
         Story.PreLoad(this);
 
         //Dolls' Hide and Seek 8363
-        Story.MapItemQuest(8363, "necrocarnival", 9249, 8);
-        Story.KillQuest(8363, "necrocarnival", "Gummy Tapeworm");
+        if (!Story.QuestProgression(8363))
+        {
+            Core.EnsureAccept(8363);
+            Core.GetMapItem(9249, 9, "necrocarnival");
+            Core.HuntMonster("necrocarnival", "Gummy Tapeworm", "Cartilage Gathered", 9);
+            Core.EnsureComplete(8363);
+        }
 
         //Arts and Crafts 8364
-        Story.MapItemQuest(8364, "necrocarnival", 9250);
-        Story.KillQuest(8364, "necrocarnival", "Skeleclown");
+        if (!Story.QuestProgression(8364))
+        {
+            Core.EnsureAccept(8364);
+            Core.GetMapItem(9250, 1, "necrocarnival");
+            Core.HuntMonster("necrocarnival", "Skeleclown", "Clowns Disciplined", 10);
+            Core.EnsureComplete(8364);
+        }
 
         //Lemonade, Chewy Ice 8365
-        Story.MapItemQuest(8365, "necrocarnival", 9251, 2);
-        Story.KillQuest(8365, "necrocarnival", new[] { "Mooch Treeant", "Gummy Tapeworm" });
+        if (!Story.QuestProgression(8365))
+        {
+            Core.EnsureAccept(8365);
+            Core.GetMapItem(9251, 2, "necrocarnival");
+            Core.HuntMonster("necrocarnival", "Mooch Treeant", "Red Sap Collected", 9);
+            Core.HuntMonster("necrocarnival", "Gummy Tapeworm", "Tape Worms Fried", 9);
+            Core.EnsureComplete(8365);
+        }
 
         //Screams and Tag 8366
-        Story.MapItemQuest(8366, "necrocarnival", 9252);
-        Story.KillQuest(8366, "necrocarnival", "Skeleclown");
+        if (!Story.QuestProgression(8366))
+        {
+            Core.EnsureAccept(8366);
+            Core.GetMapItem(9252, 1, "necrocarnival");
+            Core.HuntMonster("necrocarnival", "Skeleclown", "Clown Fired", 10);
+            Core.EnsureComplete(8366);
+        }
 
         //Playful Teething 8367
-        Story.MapItemQuest(8367, "necrocarnival", 9253, 4);
-        Story.KillQuest(8367, "necrocarnival", "Mooch Treeant");
+        if (!Story.QuestProgression(8367))
+        {
+            Core.EnsureAccept(8367);
+            Core.GetMapItem(9253, 4, "necrocarnival");
+            Core.HuntMonster("necrocarnival", "Mooch Treeant", "Pet Food", 9);
+            Core.EnsureComplete(8367);
+        }
 
         //Days Pass 8368
-        Story.MapItemQuest(8368, "necrocarnival", 9254);
-        Story.KillQuest(8368, "necrocarnival", "Cotton Tick");
+        if (!Story.QuestProgression(8368))
+        {
+            Core.EnsureAccept(8368);
+            Core.GetMapItem(9254, 1, "necrocarnival");
+            Core.HuntMonster("necrocarnival", "Cotton Tick", "Cotton Tick Fluff Collected", 10);
+            Core.EnsureComplete(8368);
+        }
 
         //Pinned Bugs 8369
-        Story.MapItemQuest(8369, "necrocarnival", 9255);
-        Story.KillQuest(8369, "necrocarnival", "Gummy Tapeworm");
+        if (!Story.QuestProgression(8369))
+        {
+            Core.EnsureAccept(8369);
+            Core.GetMapItem(9255, 1, "necrocarnival");
+            Core.HuntMonster("necrocarnival", "Gummy Tapeworm", "Gum Sludge", 10);
+            Core.EnsureComplete(8369);
+        }
 
         //Sweet Glue 8370
         Story.KillQuest(8370, "necrocarnival", "Mooch Treeant");
@@ -649,12 +757,22 @@ public class CoreMogloween
         }
 
         //Written Promise 8372
-        Story.MapItemQuest(8372, "necrocarnival", 9257, 7);
-        Story.KillQuest(8372, "necrocarnival", "Cotton Tick");
+        if (!Story.QuestProgression(8372))
+        {
+            Core.EnsureAccept(8372);
+            Core.GetMapItem(9257, 7, "necrocarnival");
+            Core.HuntMonster("necrocarnival", "Cotton Tick", "Red Tick Juice", 10);
+            Core.EnsureComplete(8372);
+        }
 
         //All Fall Down 8373
-        Story.MapItemQuest(8373, "necrocarnival", 9258);
-        Story.KillQuest(8373, "necrocarnival", "Skeleclown");
+        if (!Story.QuestProgression(8373))
+        {
+            Core.EnsureAccept(8373);
+            Core.GetMapItem(9258, 1, "necrocarnival");
+            Core.HuntMonster("necrocarnival", "Skeleclown", "Skeleclowns Reaped", 10);
+            Core.EnsureComplete(8373);
+        }
 
         //Lullaby 8374
         Story.KillQuest(8374, "necrocarnival", "Deva");
@@ -670,16 +788,31 @@ public class CoreMogloween
         Story.PreLoad(this);
 
         // Punchergeist 8926
-        Story.MapItemQuest(8926, "tricktown", 10813);
-        Story.KillQuest(8926, "tricktown", "Playful Ghost");
+        if (!Story.QuestProgression(8926))
+        {
+            Core.EnsureAccept(8926);
+            Core.GetMapItem(10813, 1, "tricktown");
+            Core.HuntMonster("tricktown", "Playful Ghost", "Specter Sweets", 8);
+            Core.EnsureComplete(8926);
+        }
 
         // Party Town 8927
-        Story.MapItemQuest(8927, "tricktown", 10804, 3);
-        Story.KillQuest(8927, "tricktown", "Decay Spirit");
+        if (!Story.QuestProgression(8927))
+        {
+            Core.EnsureAccept(8927);
+            Core.GetMapItem(10804, 3, "tricktown");
+            Core.HuntMonster("tricktown", "Decay Spirit", "Decay Jelly", 8);
+            Core.EnsureComplete(8927);
+        }
 
         // Sweet Mucus 8928
-        Story.MapItemQuest(8928, "tricktown", 10805, 5);
-        Story.KillQuest(8928, "tricktown", "Playful Ghost");
+        if (!Story.QuestProgression(8928))
+        {
+            Core.EnsureAccept(8928);
+            Core.GetMapItem(10805, 5, "tricktown");
+            Core.HuntMonster("tricktown", "Playful Ghost", "Ghosts Told Off", 8);
+            Core.EnsureComplete(8928);
+        }
 
         // Door to Door 8929
         if (!Story.QuestProgression(8929))
@@ -696,12 +829,22 @@ public class CoreMogloween
         }
 
         // Crusted Compost 8930
-        Story.MapItemQuest(8930, "tricktown", 10806, 3);
-        Story.KillQuest(8930, "tricktown", "Rotting Pumpkin");
+        if (!Story.QuestProgression(8930))
+        {
+            Core.EnsureAccept(8930);
+            Core.GetMapItem(10806, 3, "tricktown");
+            Core.HuntMonster("tricktown", "Rotting Pumpkin", "Pumpkin Seeds", 10);
+            Core.EnsureComplete(8930);
+        }
 
         // A Spot of Sludge 8931
-        Story.MapItemQuest(8931, "tricktown", 10807, 4);
-        Story.KillQuest(8931, "tricktown", "Decay Spirit");
+        if (!Story.QuestProgression(8931))
+        {
+            Core.EnsureAccept(8931);
+            Core.GetMapItem(10807, 4, "tricktown");
+            Core.HuntMonster("tricktown", "Decay Spirit", "Decay Spirit Caught", 10);
+            Core.EnsureComplete(8931);
+        }
 
         // Messy Unrest 8932
         if (!Story.QuestProgression(8932))
@@ -713,12 +856,22 @@ public class CoreMogloween
         }
 
         // Plain Monster 8933
-        Story.MapItemQuest(8933, "tricktown", 10808);
-        Story.KillQuest(8933, "tricktown", "Rotting Mound");
+        if (!Story.QuestProgression(8933))
+        {
+            Core.EnsureAccept(8933);
+            Core.GetMapItem(10808, 1, "tricktown");
+            Core.HuntMonster("tricktown", "Rotting Mound", "Rotting Mound Caught", 1);
+            Core.EnsureComplete(8933);
+        }
 
         // Study Group 8934
-        Story.MapItemQuest(8934, "tricktown", 10809, 5);
-        Story.KillQuest(8934, "tricktown", "Rotting Mound");
+        if (!Story.QuestProgression(8934))
+        {
+            Core.EnsureAccept(8934);
+            Core.GetMapItem(10809, 5, "tricktown");
+            Core.HuntMonster("tricktown", "Rotting Mound", "Skin Patches", 8);
+            Core.EnsureComplete(8934);
+        }
 
         // The Fruits of Labor 8935
         Story.KillQuest(8935, "tricktown", "Madam Ester");
@@ -734,40 +887,75 @@ public class CoreMogloween
         Core.EquipClass(ClassType.Farm);
 
         // Ghoul Fungi 9445
-        Story.MapItemQuest(9445, "cursedcastle", 12272);
-        Story.KillQuest(9445, "cursedcastle", "Luminous Fungus");
+        if (!Story.QuestProgression(9445))
+        {
+            Core.EnsureAccept(9445);
+            Core.GetMapItem(12272, 1, "cursedcastle");
+            Core.HuntMonster("cursedcastle", "Luminous Fungus", "Harvested Fungus", 8);
+            Core.EnsureComplete(9445);
+        }
 
         // Grotesque Guardian 9446
-        Story.MapItemQuest(9446, "cursedcastle", 12273);
-        Story.KillQuest(9446, "cursedcastle", "Noble Gargoyle");
+        if (!Story.QuestProgression(9446))
+        {
+            Core.EnsureAccept(9446);
+            Core.GetMapItem(12273, 1, "cursedcastle");
+            Core.HuntMonster("cursedcastle", "Noble Gargoyle", "Living Rubble", 8);
+            Core.EnsureComplete(9446);
+        }
 
         // Dragon Instinct 9447
         Story.MapItemQuest(9447, "cursedcastle", new[] { 12274, 12275 });
 
         // The Uninvited 9448
-        Story.MapItemQuest(9448, "cursedcastle", 12276);
-        Story.KillQuest(9448, "cursedcastle", "Noble Ghost");
+        if (!Story.QuestProgression(9448))
+        {
+            Core.EnsureAccept(9448);
+            Core.GetMapItem(12276, 1, "cursedcastle");
+            Core.HuntMonster("cursedcastle", "Noble Ghost", "Ghostly Velvet", 4);
+            Core.EnsureComplete(9448);
+        }
 
         // Room Service 9449
         Story.MapItemQuest(9449, "cursedcastle", new[] { 12277, 12278, 12279 });
 
         // Newborn's Teething 9450
-        Story.MapItemQuest(9450, "cursedcastle", 12280);
-        Story.KillQuest(9450, "cursedcastle", "Bone Dragonling");
+        if (!Story.QuestProgression(9450))
+        {
+            Core.EnsureAccept(9450);
+            Core.GetMapItem(12280, 1, "cursedcastle");
+            Core.HuntMonster("cursedcastle", "Bone Dragonling", "Dragonling Rib", 20);
+            Core.EnsureComplete(9450);
+        }
 
         Core.EquipClass(ClassType.Solo);
 
         // Sadistic Solicitations 9451
-        Story.MapItemQuest(9451, "cursedcastle", 12281);
-        Story.KillQuest(9451, "cursedcastle", "Noble Ghost");
+        if (!Story.QuestProgression(9451))
+        {
+            Core.EnsureAccept(9451);
+            Core.GetMapItem(12281, 1, "cursedcastle");
+            Core.HuntMonster("cursedcastle", "Noble Ghost", "Shredded Invitation", 3);
+            Core.EnsureComplete(9451);
+        }
 
         // Stomping on Eggshells 9452
-        Story.MapItemQuest(9452, "cursedcastle", 12282);
-        Story.KillQuest(9452, "cursedcastle", "Dragonlord Coledale");
+        if (!Story.QuestProgression(9452))
+        {
+            Core.EnsureAccept(9452);
+            Core.GetMapItem(12282, 1, "cursedcastle");
+            Core.HuntMonster("cursedcastle", "Dragonlord Coledale", "Dragonlord Defeated", 1);
+            Core.EnsureComplete(9452);
+        }
 
         // Stone Clad Clan 9453
-        Story.MapItemQuest(9453, "cursedcastle", 12283);
-        Story.KillQuest(9453, "cursedcastle", "Noble Gargoyle");
+        if (!Story.QuestProgression(9453))
+        {
+            Core.EnsureAccept(9453);
+            Core.GetMapItem(12283, 1, "cursedcastle");
+            Core.HuntMonster("cursedcastle", "Noble Gargoyle", "Cursed Stones", 4);
+            Core.EnsureComplete(9453);
+        }
 
         // Restless Waltz 9454
         Story.KillQuest(9454, "cursedcastle", "Unborn Brood");
@@ -781,14 +969,14 @@ public class CoreMogloween
         Story.PreLoad(this);
         #region Useable Monsters
         string[] UseableMonsters = new[]
-                {
-                    "Living Pumpkin", // UseableMonsters[0],
-                    "Dzeza Sapling", // UseableMonsters[1],
-                    "Nudibranch", // UseableMonsters[2],
-                    "Kathool Kultist", // UseableMonsters[3],
-                    "Dzeza Cultist", // UseableMonsters[4],
-                    "Harvest Acromegalia", // UseableMonsters[5]
-                };
+        {
+            "Living Pumpkin", // UseableMonsters[0],
+            "Dzeza Sapling", // UseableMonsters[1],
+            "Nudibranch", // UseableMonsters[2],
+            "Kathool Kultist", // UseableMonsters[3],
+            "Dzeza Cultist", // UseableMonsters[4],
+            "Harvest Acromegalia", // UseableMonsters[5]
+        };
         #endregion Useable Monsters
 
 
@@ -797,22 +985,37 @@ public class CoreMogloween
         // 10444 | Pumpkin Guts
         if (!Story.QuestProgression(10444))
         {
-            Story.MapItemQuest(10444, "eldritchbattletown", 15040);
-            Story.KillQuest(10444, "eldritchbattletown", UseableMonsters[0]);
+            if (!Story.QuestProgression(10444))
+            {
+                Core.EnsureAccept(10444);
+                Core.GetMapItem(15040, 1, "eldritchbattletown");
+                Core.HuntMonster("eldritchbattletown", "Living Pumpkin", "Pumpkin Seeds", 12);
+                Core.EnsureComplete(10444);
+            }
         }
 
         // 10445 | Growth Spurt
         if (!Story.QuestProgression(10445))
         {
-            Story.MapItemQuest(10445, "eldritchbattletown", 15041);
-            Story.KillQuest(10445, "eldritchbattletown", UseableMonsters[1]);
+            if (!Story.QuestProgression(10445))
+            {
+                Core.EnsureAccept(10445);
+                Core.GetMapItem(15041, 1, "eldritchbattletown");
+                Core.HuntMonster("eldritchbattletown", "Dzeza Sapling", "Toothy Branch", 12);
+                Core.EnsureComplete(10445);
+            }
         }
 
         // 10446 | Mini-Thurians
         if (!Story.QuestProgression(10446))
         {
-            Story.MapItemQuest(10446, "eldritchbattletown", 15042);
-            Story.KillQuest(10446, "eldritchbattletown", UseableMonsters[2]);
+            if (!Story.QuestProgression(10446))
+            {
+                Core.EnsureAccept(10446);
+                Core.GetMapItem(15042, 1, "eldritchbattletown");
+                Core.HuntMonster("eldritchbattletown", "Nudibranch", "Nudibranch Glands", 3);
+                Core.EnsureComplete(10446);
+            }
         }
 
         // 10447 | Paper Love Bombs
@@ -824,14 +1027,23 @@ public class CoreMogloween
         // 10448 | Abomination vs Monstrosity
         if (!Story.QuestProgression(10448))
         {
-            Story.KillQuest(10448, "eldritchbattletown", new[] { UseableMonsters[2], UseableMonsters[1] });
+            Story.KillQuest(
+                10448,
+                "eldritchbattletown",
+                new[] { UseableMonsters[2], UseableMonsters[1] }
+            );
         }
 
         // 10449 | The Mom Friend
         if (!Story.QuestProgression(10449))
         {
-            Story.MapItemQuest(10449, "eldritchbattletown", 15043);
-            Story.KillQuest(10449, "eldritchbattletown", UseableMonsters[3]);
+            if (!Story.QuestProgression(10449))
+            {
+                Core.EnsureAccept(10449);
+                Core.GetMapItem(15043, 1, "eldritchbattletown");
+                Core.HuntMonster("eldritchbattletown", "Kathool Kultist", "Kultist Parasites", 6);
+                Core.EnsureComplete(10449);
+            }
         }
 
         Core.EquipClass(ClassType.Solo);
@@ -850,7 +1062,11 @@ public class CoreMogloween
         // 10452 | Recruitment Initiative
         if (!Story.QuestProgression(10452))
         {
-            Story.KillQuest(10452, "eldritchbattletown", new[] { UseableMonsters[3], UseableMonsters[4] });
+            Story.KillQuest(
+                10452,
+                "eldritchbattletown",
+                new[] { UseableMonsters[3], UseableMonsters[4] }
+            );
         }
 
         Core.EquipClass(ClassType.Solo);
@@ -873,28 +1089,36 @@ public class CoreMogloween
         #region Useable Monsters
         string[] UseableMonsters = new[]
         {
-    "Nudibranch", // UseableMonsters[0],
-	"Infested Fisherman", // UseableMonsters[1],
-	"Kathool Cultist", // UseableMonsters[2],
-	"Dzeza Cultist", // UseableMonsters[3],
-	"Dzeza Sapling", // UseableMonsters[4],
-	"Infested Mummy", // UseableMonsters[5],
-	"Mass of Hair", // UseableMonsters[6],
-	"Mass of Teeth", // UseableMonsters[7],
-	"Dzeza the Boundless", // UseableMonsters[8]
-};
+            "Nudibranch", // UseableMonsters[0],
+            "Infested Fisherman", // UseableMonsters[1],
+            "Kathool Cultist", // UseableMonsters[2],
+            "Dzeza Cultist", // UseableMonsters[3],
+            "Dzeza Sapling", // UseableMonsters[4],
+            "Infested Mummy", // UseableMonsters[5],
+            "Mass of Hair", // UseableMonsters[6],
+            "Mass of Teeth", // UseableMonsters[7],
+            "Dzeza the Boundless", // UseableMonsters[8]
+        };
         #endregion Useable Monsters
 
         // 10465 | World of the Eldritch
         if (!Story.QuestProgression(10465))
         {
-            void EnsureItemFromQuest(int sourceQuestId, int monsterIndex, string itemName, int qty = 1)
+            void EnsureItemFromQuest(
+                int sourceQuestId,
+                int monsterIndex,
+                string itemName,
+                int qty = 1
+            )
             {
                 if (Core.CheckInventory(itemName, qty))
                     return;
 
                 Core.AddDrop(itemName);
-                Core.HuntMonsterQuest(sourceQuestId, ("eldritchworld", UseableMonsters[monsterIndex], ClassType.Farm));
+                Core.HuntMonsterQuest(
+                    sourceQuestId,
+                    ("eldritchworld", UseableMonsters[monsterIndex], ClassType.Farm)
+                );
             }
 
             Core.EnsureAccept(10465);
@@ -911,24 +1135,21 @@ public class CoreMogloween
             Core.EnsureComplete(10465);
         }
 
-
         // 10466 | Limitless Lengths
         if (!Story.QuestProgression(10466))
         {
-            Core.HuntMonsterQuest(10466,
-                ("eldritchworld", UseableMonsters[7], ClassType.Farm),
-                ("eldritchworld", UseableMonsters[6], ClassType.Farm));
+            Core.EnsureAccept(10466);
+            Core.EquipClass(ClassType.Farm);
+            Core.HuntMonster("eldritchworld", "Mass of Teeth", "Brittle Enamel", 6);
+            Core.HuntMonster("eldritchworld", "Mass of Hair", "Moldy Strands", 6);
+            Core.EnsureComplete(10466);
         }
-
 
         // 10467 | Merely Existing
         if (!Story.QuestProgression(10467))
         {
-            Core.HuntMonsterQuest(10467,
-                ("eldritchworld", UseableMonsters[8], ClassType.Solo));
+            Core.HuntMonsterQuest(10467, ("eldritchworld", UseableMonsters[8], ClassType.Solo));
         }
-
-
     }
 
     public void ElodeaTemple()
@@ -941,90 +1162,247 @@ public class CoreMogloween
         #region Useable Monsters
         string[] UseableMonsters = new[]
         {
-    "Nudibranch", // UseableMonsters[0],
-	"Kathool Cultist", // UseableMonsters[1],
-	"Merdrathoolian", // UseableMonsters[2],
-	"Riptide Adept", // UseableMonsters[3],
-	"Sarasa Maiden", // UseableMonsters[4],
-	"Necroadipocere", // UseableMonsters[5],
-	"Child of the Depths", // UseableMonsters[6]
-};
+            "Nudibranch", // UseableMonsters[0],
+            "Kathool Cultist", // UseableMonsters[1],
+            "Merdrathoolian", // UseableMonsters[2],
+            "Riptide Adept", // UseableMonsters[3],
+            "Sarasa Maiden", // UseableMonsters[4],
+            "Necroadipocere", // UseableMonsters[5],
+            "Child of the Depths", // UseableMonsters[6]
+        };
         #endregion Useable Monsters
 
         // 10469 | Escargot Escorts
         if (!Story.QuestProgression(10469))
         {
-            Core.HuntMonsterQuest(10469,
-                ("elodeatemple", UseableMonsters[0], ClassType.Farm));
+            Core.HuntMonsterQuest(10469, ("elodeatemple", UseableMonsters[0], ClassType.Farm));
         }
 
-
         // 10470 | Plus 2 Minus 2
-        Story.MapItemQuest(10470, "elodeatemple", 15090);
-        Story.KillQuest(10470, "elodeatemple", UseableMonsters[1]);
-
+        if (!Story.QuestProgression(10470))
+        {
+            Core.EnsureAccept(10470);
+            Core.GetMapItem(15090, 1, "elodeatemple");
+            Core.HuntMonster("elodeatemple", "Kathool Cultist", "Kultist's Invitation", 2);
+            Core.EnsureComplete(10470);
+        }
 
         // 10471 | Bottomfeeder Fruits
         if (!Story.QuestProgression(10471))
         {
-            Core.HuntMonsterQuest(10471,
-                ("elodeatemple", UseableMonsters[0], ClassType.Farm),
-                ("elodeatemple", UseableMonsters[1], ClassType.Farm));
+            Core.EnsureAccept(10471);
+            Core.EquipClass(ClassType.Farm);
+            Core.HuntMonster("elodeatemple", "Nudibranch", "Seaslug Entrails", 6);
+            Core.HuntMonster("elodeatemple", "Kathool Cultist", "Kultist Entrails", 4);
+            Core.EnsureComplete(10471);
         }
-
 
         // 10472 | Dirge of the Depths
         if (!Story.QuestProgression(10472))
         {
-            Core.HuntMonsterQuest(10472,
-                ("elodeatemple", UseableMonsters[2], ClassType.Farm));
+            Core.HuntMonsterQuest(10472, ("elodeatemple", UseableMonsters[2], ClassType.Farm));
         }
 
-
         // 10473 | Borrowed Voices
-        Story.MapItemQuest(10473, "elodeatemple", 15091);
-        Story.KillQuest(10473, "elodeatemple", UseableMonsters[3]);
-
+        if (!Story.QuestProgression(10473))
+        {
+            Core.EnsureAccept(10473);
+            Core.GetMapItem(15091, 1, "elodeatemple");
+            Core.HuntMonster("elodeatemple", "Riptide Adept", "Riptide Song", 12);
+            Core.EnsureComplete(10473);
+        }
 
         // 10474 | Sea Symphony
         if (!Story.QuestProgression(10474))
         {
-            Core.HuntMonsterQuest(10474,
-                ("elodeatemple", UseableMonsters[3], ClassType.Farm),
-                ("elodeatemple", UseableMonsters[2], ClassType.Farm));
+            Core.EnsureAccept(10474);
+            Core.EquipClass(ClassType.Farm);
+            Core.HuntMonster("elodeatemple", "Riptide Adept", "Adept's Aria", 8);
+            Core.HuntMonster("elodeatemple", "Merdrathoolian", "Merdrathoolian's Oratio", 6);
+            Core.EnsureComplete(10474);
         }
 
-
         // 10475 | If You Hate the Robe, You'll Hate its Priest
-        Story.MapItemQuest(10475, new[]
-        {
-            (15092, 1, "elodeatemple"),
-            (15093, 8, "elodeatemple")
-        });
+        Story.MapItemQuest(10475, new[] { (15092, 1, "elodeatemple"), (15093, 8, "elodeatemple") });
 
         // 10476 | Comets on the Cliff
         if (!Story.QuestProgression(10476))
         {
-            Core.HuntMonsterQuest(10476,
-                ("elodeatemple", UseableMonsters[4], ClassType.Farm));
+            Core.HuntMonsterQuest(10476, ("elodeatemple", UseableMonsters[4], ClassType.Farm));
         }
-
 
         // 10477 | Pipe Clog
         if (!Story.QuestProgression(10477))
         {
-            Core.HuntMonsterQuest(10477,
-                ("elodeatemple", UseableMonsters[5], ClassType.Farm));
+            Core.HuntMonsterQuest(10477, ("elodeatemple", UseableMonsters[5], ClassType.Farm));
         }
 
         // 10478 | The Victor! The Survivor!
         if (!Story.QuestProgression(10478))
         {
-            Core.HuntMonsterQuest(10478,
-                ("elodeatemple", UseableMonsters[6], ClassType.Solo));
+            Core.HuntMonsterQuest(10478, ("elodeatemple", UseableMonsters[6], ClassType.Solo));
+        }
+    }
+	
+	public void BirgittaMogloween()
+    {
+        if (Core.isCompletedBefore(10905)|| !Core.isSeasonalMapActive("birgittamogloween"))
+            return;
+
+        Story.PreLoad(this);
+
+        string[] UseableMonsters =
+        [
+            "Alpha Grigor", // UseableMonsters[0]
+            "Champion Ensis", // UseableMonsters[1]
+            "Lycan Guest", // UseableMonsters[2]
+            "Nazarene Artist", // UseableMonsters[3]
+            "ShadowSlayer", // UseableMonsters[4]
+            "Vampiric Guest", // UseableMonsters[5]
+        ];
+
+        // 10896 | Silver of the Crossroads
+        Story.KillQuest(10896, "birgittamogloween", UseableMonsters[4]); // Silver Bullets x36
+
+        // 10897 | Lilies of the Valley
+        Story.MapItemQuest(10897, "birgittamogloween", [16281, 16282]);
+
+        // 10898 | Blue Blooms
+        Story.KillQuest(10898, "birgittamogloween", UseableMonsters[3]); // Teal Resin x15
+
+        // 10899 | Wise Beyond Years
+        Story.MapItemQuest(10899, "birgittamogloween", [16283, 16284]);
+		Story.MapItemQuest(10899, "birgittamogloween", 16285, 5);
+
+        // 10900 | Dog Breath
+        Story.KillQuest(10900, "birgittamogloween", UseableMonsters[2]); // Pickled Garlic x8
+
+        // 10901 | Love Knows No Bounds
+        Story.MapItemQuest(10901, "birgittamogloween", [16286, 16287]);
+
+        // 10902 | Poison Perfume
+        Story.KillQuest(10902, "birgittamogloween", UseableMonsters[5]); // Wolfsbane Perfume x2
+
+        // 10903 | Naiver Vogel
+        Story.MapItemQuest(10903, "birgittamogloween", 16288);
+        Story.KillQuest(10903, "birgittamogloween", UseableMonsters[3]); // Blue Cork Grease x5
+
+        // 10904 | Fighting Like Bats and Dogs
+        Core.EnsureAccept(10904);
+        Core.HuntMonster("birgittamogloween", UseableMonsters[2], "Darkovian Fur", 9);
+        Core.HuntMonster("birgittamogloween", UseableMonsters[5], "Darkovian Silk", 9);
+        Core.EnsureComplete(10904);
+
+        // 10905 | The Opening Act
+        Core.EnsureAccept(10905);
+        Core.HuntMonster("birgittamogloween", UseableMonsters[1], "Champion Ensis Defeated", 1);
+        Core.HuntMonster("birgittamogloween", UseableMonsters[0], "Alpha Grigor Defeated", 1);
+        Core.EnsureComplete(10905);
+    }
+	   
+	public void ShadowSlayerWar()
+    {
+        if (Core.isCompletedBefore(10916)||!Core.isSeasonalMapActive("shadowslayerwar"))
+            return;
+
+        Story.PreLoad(this);
+
+        string[] UseableMonsters =
+        [
+            "Awakened Hunter", // UseableMonsters[0]
+            "Darkovia Hunter", // UseableMonsters[1]
+            "Forest Cultist", // UseableMonsters[2]
+            "ShadowSlayer Z", // UseableMonsters[3]
+            "Sublime Hunter", // UseableMonsters[4]
+            "Vampiric Ancestor ", // UseableMonsters[5]
+            "Werepyre Ancestor ", // UseableMonsters[6]
+        ];
+
+        // 10908 | Wulpurga Medal
+        Story.KillQuest(10908, "shadowslayerwar", UseableMonsters[5]); // Wulpurga Medal x5
+
+        // 10909 | Mega Wulpurga Medal
+        Story.KillQuest(10909, "shadowslayerwar", UseableMonsters[5]); // Mega Walpurga Medal x3
+
+        // 10910 | Ghillie Suit
+        Story.KillQuest(10910, "shadowslayerwar", UseableMonsters[1]); // Darkovian Hunter's Camo x6
+
+        // 10911 | Silver Blood
+        Story.KillQuest(10911, "shadowslayerwar", UseableMonsters[4]); // Sublime Silver x6
+
+        // 10912 | Primal Rage
+        Story.KillQuest(10912, "shadowslayerwar", UseableMonsters[5]); // Ancestral Vision x6
+
+        // 10913 | Chimerical Presence
+        Story.KillQuest(10913, "shadowslayerwar", UseableMonsters[6]); // Werepyre's Moonstone x1
+
+        // 10914 | Sunlit Invocation
+        Story.KillQuest(10914, "shadowslayerwar", UseableMonsters[2]); // Cultist's Sun Wheel x6
+
+        // 10915 | The Most Dangerous Game
+        Story.KillQuest(10915, "shadowslayerwar", UseableMonsters[0]); // Greater Hunter's Hexagram x6
+
+        // 10916 | Daughter of the Sun
+        Story.KillQuest(10916, "shadowslayerwar", UseableMonsters[3]); // ShadowSlayer Z Defeated x1
+    }
+	
+	public void Walpurgisnacht()
+    {
+        if (Core.isCompletedBefore(10930)||!Core.isSeasonalMapActive("walpurgisnacht"))
+            return;
+
+        Story.PreLoad(this);
+
+        string[] UseableMonsters =
+        [
+            "Awakened Hunter", // UseableMonsters[0]
+            "Beastly Hunger", // UseableMonsters[1]
+            "Bloodlust", // UseableMonsters[2]
+            "Druid Revenant", // UseableMonsters[3]
+            "Forest Cultist", // UseableMonsters[4]
+            "Moon's Firstborn", // UseableMonsters[5]
+            "ShadowSlayer G ", // UseableMonsters[6]
+            "The Gentleman", // UseableMonsters[7]
+        ];
+
+        // 10921 | Vervain and Vaughn
+        Story.MapItemQuest(10921, "walpurgisnacht", 16340);
+        Story.KillQuest(10921, "walpurgisnacht", UseableMonsters[3]); // Druid's Moon Sigil x4
+
+        // 10922 | Marigold and Angelica
+        Story.MapItemQuest(10922, "walpurgisnacht", 16341);
+        Story.KillQuest(10922, "walpurgisnacht", UseableMonsters[4]); // Cultist's Angelica x6
+
+        // 10923 | Nialla's Mourning Cypress
+        if (!Story.QuestProgression(10923))
+        {
+            Core.EnsureAccept(10923);
+            Core.GetMapItem(16342, 1, "walpurgisnacht");
+            Core.HuntMonster("walpurgisnacht", UseableMonsters[4], "Cultist's Eye", 6);
+            Core.HuntMonster("walpurgisnacht", UseableMonsters[3], "Druid's Eye", 6);
+            Core.EnsureComplete(10923);
         }
 
+        // 10924 | Song's Sheep Sorrel
+        Story.MapItemQuest(10924, "walpurgisnacht", 16343);
+        Story.KillQuest(10924, "walpurgisnacht", UseableMonsters[0]); // Hunter's Septogram x12
 
+        // 10925 | Auld Man's Bell
+        Story.KillQuest(10925, "walpurgisnacht", UseableMonsters[6]); // G's Crossroads Bullet x1
+
+        // 10926 | Muscadier for Focus
+        Story.MapItemQuest(10926, "walpurgisnacht", 16344, 8);
+
+        // 10927 | Blood of the Moon
+        Story.KillQuest(10927, "walpurgisnacht", UseableMonsters[2]); // Moonchild's Blood x6
+
+        // 10928 | Bones of the Forest
+        Story.KillQuest(10928, "walpurgisnacht", UseableMonsters[1]); // Moonchild's Marrow x6
+
+        // 10929 | Empty Nest
+        Story.KillQuest(10929, "walpurgisnacht", UseableMonsters[5]); // Moonchild's Memory x1
+
+        // 10930 | Gentleman of the Crossroads
+        Story.KillQuest(10930, "walpurgisnacht", UseableMonsters[7]); // Father Forest Defeated x1
     }
-
 }

@@ -11,7 +11,12 @@ public class FiendPast
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -28,7 +33,6 @@ public class FiendPast
             return;
 
         Story.PreLoad(this);
-
 
         //Test the Newborn Fiends 8478
         Story.KillQuest(8478, "fiendpast", "Newborn Fiend");
@@ -55,8 +59,13 @@ public class FiendPast
         Story.KillQuest(8485, "fiendpast", "Scarvitas");
 
         //Seal Maintenance 8486
-        Story.MapItemQuest(8486, "fiendpast", 9557, 4);
-        Story.KillQuest(8486, "fiendpast", "Avarice Guard");
+        if (!Story.QuestProgression(8486))
+        {
+            Core.EnsureAccept(8486);
+            Core.GetMapItem(9557, 4, "fiendpast");
+            Core.HuntMonster("fiendpast", "Avarice Guard", "Guard Energy Collected", 8);
+            Core.EnsureComplete(8486);
+        }
 
         //Traitors Are Null And Void 8487
         Story.KillQuest(8487, "fiendpast", "Void Fiend");
@@ -94,8 +103,5 @@ public class FiendPast
 
         //Defeat Dage the Lich 8494
         Story.KillQuest(8494, "fiendpast", "Dage the Lich");
-
-
-
     }
 }

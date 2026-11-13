@@ -12,8 +12,18 @@ public class CetoleonWarStory
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static HeartOfTheSeaStory HeartOfTheSeaStory { get => _HeartOfTheSeaStory ??= new HeartOfTheSeaStory(); set => _HeartOfTheSeaStory = value; }    private static HeartOfTheSeaStory _HeartOfTheSeaStory;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static HeartOfTheSeaStory HeartOfTheSeaStory
+    {
+        get => _HeartOfTheSeaStory ??= new HeartOfTheSeaStory();
+        set => _HeartOfTheSeaStory = value;
+    }
+    private static HeartOfTheSeaStory _HeartOfTheSeaStory;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -23,6 +33,7 @@ public class CetoleonWarStory
 
         Core.SetOptions(false);
     }
+
     public string[] AllLoot =
     {
         "Skull-n-Bones Bandana",
@@ -52,16 +63,58 @@ public class CetoleonWarStory
         "Golden Commander's Reavers",
         "Skull-n-Ghostbones Flag",
         "Vampire Commander's Shaggy Hair",
-        "Vampire Commander's Shaggy Locks"
+        "Vampire Commander's Shaggy Locks",
     };
 
-    public string[] GrislyFangLoot = { "Skull-n-Bones Bandana", "Supernatural Skull Bandana", "Vampire Commander's Backblades", "Grislyfang Pirate's Tools" };
-    public string[] WreckersLoot = { "Forgotten Cutlass", "Vampire Commander's Top Hat", "Vampire Commander's Top Hat + Locks", "Shaggy Vampire Commander's Top Hat", "Shaggy Vampire Commander's Top Hat + Locks" };
-    public string[] EngineersLoot = { "Dual Forgotten Cutlasses", "Golden Naval Commander Hook", "Arachnid Commander's Sword", "Shipwrecked Captain's Rune" };
-    public string[] GunPowderLoot = { "Vampire Commander's Black Cutlass", "Golden Pirate Monkey", "Wrapped Captain's Tricorn", "Wrapped Captain's Tricorn + Locks" };
-    public string[] SawLoot = { "Guncraft Commander's Hair", "Guncraft Commander's Locks", "Guncraft Commander's Flintlock", "Golden Commander's Rapier" };
-    public string[] TentaclesLoot = { "Golden Commander's Bandana", "Golden Commander's Back Cutlass", "Golden Commander's Cutlass", "Golden Commander's Reavers" };
-    public string[] RoachesLoot = { "Skull-n-Ghostbones Flag", "Vampire Commander's Shaggy Hair", "Vampire Commander's Shaggy Locks" };
+    public string[] GrislyFangLoot =
+    {
+        "Skull-n-Bones Bandana",
+        "Supernatural Skull Bandana",
+        "Vampire Commander's Backblades",
+        "Grislyfang Pirate's Tools",
+    };
+    public string[] WreckersLoot =
+    {
+        "Forgotten Cutlass",
+        "Vampire Commander's Top Hat",
+        "Vampire Commander's Top Hat + Locks",
+        "Shaggy Vampire Commander's Top Hat",
+        "Shaggy Vampire Commander's Top Hat + Locks",
+    };
+    public string[] EngineersLoot =
+    {
+        "Dual Forgotten Cutlasses",
+        "Golden Naval Commander Hook",
+        "Arachnid Commander's Sword",
+        "Shipwrecked Captain's Rune",
+    };
+    public string[] GunPowderLoot =
+    {
+        "Vampire Commander's Black Cutlass",
+        "Golden Pirate Monkey",
+        "Wrapped Captain's Tricorn",
+        "Wrapped Captain's Tricorn + Locks",
+    };
+    public string[] SawLoot =
+    {
+        "Guncraft Commander's Hair",
+        "Guncraft Commander's Locks",
+        "Guncraft Commander's Flintlock",
+        "Golden Commander's Rapier",
+    };
+    public string[] TentaclesLoot =
+    {
+        "Golden Commander's Bandana",
+        "Golden Commander's Back Cutlass",
+        "Golden Commander's Cutlass",
+        "Golden Commander's Reavers",
+    };
+    public string[] RoachesLoot =
+    {
+        "Skull-n-Ghostbones Flag",
+        "Vampire Commander's Shaggy Hair",
+        "Vampire Commander's Shaggy Locks",
+    };
 
     public void CetoleonWar()
     {
@@ -184,6 +237,5 @@ public class CetoleonWarStory
 
         //Gel the Jellyfish 6530
         Story.KillQuest(6530, "CetoleonWar", "Nomura");
-
     }
 }

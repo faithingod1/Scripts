@@ -6,20 +6,30 @@ tags: scroll, enrage, mystic, parchment, spellcraft, decay
 //cs_include Scripts/CoreBots.cs
 //cs_include Scripts/CoreFarms.cs
 using Skua.Core.Interfaces;
-using Skua.Core.Options;
 using Skua.Core.Models.Quests;
+using Skua.Core.Options;
 
 public class BuyScrolls
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
 
     public bool DontPreconfigure = true;
     public string OptionsStorage = "BuyScrolls";
     public List<IOption> Options = new()
     {
-        new Option<bool>("UseMysticParchment", "Use Mystic Parchment", "Use Mystic Parchment instead of gold To Buy Ink", false),
+        new Option<bool>(
+            "UseMysticParchment",
+            "Use Mystic Parchment",
+            "Use Mystic Parchment instead of gold To Buy Ink",
+            false
+        ),
         new Option<Scrolls>("scrollSelect", "Scroll of", "Select the scroll of your choise"),
         new Option<int>("scrollAmount", "How many", "Write -1 to buy up to max. stack", -1),
         CoreBots.Instance.SkipOptions,
@@ -45,7 +55,7 @@ public class BuyScrolls
         }
         string scrollName = QuestData.Rewards.First().Name;
         int maxStack = QuestData.Rewards.First().MaxStack;
-        quant = quant == -1 ? maxStack : quant;
+        quant = quant == -1 || quant > maxStack ? maxStack : quant;
 
         if (Core.CheckInventory(scrollName, quant))
             return;
@@ -60,14 +70,19 @@ public class BuyScrolls
         Action gatherMaterials = !useMysticParchment
             ? () =>
             {
-                if (!Core.CheckInventory("Arcane Quill"))
+                if (!Core.CheckInventory(ink, 5))
                 {
-                    if (!Core.CheckInventory("Gold Voucher 500k"))
-                        Farm.Gold(500000);
-                    Core.BuyItem("spellcraft", 693, "Gold Voucher 500k", 2);
-                    Core.BuyItem("spellcraft", 693, "Arcane Quill", 10, shopItemID: 8847);
+                    if (!Core.CheckInventory("Arcane Quill", 1))
+                    {
+                        if (!Core.CheckInventory("Gold Voucher 500k", 2))
+                        {
+                            Farm.Gold(1_000_000);
+                            Core.BuyItem("spellcraft", 693, "Gold Voucher 500k", 2);
+                        }
+                        Core.BuyItem("spellcraft", 693, 17391, 10, shopItemID: 7686, 1);
+                    }
+                    Core.BuyItem("spellcraft", 622, ink, 5);
                 }
-                Core.BuyItem("spellcraft", 622, ink, 5);
             }
         : () =>
         {
@@ -80,11 +95,11 @@ public class BuyScrolls
             gatherMaterials();
             Core.EnsureAccept(QuestData.ID);
             Core.EnsureCompleteMulti(QuestData.ID);
+            Bot.Wait.ForDrop(scrollName);
             Bot.Wait.ForPickup(scrollName);
-            Core.FarmingLogger(scrollName, quant);
+            Core.Logger($"{scrollName} x{Bot.Inventory.GetQuantity(scrollName)}/{quant}");
         }
     }
-
 }
 
 public enum Scrolls

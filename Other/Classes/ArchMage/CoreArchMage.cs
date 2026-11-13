@@ -17,39 +17,95 @@ tags: null
 //cs_include Scripts/Evil/NSoD/CoreNSOD.cs
 //cs_include Scripts/Evil/SDKA/CoreSDKA.cs
 //cs_include Scripts/Other/Classes/Necromancer.cs
+//cs_include Scripts/Story/DarkCarnax.cs
 using Skua.Core.Interfaces;
-using Skua.Core.Models.Skills;
 using Skua.Core.Models.Items;
+using Skua.Core.Models.Skills;
 using Skua.Core.Options;
 
 public class CoreArchMage
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
-    private static BuyScrolls Scroll { get => _Scroll ??= new BuyScrolls(); set => _Scroll = value; }
+    private static BuyScrolls Scroll
+    {
+        get => _Scroll ??= new BuyScrolls();
+        set => _Scroll = value;
+    }
     private static BuyScrolls _Scroll;
-    private static CoreBLOD BLOD { get => _BLOD ??= new CoreBLOD(); set => _BLOD = value; }
+    private static CoreBLOD BLOD
+    {
+        get => _BLOD ??= new CoreBLOD();
+        set => _BLOD = value;
+    }
     private static CoreBLOD _BLOD;
-    private static CoreQOM QOM { get => _QOM ??= new CoreQOM(); set => _QOM = value; }
+    private static CoreQOM QOM
+    {
+        get => _QOM ??= new CoreQOM();
+        set => _QOM = value;
+    }
     private static CoreQOM _QOM;
-    private static CoreSoW SoW { get => _SoW ??= new CoreSoW(); set => _SoW = value; }
+    private static CoreSoW SoW
+    {
+        get => _SoW ??= new CoreSoW();
+        set => _SoW = value;
+    }
     private static CoreSoW _SoW;
-    private static CoreSoWMats SOWM { get => _SOWM ??= new CoreSoWMats(); set => _SOWM = value; }
+    private static CoreSoWMats SOWM
+    {
+        get => _SOWM ??= new CoreSoWMats();
+        set => _SOWM = value;
+    }
     private static CoreSoWMats _SOWM;
-    private static CoreNSOD NSOD { get => _NSOD ??= new CoreNSOD(); set => _NSOD = value; }
+
+    private static CoreNSOD NSOD
+    {
+        get => _NSOD ??= new CoreNSOD();
+        set => _NSOD = value;
+    }
     private static CoreNSOD _NSOD;
+
+    private static DarkCarnaxStory DCS
+    {
+        get => _DCS ??= new DarkCarnaxStory();
+        set => _DCS = value;
+    }
+    private static DarkCarnaxStory _DCS;
 
     public bool DontPreconfigure = true;
     public string OptionsStorage = "ArchMage";
     public List<IOption> Options = new()
     {
-        new Option<bool>("lumina_elementi", "Lumina Elementi", "Todo the last quest or not, for the 51% wep(takes awhileand will require aditional boss items.) [On by default]", true),
-        new Option<bool>("cosmetics", "Get Cosmetics", "Gets the cosmetic rewards (redoes quests if you don't have them, disable to just get ArchMage and the weapon) [On by default]", false),
-        new Option<bool>("army", "Armying?", "use when running on 4 accounts at once only, will probably get out of sync.) [Off by default]", false),
+        new Option<bool>(
+            "lumina_elementi",
+            "Lumina Elementi",
+            "Todo the last quest or not, for the 51% wep(takes awhileand will require aditional boss items.) [On by default]",
+            true
+        ),
+        new Option<bool>(
+            "cosmetics",
+            "Get Cosmetics",
+            "Gets the cosmetic rewards (redoes quests if you don't have them, disable to just get ArchMage and the weapon) [On by default]",
+            false
+        ),
+        new Option<bool>(
+            "army",
+            "Armying?",
+            "use when running on 4 accounts at once only, will probably get out of sync.) [Off by default]",
+            false
+        ),
         CoreBots.Instance.SkipOptions,
     };
 
@@ -93,20 +149,27 @@ public class CoreArchMage
                 }
                 else if (Core.CheckInventory(Cosmetics, toInv: false))
                 {
-                    Core.Logger("You own \"ArchMage\", \"Providence\", and the extra cometics, farm complete.");
+                    Core.Logger(
+                        "You own \"ArchMage\", \"Providence\", and the extra cometics, farm complete."
+                    );
                     return;
                 }
             }
         }
 
         if (army)
-            Core.Logger("Armying Set to True, Please have all accounts logged in and Following this Acc using the Tools > Butler.cs");
+            Core.Logger(
+                "Armying Set to True, Please have all accounts logged in and Following this Acc using the Tools > Butler.cs"
+            );
         Bot.Drops.Add(RequiredItems.Concat(BossDrops).Concat(Cosmetics).ToArray());
 
         Core.Logger("The bot will now farm all requierments for ArchMage");
         SoW.CompleteCoreSoW();
         if (!Core.isCompletedBefore(9126))
-            Core.Logger("Quests must be completed upto 9126 (9123 > 9126) manualy as they require a dodge class.", stopBot: true);
+            Core.Logger(
+                "Quests must be completed upto 9126 (9123 > 9126) manualy as they require a dodge class.",
+                stopBot: true
+            );
         QOM.TheReshaper();
 
         Farm.SpellCraftingREP();
@@ -135,7 +198,14 @@ public class CoreArchMage
             Core.ToBank(Cosmetics);
             BossItemCheck(250, "Elemental Binding");
 
-            Core.Unbank("Book of Magus", "Book of Fire", "Book of Ice", "Book of Aether", "Book of Arcana", "Elemental Binding");
+            Core.Unbank(
+                "Book of Magus",
+                "Book of Fire",
+                "Book of Ice",
+                "Book of Aether",
+                "Book of Arcana",
+                "Elemental Binding"
+            );
             Core.EnsureComplete(8918);
 
             Bot.Wait.ForPickup("ArchMage");
@@ -152,9 +222,14 @@ public class CoreArchMage
     public void LuminaElementi(bool standalone = false, bool Extras = false)
     {
         bool GetCosmetics = Bot.Config!.Get<bool>("cosmetics") || Extras == true;
-        if (standalone || GetCosmetics ?
-                Core.CheckInventory(Core.EnsureLoad(8919).Rewards.Select(x => x.ID).ToArray(), toInv: false) :
-                Core.CheckInventory("Providence"))
+        if (
+            standalone || GetCosmetics
+                ? Core.CheckInventory(
+                    Core.EnsureLoad(8919).Rewards.Select(x => x.ID).ToArray(),
+                    toInv: false
+                )
+                : Core.CheckInventory("Providence")
+        )
             return;
 
         if (!Bot.Quests.IsUnlocked(8919))
@@ -211,16 +286,20 @@ public class CoreArchMage
         Core.EnsureComplete(8913);
         Bot.Wait.ForPickup("Book of Magus");
         Core.ToBank(BLOD.BLoDItems);
-
     }
 
     public void BookOfFire(bool Extras = false)
     {
         //Book of Fire: Immolation
         bool GetCosmetics = Bot.Config!.Get<bool>("cosmetics") || Extras == true;
-        if (GetCosmetics ?
-                Core.CheckInventory(Core.EnsureLoad(8914).Rewards.Select(x => x.ID).ToArray(), toInv: false) :
-                Core.CheckInventory("Book of Fire"))
+        if (
+            GetCosmetics
+                ? Core.CheckInventory(
+                    Core.EnsureLoad(8914).Rewards.Select(x => x.ID).ToArray(),
+                    toInv: false
+                )
+                : Core.CheckInventory("Book of Fire")
+        )
             return;
 
         Core.FarmingLogger("Book of Fire", 1);
@@ -246,9 +325,14 @@ public class CoreArchMage
     public void BookOfIce(bool Extras = false)
     {
         bool GetCosmetics = Bot.Config!.Get<bool>("cosmetics") || Extras == true;
-        if (GetCosmetics ?
-                Core.CheckInventory(Core.EnsureLoad(8915).Rewards.Select(x => x.ID).ToArray(), toInv: false) :
-                Core.CheckInventory("Book of Ice"))
+        if (
+            GetCosmetics
+                ? Core.CheckInventory(
+                    Core.EnsureLoad(8915).Rewards.Select(x => x.ID).ToArray(),
+                    toInv: false
+                )
+                : Core.CheckInventory("Book of Ice")
+        )
             return;
 
         Core.FarmingLogger("Book of Ice", 1);
@@ -276,15 +360,19 @@ public class CoreArchMage
         Core.EnsureComplete(8915);
         Bot.Wait.ForPickup("Book of Ice");
         Core.ToBank(Cosmetics);
-
     }
 
     public void BookOfAether(bool Extras = false)
     {
         bool GetCosmetics = Bot.Config!.Get<bool>("cosmetics") || Extras == true;
-        if (GetCosmetics ?
-                Core.CheckInventory(Core.EnsureLoad(8916).Rewards.Select(x => x.ID).ToArray(), toInv: false) :
-                Core.CheckInventory("Book of Aether"))
+        if (
+            GetCosmetics
+                ? Core.CheckInventory(
+                    Core.EnsureLoad(8916).Rewards.Select(x => x.ID).ToArray(),
+                    toInv: false
+                )
+                : Core.CheckInventory("Book of Aether")
+        )
             return;
 
         Core.FarmingLogger("Book of Aether", 1);
@@ -302,20 +390,31 @@ public class CoreArchMage
         Core.EnsureComplete(8916);
         Bot.Wait.ForPickup("Book of Aether");
         Core.ToBank(Cosmetics);
-
     }
 
     public void BookOfArcana(bool Extras = false)
     {
         bool GetCosmetics = Bot.Config!.Get<bool>("cosmetics") || Extras == true;
-        if (GetCosmetics ?
-                Core.CheckInventory(Core.EnsureLoad(8917).Rewards.Select(x => x.ID).ToArray(), toInv: false) :
-                Core.CheckInventory("Book of Arcana"))
+        if (
+            GetCosmetics
+                ? Core.CheckInventory(
+                    Core.EnsureLoad(8917).Rewards.Select(x => x.ID).ToArray(),
+                    toInv: false
+                )
+                : Core.CheckInventory("Book of Arcana")
+        )
             return;
 
         Core.FarmingLogger("Book of Arcana", 1);
 
-        BossItemCheck(1, "The Mortal Coil", "The Divine Will", "Insatiable Hunger", "Undying Resolve", "Calamitous Ruin");
+        BossItemCheck(
+            1,
+            "The Mortal Coil",
+            "The Divine Will",
+            "Insatiable Hunger",
+            "Undying Resolve",
+            "Calamitous Ruin"
+        );
 
         UnboundTome(1);
         Core.EnsureAccept(8917);
@@ -334,7 +433,9 @@ public class CoreArchMage
     {
         if (Core.CheckInventory(73327, quant))
         {
-            Core.Logger($"Mystic Scribing Kit: {Core.dynamicQuant("Mystic Scribing Kit", false)}/{quant}");
+            Core.Logger(
+                $"Mystic Scribing Kit: {Core.dynamicQuant("Mystic Scribing Kit", false)}/{quant}"
+            );
             return;
         }
 
@@ -352,27 +453,34 @@ public class CoreArchMage
             if (!Core.isCompletedBefore(3052))
             {
                 Core.EnsureAccept(3052);
-                Core.GetMapItems(new[] { (1921, 1), (1922, 1), (1923, 1), (1924, 1) }, "dragonrune");
+                Core.GetMapItems(
+                    new[] { (1921, 1), (1922, 1), (1923, 1), (1924, 1) },
+                    "dragonrune"
+                );
                 Core.EnsureComplete(3052);
             }
-            Core.RegisterQuests(3050);
-            while (!Bot.ShouldExit && !Core.CheckInventory(new[] { "Mystic Shards", "Mystic Quills" }, 49))
+
+            while (
+                !Bot.ShouldExit
+                && !Core.CheckInventory(new[] { "Mystic Shards", "Mystic Quills" }, 49)
+            )
             {
+                Core.EnsureAccept(3050);
                 Core.HuntMonster("gilead", "Water Elemental", "Water Core", log: false);
                 Core.HuntMonster("gilead", "Fire Elemental", "Fire Core", log: false);
                 Core.HuntMonster("gilead", "Wind Elemental", "Air Core", log: false);
                 Core.HuntMonster("gilead", "Earth Elemental", "Earth Core", log: false);
                 Core.HuntMonster("gilead", "Mana Elemental", "Mana Core", log: false);
+                Core.EnsureComplete(3050);
             }
 
-            Core.CancelRegisteredQuests();
 
             Core.EquipClass(ClassType.Solo);
             if (!Core.CheckInventory("Semiramis Feather"))
             {
                 Core.AddDrop("Semiramis Feather");
                 Core.EnsureAccept(6286);
-                Core.HuntMonster("guardiantree", "Terrane", "Terrane Defeated");
+                Core.KillMonster("guardiantree", "r12", "Left", "Terrane", "Terrane Defeated");
                 Core.EnsureComplete(6286);
                 Bot.Wait.ForPickup("Semiramis Feather");
             }
@@ -431,7 +539,9 @@ public class CoreArchMage
             Core.HuntMonster("natatorium", "Anglerfish", "Sea Locus", isTemp: false);
             Core.EquipClass(ClassType.Solo);
             Core.Sleep(2500);
-            Core.Logger("cutscene happens when joining some maps, give the bot a sec to realise its not broke :P");
+            Core.Logger(
+                "cutscene happens when joining some maps, give the bot a sec to realise its not broke :P"
+            );
             Core.Sleep(2500);
             Core.KillMonster("skytower", "r13", "Bottom", "*", "Sky Locus", isTemp: false);
             Core.HuntMonster("elemental", "Mana Golem", "Prime Locus Attunement", 30, isTemp: false);
@@ -462,12 +572,15 @@ public class CoreArchMage
         PrismaticEther(remaining);
         ArcaneLocus(remaining);
 
-
         Core.AddDrop("Unbound Tome");
 
-        while (!Bot.ShouldExit
-        && Core.CheckInventory(new[] { "Mystic Scribing Kit", "Prismatic Ether", "Arcane Locus" })
-        && !Core.CheckInventory("Unbound Tome", quant))
+        while (
+            !Bot.ShouldExit
+            && Core.CheckInventory(
+                new[] { "Mystic Scribing Kit", "Prismatic Ether", "Arcane Locus" }
+            )
+            && !Core.CheckInventory("Unbound Tome", quant)
+        )
         {
             Core.EnsureAccept(8912);
 
@@ -506,7 +619,7 @@ public class CoreArchMage
     {
         foreach (string item in Items)
         {
-            if (Core.CheckInventory(item))
+            if (Core.CheckInventory(item, quant))
                 continue;
 
             switch (item)
@@ -514,23 +627,27 @@ public class CoreArchMage
                 case "Void Essentia":
                     NSOD.VoidAuras(75);
                     Core.EquipClass(ClassType.Solo);
-                    Core.HuntMonster("thevoid", "Ninja", "Void Energy", 25, isTemp: false);
+                    if (!Core.CheckInventory("Void Essence", 25))
+                    {
+                        Core.Logger("This has been changed you need 25x `Void Essence` from \"Flibbitiestgibbet\"");
+                        return;
+                    }
                     // Purchase required items.
                     Adv.BuyItem("thevoid", 1406, item);
                     break;
 
                 case "Vital Exanima":
-                    Adv.GearStore();
-                    Core.BossClass();
+                    Adv.GearStore(EnhAfter: true);
+                    Core.UseBossClass();
                     Core.KillMonster("dage", "Boss", "Right", "Dage the Evil", item, isTemp: false);
-                    Adv.GearStore(true);
+                    Adv.GearStore(true, EnhAfter: true);
                     break;
 
                 case "Everlight Flame":
-                    Adv.GearStore();
-                    Core.BossClass();
-                    Core.KillMonster("fireavatar", "r9", "Left", "Avatar Tyndarius", item, isTemp: false);
-                    Adv.GearStore(true);
+                    Adv.GearStore(EnhAfter: true);
+                    Core.UseBossClass();
+                    Core.KillMonster("fireavatar", "r9", "Left", "Avatar Tyndarius", item, isTemp: false); Adv.GearStore(true, EnhAfter: true);
+                    Adv.GearStore(true, EnhAfter: true);
                     break;
 
                 case "Calamitous Ruin":
@@ -540,13 +657,14 @@ public class CoreArchMage
                     break;
 
                 case "The Mortal Coil":
-                    Adv.GearStore();
-                    Core.DodgeClass();
-                    Core.KillMonster("tercessuinotlim", "Boss2", "Right", "Nulgath", item, isTemp: false);
-                    Adv.GearStore(true);
+                    Adv.GearStore(EnhAfter: true);
+                    Core.EquipClass(ClassType.Dodge);
+                    Core.KillMonster("tercessuinotlim", "Boss2", "Right", "Nulgath", item, isTemp: false); Adv.GearStore(true, EnhAfter: true);
+                    Adv.GearStore(true, EnhAfter: true);
                     break;
 
                 case "The Divine Will":
+                    Core.EquipClass(ClassType.Dodge);
                     Item("celestialpast", "Azalith", item, quant);
                     break;
 
@@ -565,11 +683,15 @@ public class CoreArchMage
             }
         }
 
-        void Item(string map, string monster, string item, int quant)
+        void Item(string map, string monster, string item, int quant, bool EquipBestClassType = true)
         {
             if (army)
-                Core.HuntMonster(map, monster, item, quant, isTemp: false);
-            else Core.Logger($"{item} x{quant} not found, it can be farmed (with an army) from \"{monster}\" in /{map.ToLower()}", stopBot: true);
+                Core.HuntMonster(map, monster, item, quant, isTemp: false, EquipBestClassType);
+            else
+                Core.Logger(
+                    $"{item} x{quant} not found, it can be farmed (with an army) from \"{monster}\" in /{map.ToLower()}",
+                    stopBot: true
+                );
         }
     }
 
@@ -582,41 +704,50 @@ public class CoreArchMage
     private void MoveNightmareCarnax(string zone)
     {
         string zoneLower = zone?.ToLower() ?? "";
-        if (zoneLower == currentZone || DateTime.Now - lastMove < moveCooldown || (moveTask is { IsCompleted: false }))
+        if (
+            zoneLower == currentZone
+            || DateTime.Now - lastMove < moveCooldown
+            || (moveTask is { IsCompleted: false })
+        )
             return;
 
         currentZone = zoneLower;
         lastMove = DateTime.Now;
 
-        moveTask = Task.Run(async () =>
-        {
-            try
+        moveTask = Task.Run(
+            async () =>
             {
-                await Task.Delay(300, moveTaskCts?.Token ?? default);
-
-                int y = Bot.Random.Next(380, 475);
-                int x = zoneLower switch
+                try
                 {
-                    "a" => Bot.Random.Next(600, 931),
-                    "b" => Bot.Random.Next(25, 326),
-                    _ => Bot.Random.Next(325, 601)
-                };
+                    await Task.Delay(300, moveTaskCts?.Token ?? default);
 
-                Bot.Player.WalkTo(x, y);
+                    int y = Bot.Random.Next(380, 475);
+                    int x = zoneLower switch
+                    {
+                        "a" => Bot.Random.Next(600, 931),
+                        "b" => Bot.Random.Next(25, 326),
+                        _ => Bot.Random.Next(325, 601),
+                    };
 
-                await Task.Delay(2500, moveTaskCts?.Token ?? default);
-            }
-            catch (OperationCanceledException)
-            {
-                // Expected when cancellation is requested - no action needed
-            }
-        }, moveTaskCts?.Token ?? default);
+                    Bot.Player.WalkTo(x, y);
+
+                    await Task.Delay(2500, moveTaskCts?.Token ?? default);
+                }
+                catch (OperationCanceledException)
+                {
+                    // Expected when cancellation is requested - no action needed
+                }
+            },
+            moveTaskCts?.Token ?? default
+        );
     }
 
     private void FarmDarkCarnax(bool attemptSolo = true)
     {
         if (Core.CheckInventory("Calamitous Ruin"))
             return;
+
+        DCS.Storyline();
 
         Core.AddDrop("Synthetic Viscera");
         Core.Jump("Boss", "Left");
@@ -643,7 +774,7 @@ public class CoreArchMage
             else
                 Core.EquipClass(ClassType.Solo);
 
-            Adv.GearStore();
+            Adv.GearStore(EnhAfter: true);
             Adv.EnhanceEquipped(EnhancementType.Healer, wSpecial: WeaponSpecial.Elysium);
         }
 
@@ -668,7 +799,7 @@ public class CoreArchMage
 
         Core.CancelRegisteredQuests();
         Bot.Options.AttackWithoutTarget = false;
-        Adv.GearStore(true);
+        Adv.GearStore(true, EnhAfter: true);
 
         Bot.Events.RunToArea -= MoveNightmareCarnax;
 
@@ -679,8 +810,8 @@ public class CoreArchMage
         moveTask = null;
     }
 
-
-    private readonly string[] RequiredItems = {
+    private readonly string[] RequiredItems =
+    {
         "ArchMage",
         "Providence",
         "Mystic Scribing Kit",
@@ -693,9 +824,10 @@ public class CoreArchMage
         "Book of Aether",
         "Book of Arcana",
         "Arcane Sigil",
-        "Archmage"
+        "Archmage",
     };
-    private readonly string[] BossDrops = {
+    private readonly string[] BossDrops =
+    {
         "Void Essentia",
         "Vital Exanima",
         "Everlight Flame",
@@ -704,9 +836,10 @@ public class CoreArchMage
         "The Divine Will",
         "Insatiable Hunger",
         "Undying Resolve",
-        "Elemental Binding"
+        "Elemental Binding",
     };
-    private readonly string[] Cosmetics = {
+    private readonly string[] Cosmetics =
+    {
         "Arcane Sigil",
         "Arcane Floating Sigil",
         "Sheathed Archmage's Staff",
@@ -720,9 +853,7 @@ public class CoreArchMage
         "Prismatic Floating Sigil",
         "Sheathed Providence",
         "Prismatic Sigil",
-        "Astral Mantle"
+        "Astral Mantle",
     };
     private bool army = false;
-
-
 }

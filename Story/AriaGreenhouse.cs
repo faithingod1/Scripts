@@ -12,8 +12,17 @@ public class AriaGreenhouse
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
     private static CoreFarms _Farm;
 
     public void ScriptMain(IScriptInterface bot)
@@ -32,6 +41,7 @@ public class AriaGreenhouse
         Fire();
         Energy();
         Kylokos();
+        Darkness();
     }
 
     public void Nature()
@@ -44,62 +54,60 @@ public class AriaGreenhouse
         // 10179 | Drosanthemum
         Story.MapItemQuest(10179, "faerie", new[] { 14392, 14393 });
 
-
         // 10180 | String of Turtles
         if (!Story.QuestProgression(10180))
         {
-            Core.HuntMonsterQuest(10180,
-                ("pines", "Red Shell Turtle", ClassType.Farm));
+            Core.HuntMonsterQuest(10180, ("pines", "Red Shell Turtle", ClassType.Farm));
         }
-
 
         // 10181 | Aconite
         Core.AddDrop(Core.QuestRewards(10181));
-        Story.MapItemQuest(10181, "cloister", 14394);
-        Story.KillQuest(10181, "cloister", "Karasu");
-
+        if (!Story.QuestProgression(10181))
+        {
+            Core.EnsureAccept(10181);
+            Core.GetMapItem(14394, 1, "cloister");
+            Core.HuntMonster("cloister", "Karasu", "Karasu Plucked", 5);
+            Core.EnsureComplete(10181);
+        }
 
         // 10182 | Blood Red Carnations
         Story.MapItemQuest(10182, "darkoviaforest", 14395);
 
-
         // 10183 | Cottongrass
         if (!Story.QuestProgression(10183))
         {
-            Core.HuntMonsterQuest(10183,
-                ("northlands", "Snow Golem", ClassType.Farm));
+            Core.HuntMonsterQuest(10183, ("northlands", "Snow Golem", ClassType.Farm));
         }
-
 
         // 10184 | Hebeloma Aminophilum
         Farm.Experience(60);
-        Story.MapItemQuest(10184, "deleuzetundra", new[] { 14396, 14397 });
-        Story.KillQuest(10184, "deleuzetundra", "Empty Creature");
-
+        if (!Story.QuestProgression(10184))
+        {
+            Core.EnsureAccept(10184);
+            Core.GetMapItems(new[] { (14396, 1), (14397, 1) }, "deleuzetundra");
+            Core.HuntMonster("deleuzetundra", "Empty Creature", "Empty Critter", 8);
+            Core.EnsureComplete(10184);
+        }
 
         // 10185 | Annual Mercury
         if (!Story.QuestProgression(10185))
         {
-            Core.HuntMonsterQuest(10185,
-                ("yokaitreasure", "Quicksilver", ClassType.Farm));
+            Core.HuntMonsterQuest(10185, ("yokaitreasure", "Quicksilver", ClassType.Farm));
         }
-
 
         // 10186 | Gorshka Maika
         if (!Story.QuestProgression(10186))
         {
-            Core.HuntMonsterQuest(10186,
-                ("hakuwar", "Zakhvatchik", ClassType.Solo));
+            Bot.Quests.UpdateQuest(9607);
+            Core.HuntMonsterQuest(10186, ("hakuwar", "Zakhvatchik", ClassType.Solo));
         }
-
 
         // 10187 | Alchemilla
         if (!Story.QuestProgression(10187))
         {
-            Core.HuntMonsterQuest(10187,
-                ("yokairealm", "Mikoto Kukol'nyy", ClassType.Solo));
+            Bot.Quests.UpdateQuest(9689);
+            Core.HuntMonsterQuest(10187, ("yokairealm", "Mikoto Kukol'nyy", ClassType.Solo));
         }
-
 
         // 10188 | Arianne Vivaldi
         Story.MapItemQuest(10188, "vivaldicavern", 14398);
@@ -117,63 +125,54 @@ public class AriaGreenhouse
         // 10189 | People and Scarecrows
         if (!Story.QuestProgression(10189))
         {
-            Core.HuntMonsterQuest(10189,
-                ("farm", "Scarecrow", ClassType.Farm));
+            Core.HuntMonsterQuest(10189, ("farm", "Scarecrow", ClassType.Farm));
         }
-
 
         // 10190 | Dolphins and Sharks
         if (!Story.QuestProgression(10190))
         {
-            Core.HuntMonsterQuest(10190,
-                ("pirates", "Fishman Soldier", ClassType.Farm));
+            Core.HuntMonsterQuest(10190, ("pirates", "Fishman Soldier", ClassType.Farm));
         }
-
 
         // 10191 | Dragons and Lizards
         if (!Story.QuestProgression(10191))
         {
-            Core.HuntMonsterQuest(10191,
-                ("natatorium", "Merdraconian", ClassType.Farm));
+            Core.HuntMonsterQuest(10191, ("natatorium", "Merdraconian", ClassType.Farm));
         }
-
 
         // 10192 | Water and Oil
         Farm.Experience(60);
-        Story.MapItemQuest(10192, "feverfew", 14399);
-        Story.KillQuest(10192, "feverfew", "Coral Creeper");
+        if (!Story.QuestProgression(10192))
+        {
+            Core.EnsureAccept(10192);
+            Core.GetMapItem(14399, 1, "feverfew");
+            Core.HuntMonster("feverfew", "Coral Creeper", "Creeps Eliminated", 14);
+            Core.EnsureComplete(10192);
+        }
 
         // 10193 | Black Silk and White Fleece
-        if (!Story.QuestProgression(10193))
+        if (!Story.QuestProgression(10193) || !Core.CheckInventory("Hyonix's Treasure Chest"))
         {
-            Core.HuntMonsterQuest(10193,
-                ("blackseakeep", "Blacksea Pirate Mage", ClassType.Farm));
+            Core.HuntMonsterQuest(10193, ("blackseakeep", "Blacksea Pirate Mage", ClassType.Farm));
         }
-
 
         // 10194 | Sunlight and Moonbeams
-        if (!Story.QuestProgression(10194))
+        if (!Story.QuestProgression(10194) || !Core.CheckInventory("Sunlit Sea"))
         {
-            Core.HuntMonsterQuest(10194,
-                ("sunlightzone", "Blighted Water", ClassType.Farm));
+            Core.HuntMonsterQuest(10194, ("sunlightzone", "Blighted Water", ClassType.Farm));
         }
-
 
         // 10195 | Midnight and Noon
-        if (!Story.QuestProgression(10195))
+        if (!Story.QuestProgression(10195) || !Core.CheckInventory("Midnight Sea"))
         {
-            Core.HuntMonsterQuest(10195,
-                ("midnightzone", "Venerated Wraith", ClassType.Farm));
+            Core.HuntMonsterQuest(10195, ("midnightzone", "Venerated Wraith", ClassType.Farm));
         }
-
 
         // 10196 | Lie and Truth
-        if (!Story.QuestProgression(10196))
+        if (!Story.QuestProgression(10196) || !Core.CheckInventory("Abyssal Sea"))
         {
-            Core.HuntMonsterQuest(10196,
-                ("abyssalzone", "Blighted Water", ClassType.Farm));
+            Core.HuntMonsterQuest(10196, ("abyssalzone", "Blighted Water", ClassType.Farm));
         }
-
 
         // 10197 | Odette and Odile
         if (!Story.QuestProgression(10197))
@@ -182,14 +181,11 @@ public class AriaGreenhouse
             return;
         }
 
-
         // 10198 | Hyonix's Treasure Chest
         Story.ChainQuest(10198);
 
         // 10203 | Sinclair and Demien
         Story.MapItemQuest(10203, "sinclaircove", 14400);
-
-
     }
 
     public void Fire()
@@ -202,68 +198,62 @@ public class AriaGreenhouse
         // 10204 | Grassroots Opinion
         if (!Story.QuestProgression(10204))
         {
-            Core.HuntMonsterQuest(10204,
-                ("greendragon", "Greenguard Dragon", ClassType.Solo));
+            Core.HuntMonsterQuest(10204, ("greendragon", "Greenguard Dragon", ClassType.Solo));
         }
-
 
         // 10205 | Flame War
         if (!Story.QuestProgression(10205))
         {
-            Core.HuntMonsterQuest(10205,
-                ("bludrut2", "Fire Elemental", ClassType.Farm));
+            Core.HuntMonsterQuest(10205, ("bludrut2", "Fire Elemental", ClassType.Farm));
         }
-
 
         // 10206 | Ashes Reignited
         if (!Story.QuestProgression(10206))
         {
-            Core.HuntMonsterQuest(10206,
-                ("lair", "Water Draconian", ClassType.Farm));
+            Core.HuntMonsterQuest(10206, ("lair", "Water Draconian", ClassType.Farm));
         }
 
-
         // 10207 | Feldspar Silica
-        Story.MapItemQuest(10207, "mafic", 14402);
-        Story.KillQuest(10207, "mafic", "Living Fire");
-
+        if (!Story.QuestProgression(10207))
+        {
+            Core.EnsureAccept(10207);
+            Core.GetMapItem(14402, 1, "mafic");
+            Core.HuntMonster("mafic", "Living Fire", "Living Fire", 6);
+            Core.EnsureComplete(10207);
+        }
 
         // 10208 | Convective Conversation
         if (!Story.QuestProgression(10208))
         {
-            Core.HuntMonsterQuest(10208,
-                ("embersea", "Living Lava", ClassType.Farm));
+            Core.HuntMonsterQuest(10208, ("embersea", "Living Lava", ClassType.Farm));
         }
-
 
         // 10209 | Spicy Chicken
         if (!Story.QuestProgression(10209))
         {
-            Core.HuntMonsterQuest(10209,
-                ("lavarun", "Phedra", ClassType.Solo));
+            Core.HuntMonsterQuest(10209, ("lavarun", "Phedra", ClassType.Solo));
         }
-
 
         // 10210 | Akriloth's Inferno
         if (!Story.QuestProgression(10210))
         {
-            Core.HuntMonsterQuest(10210,
-                ("firewar", "Uriax", ClassType.Solo));
+            Core.HuntMonsterQuest(10210, ("firewar", "Uriax", ClassType.Solo));
         }
 
-
         // 10211 | Scattered Embers
-        Story.MapItemQuest(10211, "fireplanewar", 14403, 11);
-        Story.KillQuest(10211, "fireplanewar", "Shadefire Onslaught");
-
+        if (!Story.QuestProgression(10211))
+        {
+            Core.EnsureAccept(10211);
+            Core.GetMapItem(14403, 11, "fireplanewar");
+            Core.HuntMonster("fireplanewar", "Shadefire Onslaught", "Shadefire", 8);
+            Core.EnsureComplete(10211);
+        }
 
         // 10212 | Tempered Restraint
         if (!Story.QuestProgression(10212))
         {
-            Core.HuntMonsterQuest(10212,
-                ("wartraining", "Fire Champion", ClassType.Solo));
+            Core.HuntMonsterQuest(10212, ("wartraining", "Fire Champion", ClassType.Solo));
         }
-
 
         // 10213 | Extinct Volcano
         Story.MapItemQuest(10213, "kingeldfell", 14404);
@@ -276,80 +266,65 @@ public class AriaGreenhouse
 
         Story.PreLoad(this);
 
-
         // 10214 | Dragonlord Dreams
         if (!Story.QuestProgression(10214))
         {
-            Core.HuntMonsterQuest(10214,
-                ("dwarfhold", "Chaos Drow", ClassType.Farm));
+            Core.HuntMonsterQuest(10214, ("dwarfhold", "Chaos Drow", ClassType.Farm));
         }
-
 
         // 10215 | Background Noise
         if (!Story.QuestProgression(10215))
         {
-            Core.HuntMonsterQuest(10215,
-                ("uppercity", "Drow Assassin", ClassType.Farm));
+            Core.HuntMonsterQuest(10215, ("uppercity", "Drow Assassin", ClassType.Farm));
         }
-
 
         // 10216 | Manticore Prince
         if (!Story.QuestProgression(10216))
         {
-            Core.HuntMonsterQuest(10216,
-                ("venomvaults", "Chaonslaught Warrior", ClassType.Farm));
+            Core.HuntMonsterQuest(10216, ("venomvaults", "Chaonslaught Warrior", ClassType.Farm));
         }
 
-
         // 10217 | Solid Clouds
-        Story.MapItemQuest(10217, "stormtemple", 14405, 8);
-        Story.KillQuest(10217, "stormtemple", "Chaonslaught Warrior");
-
+        if (!Story.QuestProgression(10217))
+        {
+            Core.EnsureAccept(10217);
+            Core.GetMapItem(14405, 8, "stormtemple");
+            Core.HuntMonster("stormtemple", "Chaonslaught Warrior", "Warrior's Pocket", 6);
+            Core.EnsureComplete(10217);
+        }
 
         // 10218 | Electric Rivalry
         if (!Story.QuestProgression(10218))
         {
-            Core.HuntMonsterQuest(10218,
-                ("thunderfang", "Tonitru", ClassType.Solo));
+            Core.HuntMonsterQuest(10218, ("thunderfang", "Tonitru", ClassType.Solo));
         }
-
 
         // 10219 | A Dragon's Dignity
         if (!Story.QuestProgression(10219))
         {
-            Core.HuntMonsterQuest(10219,
-                ("pride", "Valsarian", ClassType.Solo));
+            Core.HuntMonsterQuest(10219, ("pride", "Valsarian", ClassType.Solo));
         }
-
 
         // 10220 | A Show Horse
         if (!Story.QuestProgression(10220))
         {
-            Core.HuntMonsterQuest(10220,
-                ("balemorale", "Skye Warrior", ClassType.Farm));
+            Core.HuntMonsterQuest(10220, ("balemorale", "Skye Warrior", ClassType.Farm));
         }
-
 
         // 10221 | Elemental Executioners
         if (!Story.QuestProgression(10221))
         {
-            Core.HuntMonsterQuest(10221,
-                ("loughshine", "Energy Elemental", ClassType.Farm));
+            Core.HuntMonsterQuest(10221, ("loughshine", "Energy Elemental", ClassType.Farm));
         }
-
 
         // 10222 | Pride's Grave
         if (!Story.QuestProgression(10222))
         {
-            Core.HuntMonsterQuest(10222,
-                ("naoisegrave", "Volgritian", ClassType.Solo));
+            Core.HuntMonsterQuest(10222, ("naoisegrave", "Volgritian", ClassType.Solo));
         }
-
 
         // 10223 | King of the Tempest
         Story.MapItemQuest(10223, "terminagrove", 14406);
-
-
     }
 
     public void Kylokos()
@@ -359,86 +334,145 @@ public class AriaGreenhouse
 
         Story.PreLoad(this);
 
-
         // 10309 | Epsilon Tau
         if (!Story.QuestProgression(10309))
         {
-            Core.HuntMonsterQuest(10309,
-                ("starfield", "Nova Seed", ClassType.Farm));
+            Core.HuntMonsterQuest(10309, ("starfield", "Nova Seed", ClassType.Farm));
         }
-
 
         // 10310 | Fixed Earth
         if (!Story.QuestProgression(10310))
         {
-            Core.HuntMonsterQuest(10310,
-                ("hedgemaze", "Minotaur", ClassType.Farm));
+            Core.HuntMonsterQuest(10310, ("hedgemaze", "Minotaur", ClassType.Farm));
         }
-
 
         // 10311 | Fable Fall
         if (!Story.QuestProgression(10311))
         {
-            Core.HuntMonsterQuest(10311,
-                ("fableforest", "Fire Elemental", ClassType.Farm));
+            Core.HuntMonsterQuest(10311, ("fableforest", "Fire Elemental", ClassType.Farm));
         }
-
 
         // 10312 | Delta Andromedae
         if (!Story.QuestProgression(10312))
         {
-            Core.HuntMonsterQuest(10312,
-                ("ashray", "Kitefin Shark Bait", ClassType.Farm));
+            Core.HuntMonsterQuest(10312, ("ashray", "Kitefin Shark Bait", ClassType.Farm));
         }
-
 
         // 10313 | Beta Arietis
         if (!Story.QuestProgression(10313))
         {
-            Core.HuntMonsterQuest(10313,
-                ("kolyaban", "Tentacled Darkblood", ClassType.Farm));
+            Core.HuntMonsterQuest(10313, ("kolyaban", "Tentacled Darkblood", ClassType.Farm));
         }
-
 
         // 10314 | 35 Arietis
         if (!Story.QuestProgression(10314))
         {
-            Core.HuntMonsterQuest(10314,
-                ("comet", "Vaderix", ClassType.Farm));
+            Core.HuntMonsterQuest(10314, ("comet", "Vaderix", ClassType.Farm));
         }
-
 
         // 10315 | Fractured Pleiades
         if (!Story.QuestProgression(10315))
         {
-            Core.HuntMonsterQuest(10315,
-                ("atlaspromenade", "Atlas Light Magus", ClassType.Solo));
+            Core.HuntMonsterQuest(10315, ("atlaspromenade", "Atlas Light Magus", ClassType.Solo));
         }
-
 
         // 10316 | Lambda Ori
         if (!Story.QuestProgression(10316))
         {
-            Core.HuntMonsterQuest(10316,
-                ("victormatsuri", "Kitsune Himawari", ClassType.Solo));
+            Core.HuntMonsterQuest(10316, ("victormatsuri", "Kitsune Himawari", ClassType.Solo));
         }
-
 
         // 10317 | Delta Ori
         if (!Story.QuestProgression(10317))
         {
-            Core.HuntMonsterQuest(10317,
-                ("hakuwar", "Long Kukol'nyy", ClassType.Solo));
+            Core.HuntMonsterQuest(10317, ("hakuwar", "Long Kukol'nyy", ClassType.Solo));
         }
-
 
         // 10318 | Western Moon Mansions
         if (!Story.QuestProgression(10318))
         {
-            Core.HuntMonsterQuest(10318,
-                ("yokaiportal", "Kitsune Spirits", ClassType.Farm));
+            Core.HuntMonsterQuest(10318, ("yokaiportal", "Kitsune Spirits", ClassType.Farm));
+        }
+    }
+
+    public void Darkness()
+    {
+        if (Core.isCompletedBefore(10834))
+            return;
+
+        Story.PreLoad(this);
+
+        // 10825 | I Don't Know Your Name
+        if (!Story.QuestProgression(10825))
+        {
+            Core.HuntMonsterQuest(10825,
+                ("well", "Gell Oh No", ClassType.Solo));
         }
 
+
+        // 10826 | I Still Don't Know You
+        if (!Story.QuestProgression(10826))
+        {
+            Story.MapItemQuest(10826, "mudluk", 16093, 8);
+        }
+
+
+        // 10827 | I Heard You're Looking For Me
+        if (!Story.QuestProgression(10827))
+        {
+            Story.MapItemQuest(10827, "abaddoncave", 16094, 7);
+        }
+
+
+        // 10828 | I'm Looking for You
+        if (!Story.QuestProgression(10828))
+        {
+            Core.HuntMonsterQuest(10828,
+                ("doomwood", "Weakened Ectomancer", ClassType.Solo));
+        }
+
+
+        // 10829 | I'm Getting Closer
+        if (!Story.QuestProgression(10829))
+        {
+            Story.MapItemQuest(10829, "maul", 16096, 3);
+        }
+
+
+        // 10830 | I'm Getting Even Closer
+        if (!Story.QuestProgression(10830))
+        {
+            Core.HuntMonsterQuest(10830,
+                ("yokaitreasure", "Quicksilver", ClassType.Solo));
+        }
+
+
+        // 10831 | I'm Right Behind You
+        if (!Story.QuestProgression(10831))
+        {
+            Story.MapItemQuest(10831, "ashray", 16098, 2);
+        }
+
+
+        // 10832 | I'm Breathing Down Your Neck
+        if (!Story.QuestProgression(10832))
+        {
+            Story.MapItemQuest(10832, "lavarun", 16099);
+        }
+
+
+        // 10833 | Now I Know Where You Live
+        if (!Story.QuestProgression(10833))
+        {
+            Story.MapItemQuest(10833, "terminagrove", 16100);
+        }
+
+
+        // 10834 | See You Later, Stalker
+        if (!Story.QuestProgression(10834))
+        {
+            Story.MapItemQuest(10834, "greifplayhouse", 16095);
+        }
 
     }
 }

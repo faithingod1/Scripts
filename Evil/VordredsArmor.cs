@@ -18,11 +18,36 @@ public class VordredArmor
     public IScriptInterface Bot => IScriptInterface.Instance;
 
     public CoreBots Core => CoreBots.Instance;
-    private static CoreFarms Farm { get => _Farm ??= new CoreFarms(); set => _Farm = value; }    private static CoreFarms _Farm;
-    private static CoreDoomwood DW { get => _DW ??= new CoreDoomwood(); set => _DW = value; }    private static CoreDoomwood _DW;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }    private static CoreAdvanced _Adv;
-    private static CoreSDKA SDKA { get => _SDKA ??= new CoreSDKA(); set => _SDKA = value; }    private static CoreSDKA _SDKA;
+    private static CoreFarms Farm
+    {
+        get => _Farm ??= new CoreFarms();
+        set => _Farm = value;
+    }
+    private static CoreFarms _Farm;
+    private static CoreDoomwood DW
+    {
+        get => _DW ??= new CoreDoomwood();
+        set => _DW = value;
+    }
+    private static CoreDoomwood _DW;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
+    private static CoreAdvanced _Adv;
+    private static CoreSDKA SDKA
+    {
+        get => _SDKA ??= new CoreSDKA();
+        set => _SDKA = value;
+    }
+    private static CoreSDKA _SDKA;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -45,7 +70,6 @@ public class VordredArmor
 
         DW.DoomwoodPart3();
         Farm.Experience(60);
-        //Adv.BestGear(RacialGearBoost.Undead);
 
         if (!Story.QuestProgression(8376))
         {
@@ -103,8 +127,10 @@ public class VordredArmor
         {
             Core.EnsureAccept(8379);
             Core.HuntMonster("desolich", "Desolich", "Desolich's Skull", 5, isTemp: false);
+            Core.EquipClass(ClassType.Solo);
             Core.KillMonster("doomvaultb", "r26", "Left", "Undead Raxgore", "Undead Raxgore's Skull", 10, isTemp: false);
             Core.HuntMonster("frozenlair", "Legion Lich Lord", "Legion Lich Lord's Skull", 15, isTemp: false);
+            Core.EquipClass(ClassType.Solo);
             Core.HuntMonster("thevoid", "Reaper", "Reaper's Skull", 20, isTemp: false);
             Core.EnsureComplete(8379);
         }
@@ -124,11 +150,9 @@ public class VordredArmor
                 return;
         }
 
-
         // Empower Vordred's Armor - 8381
         if (!Story.QuestProgression(8381))
         {
-            //Adv.BestGear(RacialGearBoost.Undead);
             Core.EquipClass(ClassType.Solo);
             Core.EnsureAccept(8381);
             if (!Core.CheckInventory("Sepulchure's DoomKnight Armor"))
@@ -150,7 +174,6 @@ public class VordredArmor
             return;
 
         Core.AddDrop("Especially Unbroken Skull");
-        //Adv.BestGear(RacialGearBoost.Undead);
         Core.EquipClass(ClassType.Farm);
 
         // UNBROKEN SKULLS (Mem) - 8342

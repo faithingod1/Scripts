@@ -8,11 +8,15 @@ tags: null
 using Skua.Core.Interfaces;
 
 public class ConZombieSlayer
-
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }    private static CoreStory _Story;
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
+    private static CoreStory _Story;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -29,7 +33,7 @@ public class ConZombieSlayer
         {
             Core.Logger($"Already have the {badge} badge");
             return;
-        }       
+        }
 
         Core.Logger($"Doing Artix quest for {badge} badge");
 
@@ -89,8 +93,7 @@ public class ConZombieSlayer
             Core.Sleep();
         }
         Core.AbandonQuest(3144);
-
     }
 
-    private string badge = "ConZombie Slayer";
+    private readonly string badge = "ConZombie Slayer";
 }

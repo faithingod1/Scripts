@@ -12,7 +12,12 @@ public class LordOfTheWeddingRing
 {
     public IScriptInterface Bot => IScriptInterface.Instance;
     public CoreBots Core => CoreBots.Instance;
-    private static ArtixWedding AW { get => _AW ??= new ArtixWedding(); set => _AW = value; }    private static ArtixWedding _AW;
+    private static ArtixWedding AW
+    {
+        get => _AW ??= new ArtixWedding();
+        set => _AW = value;
+    }
+    private static ArtixWedding _AW;
 
     public void ScriptMain(IScriptInterface bot)
     {
@@ -33,8 +38,7 @@ public class LordOfTheWeddingRing
 
         Core.Logger($"Doing Artix Wedding story for {badge} badge");
         AW.ArtixWeddingComplete();
-
     }
 
-    private string badge = "Lord of the Wedding Ring";
+    private readonly string badge = "Lord of the Wedding Ring";
 }

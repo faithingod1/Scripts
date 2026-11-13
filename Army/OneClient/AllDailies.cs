@@ -27,17 +27,29 @@ public class ArmyAllDailies
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static FarmAllDailies FAD { get => _FAD ??= new FarmAllDailies(); set => _FAD = value; }
+    private static FarmAllDailies FAD
+    {
+        get => _FAD ??= new FarmAllDailies();
+        set => _FAD = value;
+    }
     private static FarmAllDailies _FAD;
-    private static CoreArmyLite Army { get => _Army ??= new CoreArmyLite(); set => _Army = value; }
+    private static CoreArmyLite Army
+    {
+        get => _Army ??= new CoreArmyLite();
+        set => _Army = value;
+    }
     private static CoreArmyLite _Army;
 
     public bool DontPreconfigure = true;
     public string OptionsStorage = "ArmyAllDailies";
     public List<IOption> Options = new()
     {
-        new Option<bool>("randomServers", "Random Servers", "Should the bot use a random server each for each account.", true),
-        new Option<FarmAllDailies.DailySet>("Select Dailies Set", "Dailies set: Recommended or All?", "only do the few that we recommend to make it a bit quicker?", FarmAllDailies.DailySet.All),
+        new Option<FarmAllDailies.DailySet>(
+            "Select Dailies Set",
+            "Dailies set: Recommended or All?",
+            "only do the few that we recommend to make it a bit quicker?",
+            FarmAllDailies.DailySet.All
+        ),
         CoreBots.Instance.SkipOptions,
     };
 
@@ -45,14 +57,24 @@ public class ArmyAllDailies
     {
         Core.SetOptions();
 
-        CheckACs(Bot.Config!.Get<bool>("randomServers"));
+        // CheckACs();
+        Bot.Log("OneClient scripts area bit fucked, and i just cant fix the \"not logging into full server\" issue.. so they will be disabled -- please use the normal varients of the scripts.");
+
 
         Core.SetOptions(false);
     }
 
-    public void CheckACs(bool randomServers)
+    public void CheckACs()
     {
-        while (!Bot.ShouldExit && Army.doForAll(randomServers))
+        Bot.Options.ReloginServer =
+            (Bot.Options.ReloginServer ?? "Twilly") ?? new[] { "Twilly", "Twig" }[new Random().Next(2)];
+
+        while (!Bot.ShouldExit && Army.doForAll())
+        {
+            // TEMPORARY Game4000 inventory change. Remove after the client inventory fix.
+            if (Core.InventoryBagFreeSlots <= 0)
+                continue;
             FAD.DoAllDailies(Bot.Config!.Get<FarmAllDailies.DailySet>("Select Dailies Set"));
-    }  
+        }
+    }
 }

@@ -13,10 +13,19 @@ public class VictorMatsuri
 {
     private IScriptInterface Bot => IScriptInterface.Instance;
     private CoreBots Core => CoreBots.Instance;
-    private static CoreStory Story { get => _Story ??= new CoreStory(); set => _Story = value; }
+    private static CoreStory Story
+    {
+        get => _Story ??= new CoreStory();
+        set => _Story = value;
+    }
     private static CoreStory _Story;
-    private static CoreAdvanced Adv { get => _Adv ??= new CoreAdvanced(); set => _Adv = value; }
+    private static CoreAdvanced Adv
+    {
+        get => _Adv ??= new CoreAdvanced();
+        set => _Adv = value;
+    }
     private static CoreAdvanced _Adv;
+
     // Flags for event-driven action
     private bool counterAttackTriggered = false;
     private DateTime lastCounterAttack = DateTime.MinValue;
@@ -32,7 +41,7 @@ public class VictorMatsuri
 
     public void Storyline(bool merge = false)
     {
-        if (merge ? Core.isCompletedBefore(10291) : Core.isCompletedBefore(10295))
+        if (merge ? Core.isCompletedBefore(10292) : Core.isCompletedBefore(10295))
             return;
 
         Story.PreLoad(this);
@@ -40,56 +49,47 @@ public class VictorMatsuri
         #region Useable Monsters
         string[] UseableMonsters = new[]
         {
-    "Kitsune Himawari", // UseableMonsters[0],
-	"NeOni", // UseableMonsters[1],
-	"Narcis Arrhythmia", // UseableMonsters[2],
-	"Haruki Matsuoka", // UseableMonsters[3],
-	"Lady Laidronette", // UseableMonsters[4],
-	"Masakado", // UseableMonsters[5]
-};
+            "Kitsune Himawari", // UseableMonsters[0],
+            "NeOni", // UseableMonsters[1],
+            "Narcis Arrhythmia", // UseableMonsters[2],
+            "Haruki Matsuoka", // UseableMonsters[3],
+            "Lady Laidronette", // UseableMonsters[4],
+            "Masakado", // UseableMonsters[5]
+        };
         #endregion Useable Monsters
 
         // 10290 | In Kuzunoha's Image
         if (!Story.QuestProgression(10290))
         {
-            Core.HuntMonsterQuest(10290,
-                ("victormatsuri", UseableMonsters[0], ClassType.Solo));
+            Core.HuntMonsterQuest(10290, ("victormatsuri", UseableMonsters[0], ClassType.Solo));
         }
-
 
         // 10291 | NeOni Blue
         if (!Story.QuestProgression(10291))
         {
-            Core.HuntMonsterQuest(10291,
-                ("victormatsuri", UseableMonsters[1], ClassType.Solo));
+            Core.HuntMonsterQuest(10291, ("victormatsuri", UseableMonsters[1], ClassType.Solo));
+        }
+
+        // 10292 | Embodiment of Scarlet
+        if (!Story.QuestProgression(10292))
+        {
+            Core.HuntMonsterQuest(10292, ("victormatsuri", UseableMonsters[2], ClassType.Solo));
         }
 
         if (merge)
             return;
 
-        // 10292 | Embodiment of Scarlet
-        if (!Story.QuestProgression(10292))
-        {
-            Core.HuntMonsterQuest(10292,
-                ("victormatsuri", UseableMonsters[2], ClassType.Solo));
-        }
-
-
         // 10293 | Onihitokuchi
         if (!Story.QuestProgression(10293))
         {
-            Core.HuntMonsterQuest(10293,
-                ("victormatsuri", UseableMonsters[3], ClassType.Solo));
+            Core.HuntMonsterQuest(10293, ("victormatsuri", UseableMonsters[3], ClassType.Solo));
         }
-
 
         // 10294 | Tsukihime
         if (!Story.QuestProgression(10294))
         {
-            Core.HuntMonsterQuest(10294,
-                ("victormatsuri", UseableMonsters[4], ClassType.Solo));
+            Core.HuntMonsterQuest(10294, ("victormatsuri", UseableMonsters[4], ClassType.Solo));
         }
-
 
         // 10295 | Kanmu Heishi
         if (!Story.QuestProgression(10295))
@@ -108,27 +108,65 @@ public class VictorMatsuri
             );
             Core.EnsureComplete(10295);
         }
-
     }
 
     public void KillMasakado(
-        string map, string cell, string pad, string monster,
+        string map,
+        string cell,
+        string pad,
+        string monster,
         string[] auraNames,
-        string? item = null, int quant = 1, bool isTemp = false, bool log = true,
-        int ItemToUse = 0, int SafeItem = 0,
-        CancellationToken cancellationToken = default)
+        string? item = null,
+        int quant = 1,
+        bool isTemp = false,
+        bool log = true,
+        int ItemToUse = 0,
+        int SafeItem = 0,
+        CancellationToken cancellationToken = default
+    )
     {
-        if (item != null && (isTemp ? Bot.TempInv.Contains(item, quant) : Core.CheckInventory(item, quant)))
-            return;
-
-        if (!Core.CheckInventory("Legion Revenant") && !(Adv.uPraxis() && Adv.uPenitence() && Adv.uPneuma()))
+        // return if item already in inventory
+        if (
+            item != null
+            && (isTemp ? Bot.TempInv.Contains(item, quant) : Core.CheckInventory(item, quant))
+        )
         {
-            Core.Logger("You need to have the Legion Revenant class, Penitence, Praxis, and the Pneuma enhancements to kill Masakado with this script.");
             return;
         }
-        Adv.GearStore();
+
+        // if Legion Revenant class not owned, log and return
+        if (!Core.CheckInventory("Legion Revenant"))
+        {
+            Core.Logger("You need to own the Legion Revenant class to use this script.");
+            return;
+        }
+
+        // Check for praxis only first (as it's the most important and 100% required)
+        if (!Adv.uPraxis())
+        {
+            Core.Logger(
+                "You **HAVE** to have the Praxis enhancement to kill Masakado with this script."
+            );
+            return;
+        }
+
+        // Then check for penitence and pneuma
+        if (!Adv.uPenitence() || !Adv.uPneuma())
+        {
+            Core.Logger(
+                "You need to have the Penitence cape and Pneuma helm enhancements to kill Masakado with this script."
+            );
+            return;
+        }
+
+        Adv.GearStore(EnhAfter: true);
         Core.Equip("Legion Revenant");
-        Adv.EnhanceEquipped(EnhancementType.Wizard, CapeSpecial.Penitence, HelmSpecial.Pneuma, WeaponSpecial.Praxis);
+        Adv.EnhanceEquipped(
+            EnhancementType.Wizard,
+            CapeSpecial.Penitence,
+            HelmSpecial.Pneuma,
+            WeaponSpecial.Praxis
+        );
 
         DateTime lastAuraTrigger = DateTime.MinValue;
         TimeSpan auraCooldown = TimeSpan.FromSeconds(0);
@@ -167,16 +205,28 @@ public class VictorMatsuri
             if (log)
                 Core.FarmingLogger(item, quant);
 
-            while (!Bot.ShouldExit && !Core.CheckInventory(item, quant) && !cancellationToken.IsCancellationRequested)
+            while (
+                !Bot.ShouldExit
+                && !Core.CheckInventory(item, quant)
+                && !cancellationToken.IsCancellationRequested
+            )
             {
-                while (!Bot.ShouldExit && !Bot.Player.Alive && !cancellationToken.IsCancellationRequested) { }
+                while (
+                    !Bot.ShouldExit
+                    && !Bot.Player.Alive
+                    && !cancellationToken.IsCancellationRequested
+                )
+                {
+                    Bot.Sleep(500);
+                }
 
                 if (Bot.Map.Name != map)
                     Core.Join(map, cell, pad);
                 if (Bot.Player.Cell != cell)
                     Core.Jump(cell, pad);
 
-                Bot.Combat.Attack(monster);
+                if (!counterAttackTriggered)
+                    Bot.Combat.Attack(monster);
                 Bot.Sleep(500);
 
                 // Handle counter attack outside the listener
@@ -193,13 +243,17 @@ public class VictorMatsuri
                     counterAttackTriggered = false;
                 }
 
-                if (isTemp ? Bot.TempInv.Contains(item, quant) : (Bot.Inventory.Contains(item, quant) || Bot.Bank.Contains(item, quant)))
+                if (
+                    isTemp
+                        ? Bot.TempInv.Contains(item, quant)
+                        : (Bot.Inventory.Contains(item, quant) || Bot.Bank.Contains(item, quant))
+                )
                     break;
             }
         }
 
         Bot.Events.ExtensionPacketReceived -= AuraListener;
-        Adv.GearStore(true);
+        Adv.GearStore(true, EnhAfter: true);
 
         void AuraListener(dynamic packet)
         {
